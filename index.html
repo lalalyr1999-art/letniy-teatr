@@ -9,8 +9,8 @@
 <style>
 :root{
   /* палитра брендбука Парка Маяковского */
-  --red:#DA6150; --coral:#DA6150; --page:#EAEBEA; --white:#F4F4F2; --beige:#BFB596; --cream:#F6E9D8;
-  --wood:#8A4A22; --green:#00963F; --sky:#8EC5EE; --ink:#111; --grey:#dfe0de; --muted:#6d6e71; --warm:#ffcf8a;
+  --red:#DA6150; --coral:#DA6150; --page:#F6EED9; --white:#FFFBF3; --beige:#BFB596; --cream:#F6E9D8;
+  --wood:#8A4A22; --green:#00963F; --sky:#8EC5EE; --ink:#111; --grey:#E6DED0; --muted:#6d6e71; --warm:#ffcf8a;
   --cond:'Mayak','Oswald','Arial Narrow',sans-serif; --text:'Inter',Arial,sans-serif; --hand:'Caveat','Segoe Script',cursive;
   --g:clamp(16px,4vw,56px); --ease:cubic-bezier(.6,0,.2,1);
 }
@@ -23,12 +23,12 @@ button{font:inherit;color:inherit}
 .btn-red:hover{transform:translateY(-2px) rotate(-2deg);box-shadow:0 10px 24px rgba(218,97,80,.4)}
 .btn-glass{background:rgba(255,255,255,.14);backdrop-filter:blur(10px);color:#fff;padding:12px 24px;font-size:17px;border:1.5px solid rgba(255,255,255,.4);transition:background .2s}
 .btn-glass:hover{background:rgba(255,255,255,.26)}
-.btn-line{border:1.5px solid #111;padding:10px 20px;font-size:16px;transition:all .2s}
+.btn-line{background:transparent;border:1.5px solid #111;padding:10px 20px;font-size:16px;transition:all .2s}
 .btn-line:hover{background:#111;color:#fff}
 
 /* ---------- шапка ---------- */
 header{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:40px;padding:18px var(--g);background:transparent;transition:box-shadow .3s,background .3s}
-header.scrolled{background:rgba(234,235,234,.88);backdrop-filter:blur(14px);box-shadow:0 1px 0 rgba(0,0,0,.06)}
+header.scrolled{background:rgba(246,238,217,.88);backdrop-filter:blur(14px);box-shadow:0 1px 0 rgba(0,0,0,.06)}
 .logo img{height:26px;display:block;transition:transform .3s var(--ease)}
 .logo:hover img{transform:rotate(-4deg)}
 nav{display:flex;gap:28px;font-size:15px;font-weight:500}
@@ -280,7 +280,7 @@ nav a:hover{color:#000}nav a:hover::after{transform:scaleX(1)}
 <style>
 /* подвал: вход в театр */
 .gatewall{position:relative;width:100%;height:max(280px,calc(100vw * 470 / 1600));margin-top:80px;background:#F6EED9;overflow:hidden}
-.gatewall::before{content:"";position:absolute;inset:0 0 auto;height:40%;background:linear-gradient(var(--page,#EAEBEA),#F6EED9)}
+.gatewall::before{content:"";position:absolute;inset:0 0 auto;height:40%;background:linear-gradient(var(--page,#F6EED9),#F6EED9)}
 .gw-svg{position:absolute;inset:0;width:100%;height:100%;display:block}
 .gw-wheel{animation:gwspin 60s linear infinite}
 @keyframes gwspin{to{transform:rotate(360deg)}}
@@ -610,7 +610,7 @@ html,body{overflow-x:clip}
       <!-- земля и зал -->
       <path d="M0 560 Q500 520 1000 560 V640 H0Z" fill="#cfd8c9"/>
       <!-- здание сцены -->
-      <rect x="205" y="200" width="590" height="320" fill="#F4F4F2"/>
+      <rect x="205" y="200" width="590" height="320" fill="#FFFBF3"/>
       <rect x="205" y="200" width="40" height="320" fill="#e2e3e0"/><rect x="755" y="200" width="40" height="320" fill="#e2e3e0"/>
       <g stroke="#d4d5d2" stroke-width="1.5"><path d="M205 260H245M205 320H245M205 380H245M205 440H245M755 260H795M755 320H795M755 380H795M755 440H795"/></g>
       <!-- колонки -->
@@ -1453,11 +1453,11 @@ body{background:var(--page) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.
 #hlA .hl-it small{color:var(--cream)}
 #hlA .hl-it::after{color:#fff}
 #hlA .hl-it:hover b{color:#111}
-#hlB{background:#F4F4F2;box-shadow:0 10px 30px rgba(0,0,0,.06);transform:rotate(3.4deg) translateY(-8px)}
+#hlB{background:#FFFBF3;box-shadow:0 10px 30px rgba(0,0,0,.06);transform:rotate(3.4deg) translateY(-8px)}
 .hl-row.rev .hl-it b{-webkit-text-stroke:1.5px #111}
 
 /* «у нас уже выступали» — дневное небо */
-.st{background:linear-gradient(180deg,#bfe0f4 0%,#dcedf6 55%,#F4F4F2 100%);color:#111}
+.st{background:linear-gradient(180deg,#bfe0f4 0%,#dcedf6 55%,#FFFBF3 100%);color:#111}
 .st-h h2{color:#111}.st-h small{color:var(--coral)}
 .sn{color:rgba(17,17,17,.13)}
 .sn.lit{color:#111;text-shadow:none}
