@@ -207,7 +207,7 @@
         d.className = 'dot';
         d.dataset.id = id;
         d.setAttribute('aria-label', 'Замечание');
-        d.addEventListener('click', e => { e.stopPropagation(); openExisting(id); });
+        bindDot(d, () => openExisting(id));
         layer.appendChild(d);
       }
       d.style.background = COLORS[n.device] || COLORS.desktop;
@@ -215,6 +215,34 @@
     });
     layer.querySelectorAll('.dot[data-id]').forEach(d => { if (!keep.has(d.dataset.id)) d.remove(); });
     layoutDots();
+  }
+  // Точка открывается по отпусканию пальца/кнопки без сдвига. События не уходят сайту
+  // (свайп-ленты, слайдеры), перетаскивание отключено.
+  function bindDot(d, open) {
+    let start = null, lastOpen = 0;
+    d.draggable = false;
+    const stop = e => e.stopPropagation();
+    ['touchstart', 'touchmove', 'touchend', 'mousedown', 'mouseup', 'dragstart'].forEach(t =>
+      d.addEventListener(t, e => { stop(e); if (t === 'dragstart') e.preventDefault(); }, { passive: false }));
+    d.addEventListener('pointerdown', e => {
+      stop(e);
+      start = { x: e.clientX, y: e.clientY };
+      try { d.releasePointerCapture(e.pointerId); } catch (_) {}
+    });
+    d.addEventListener('pointerup', e => {
+      stop(e);
+      if (!start || Math.hypot(e.clientX - start.x, e.clientY - start.y) > 12) { start = null; return; }
+      start = null;
+      if (e.cancelable) e.preventDefault();
+      lastOpen = Date.now();
+      open();
+    });
+    d.addEventListener('pointercancel', () => { start = null; });
+    d.addEventListener('contextmenu', e => { stop(e); e.preventDefault(); });
+    d.addEventListener('click', e => {
+      stop(e); e.preventDefault();
+      if (Date.now() - lastOpen > 600) open(); // клавиатура или браузер без pointer-событий
+    });
   }
   function layoutDots(fromScroll) {
     layer.querySelectorAll('.dot').forEach(d => {
@@ -312,15 +340,16 @@
     const done = el('button', 'btn main', 'Готово'); done.type = 'button';
     del.addEventListener('click', onDelete);
     done.addEventListener('click', onDone);
-    actions.append(del, done);
+    const edit = el('button', 'btn ghost', 'Редактировать'); edit.type = 'button'; edit.hidden = true;
+    actions.append(del, edit, done);
     node.append(body, err, actions);
     layer.appendChild(node);
-    return { node, body, err, del, done };
+    return { node, body, err, del, done, edit };
   }
   function setBusy(p, busy) {
     p.busy = busy;
     p.node.classList.toggle('busy', busy);
-    p.done.disabled = p.del.disabled = busy;
+    p.done.disabled = p.del.disabled = p.edit.disabled = busy;
   }
   function showErr(p, msg) { p.err.textContent = msg || ERR; p.err.hidden = false; placePanel(); }
 
@@ -379,11 +408,37 @@
     const p = shell(() => p.commit(), () => p.remove());
     p.noteId = id;
     panel = p;
-    let ta = null;
+    let ta = null, editing = null; // editing: { text, reply, reply2 } -> textarea
+
+    p.edit.hidden = false;
+    p.edit.addEventListener('click', () => {
+      if (p.busy) return;
+      editing = editing ? null : {};
+      p.edit.textContent = editing ? 'Отменить' : 'Редактировать';
+      p.err.hidden = true;
+      draw();
+      const first = p.body.querySelector('.ta');
+      if (first) { try { first.focus({ preventScroll: true }); first.setSelectionRange(first.value.length, first.value.length); } catch (_) {} }
+    });
+    const editBox = (field, value, placeholder) => {
+      const t = textArea(placeholder);
+      t.value = value;
+      editing[field] = t;
+      requestAnimationFrame(() => t.dispatchEvent(new Event('input')));
+      return t;
+    };
 
     function draw(keepText) {
       const row = notes.get(id);
       p.body.textContent = '';
+      if (editing) {
+        p.body.append(editBox('text', row.text, 'Замечание'));
+        if (row.reply) { const r = el('div', 'reply'); r.append(el('div', 'lbl', 'Ответ'), editBox('reply', row.reply, 'Ответ')); p.body.append(r); }
+        if (row.reply2) { const r = el('div', 'reply r2'); r.append(el('div', 'lbl', 'Ответ на ответ'), editBox('reply2', row.reply2, 'Ответ на ответ')); p.body.append(r); }
+        ta = null;
+        if (panel === p) placePanel();
+        return;
+      }
       p.body.append(el('div', 'txt', row.text));
       const d = new Date(row.created_at);
       p.body.append(el('div', 'meta', isNaN(d) ? '' : d.toLocaleString('ru-RU', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' })));
@@ -416,6 +471,7 @@
 
     p.commit = async () => {
       if (p.busy) return;
+      if (editing) return saveEdit();
       const text = ta ? ta.value.slice(0, MAXLEN) : '';
       if (!text.trim()) return closePanel();
       setBusy(p, true);
@@ -445,6 +501,27 @@
         showErr(p);
       }
     };
+
+    async function saveEdit() {
+      const row = notes.get(id), patch = {};
+      Object.keys(editing).forEach(f => {
+        const v = editing[f].value.slice(0, MAXLEN);
+        if (v.trim() && v !== row[f]) patch[f] = v; // пустое поле — оставить как было
+      });
+      if (!Object.keys(patch).length) return closePanel();
+      setBusy(p, true);
+      mutationSeq++;
+      try {
+        patch.updated_at = new Date().toISOString();
+        const res = await api('PATCH', byId(id) + '&select=*', patch, 'return=representation');
+        if (res && res[0]) notes.set(id, res[0]); else notes.delete(id);
+        if (panel === p) closePanel(); else renderDots();
+      } catch (e) {
+        log('правка', e);
+        setBusy(p, false);
+        showErr(p);
+      }
+    }
 
     p.remove = async () => {
       if (p.busy) return;
@@ -629,8 +706,9 @@
 *{box-sizing:border-box}
 .dot{position:absolute;left:0;top:0;width:12px;height:12px;padding:0;margin:0;border-radius:50%;
   border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.35),0 0 0 1px rgba(0,0,0,.12);cursor:pointer;
-  transition:scale .15s ease, box-shadow .15s ease;-webkit-tap-highlight-color:transparent}
-.dot::after{content:"";position:absolute;inset:-8px;border-radius:50%}
+  transition:scale .15s ease, box-shadow .15s ease;-webkit-tap-highlight-color:transparent;
+  touch-action:none;user-select:none;-webkit-user-select:none;-webkit-user-drag:none;-webkit-touch-callout:none}
+.dot::after{content:"";position:absolute;inset:-10px;border-radius:50%}
 .dot:hover,.dot.active{scale:1.4}
 .dot.active,.dot.temp{box-shadow:0 0 0 3px rgba(0,0,0,.18),0 1px 4px rgba(0,0,0,.35)}
 .panel{position:absolute;width:min(280px,calc(100vw - 24px));background:var(--rn-bg);color:var(--rn-fg);
@@ -654,7 +732,9 @@
 .seg-b{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;opacity:.65}
 .seg-b::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--c);flex:none}
 .seg-b[aria-pressed="true"]{opacity:1;border-color:var(--rn-fg)}
-.actions{display:flex;justify-content:space-between;gap:8px}
+.actions{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px}
+.actions .btn.main{margin-left:auto}
+.btn[hidden]{display:none}
 .btn.main{background:var(--rn-accent);border-color:var(--rn-accent);color:var(--rn-on-accent)}
 .btn.danger{border-color:#E5322D;color:#E5322D}
 .btn:disabled{cursor:default}
