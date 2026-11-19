@@ -621,46 +621,54 @@
   }
 
   function onContextMenu(e) {
+    // Телефон: идёт долгое нажатие — меню телефона не показываем, заметку открывает таймер
+    if (touch) {
+      if (e.cancelable) e.preventDefault();
+      if (!touch.fired) fireTouch();
+      return;
+    }
     if (e.defaultPrevented) return;
     const path = e.composedPath ? e.composedPath() : [];
     if (!eligible(e.target, path)) return;
     e.preventDefault();
-    cancelTouch();
     if (lastSrc === 'touch' && Date.now() - lastSrcAt < 800) return; // Android: долгий тап + contextmenu
     lastSrc = 'mouse'; lastSrcAt = Date.now();
     openNew(e.target, e.clientX, e.clientY);
   }
 
-  let touch = null;
+  /* долгое нажатие пальцем ~550 мс — на любом месте, включая кнопки, ссылки и картинки (кроме полей ввода) */
+  let touch = null, eatClick = 0;
+  function unlockPage() {
+    document.documentElement.style.removeProperty('-webkit-user-select');
+    document.documentElement.style.removeProperty('-webkit-touch-callout');
+  }
   function cancelTouch() {
     if (!touch) return;
     clearTimeout(touch.timer);
-    document.documentElement.style.removeProperty('-webkit-user-select');
-    document.documentElement.style.removeProperty('-webkit-touch-callout');
+    unlockPage();
     if (!touch.fired) touch = null;
+  }
+  function fireTouch() {
+    if (!touch || touch.fired) return;
+    touch.fired = true;
+    clearTimeout(touch.timer);
+    const tt = touch;
+    if (lastSrc === 'mouse' && Date.now() - lastSrcAt < 800) return;
+    lastSrc = 'touch'; lastSrcAt = Date.now();
+    eatClick = Date.now();
+    try { const s = getSelection(); s && s.removeAllRanges(); } catch (_) {}
+    openNew(tt.target, tt.x, tt.y);
   }
   function onTouchStart(e) {
     if (touch) { cancelTouch(); touch = null; }
     if (e.touches.length !== 1) return;
     const t = e.touches[0];
     const path = e.composedPath ? e.composedPath() : [];
-    if (!eligible(e.target, path)) return;
+    if (!eligible(e.target, path, true)) return;
     const st = document.documentElement.style;
-    st.setProperty('-webkit-user-select', 'none'); // iOS: без выделения и выноски на время удержания
+    st.setProperty('-webkit-user-select', 'none'); // iOS: без выделения, выноски и превью ссылки на время удержания
     st.setProperty('-webkit-touch-callout', 'none');
-    touch = {
-      x: t.clientX, y: t.clientY, target: e.target, fired: false,
-      timer: setTimeout(() => {
-        if (!touch) return;
-        touch.fired = true;
-        const tt = touch;
-        cancelTouch();
-        if (lastSrc === 'mouse' && Date.now() - lastSrcAt < 800) return;
-        lastSrc = 'touch'; lastSrcAt = Date.now();
-        try { const s = getSelection(); s && s.removeAllRanges(); } catch (_) {}
-        openNew(tt.target, tt.x, tt.y);
-      }, 550)
-    };
+    touch = { x: t.clientX, y: t.clientY, target: e.target, fired: false, timer: setTimeout(fireTouch, 550) };
   }
   function onTouchMove(e) {
     if (!touch || touch.fired) return;
@@ -670,13 +678,22 @@
   function onTouchEnd(e) {
     if (!touch) return;
     const fired = touch.fired;
-    cancelTouch();
+    clearTimeout(touch.timer);
+    unlockPage();
     touch = null;
-    if (fired && e.cancelable) e.preventDefault(); // не пускать «клик» после долгого нажатия
+    if (fired) {
+      if (e.cancelable) e.preventDefault(); // не пускать «клик» по ссылке/кнопке после долгого нажатия
+      eatClick = Date.now();
+      setTimeout(() => { eatClick = 0; }, 700);
+    }
+  }
+  function onDragStart(e) {
+    cancelHold();
+    if (touch) e.preventDefault(); // iOS: перетаскивание ссылки/картинки при долгом нажатии
   }
 
   /* зажатие левой кнопки мыши / тачпада ~550 мс — на любом месте, включая ссылки и картинки */
-  let hold = null, eatClick = 0;
+  let hold = null;
   function cancelHold() {
     if (!hold) return;
     clearTimeout(hold.timer);
@@ -709,7 +726,10 @@
   }
   function onHoldUp(e) {
     cancelHold();
-    if (eatClick && Date.now() - eatClick < 5000 && e.type === 'pointerup') e.preventDefault();
+    if (eatClick && Date.now() - eatClick < 5000 && e.type === 'pointerup') {
+      e.preventDefault();
+      setTimeout(() => { eatClick = 0; }, 700); // клик приходит сразу после отпускания
+    }
   }
   function onClickCapture(e) {
     // после зажатия не пускать клик по ссылке/кнопке под курсором
@@ -759,6 +779,7 @@
   border:1px solid color-mix(in srgb,var(--rn-fg) 22%,transparent);border-radius:var(--rn-panel-radius);
   padding:6px 8px;outline:none;line-height:1.4}
 .ta:focus{border-color:var(--rn-accent)}
+@media (pointer:coarse){.ta{font-size:max(16px,var(--rn-size))}}
 .ta::placeholder{color:inherit;opacity:.5}
 .seg{display:flex;gap:4px}
 .seg-b,.btn{font:inherit;color:inherit;background:transparent;cursor:pointer;margin:0;line-height:1.2;
@@ -808,14 +829,14 @@ button:focus-visible{outline:2px solid var(--rn-accent);outline-offset:1px}
     document.addEventListener('touchstart', onTouchStart, { passive: true });
     document.addEventListener('touchmove', onTouchMove, { passive: true });
     document.addEventListener('touchend', onTouchEnd, { passive: false });
-    document.addEventListener('touchcancel', () => { cancelTouch(); touch = null; }, { passive: true });
+    document.addEventListener('touchcancel', () => { cancelTouch(); if (touch && touch.fired) { unlockPage(); touch = null; } }, { passive: true });
     window.addEventListener('scroll', e => { cancelHold(); if (touch && !touch.fired) { cancelTouch(); } scheduleLayout(e); }, { passive: true, capture: true });
     window.addEventListener('pointerdown', onPointerDown, true);
     window.addEventListener('pointerdown', onHoldDown, true);
     window.addEventListener('pointermove', onHoldMove, { capture: true, passive: true });
     window.addEventListener('pointerup', onHoldUp, true);
     window.addEventListener('pointercancel', cancelHold, true);
-    window.addEventListener('dragstart', cancelHold, true);
+    window.addEventListener('dragstart', onDragStart, true);
     window.addEventListener('wheel', cancelHold, { capture: true, passive: true });
     window.addEventListener('blur', cancelHold);
     window.addEventListener('click', onClickCapture, true);
