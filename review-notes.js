@@ -620,14 +620,15 @@
     return true;
   }
 
-  function onContextMenu(e) {
+  function onTouchContextMenu(e) {
     // Телефон: идёт долгое нажатие — меню телефона не показываем, заметку открывает таймер
-    if (touch) {
-      if (e.cancelable) e.preventDefault();
-      if (!touch.fired) fireTouch();
-      return;
-    }
-    if (e.defaultPrevented) return;
+    if (!touch) return;
+    if (e.cancelable) e.preventDefault();
+    e.stopImmediatePropagation();
+    if (!touch.fired) fireTouch();
+  }
+  function onContextMenu(e) {
+    if (touch || e.defaultPrevented) return;
     const path = e.composedPath ? e.composedPath() : [];
     if (!eligible(e.target, path)) return;
     e.preventDefault();
@@ -668,7 +669,7 @@
     const st = document.documentElement.style;
     st.setProperty('-webkit-user-select', 'none'); // iOS: без выделения, выноски и превью ссылки на время удержания
     st.setProperty('-webkit-touch-callout', 'none');
-    touch = { x: t.clientX, y: t.clientY, target: e.target, fired: false, timer: setTimeout(fireTouch, 550) };
+    touch = { x: t.clientX, y: t.clientY, target: e.target, fired: false, t0: Date.now(), timer: setTimeout(fireTouch, 550) };
   }
   function onTouchMove(e) {
     if (!touch || touch.fired) return;
@@ -825,11 +826,17 @@ button:focus-visible{outline:2px solid var(--rn-accent);outline-offset:1px}
     document.documentElement.appendChild(host);
     detectStyle();
 
+    window.addEventListener('contextmenu', onTouchContextMenu, true);
     window.addEventListener('contextmenu', onContextMenu);
-    document.addEventListener('touchstart', onTouchStart, { passive: true });
-    document.addEventListener('touchmove', onTouchMove, { passive: true });
-    document.addEventListener('touchend', onTouchEnd, { passive: false });
-    document.addEventListener('touchcancel', () => { cancelTouch(); if (touch && touch.fired) { unlockPage(); touch = null; } }, { passive: true });
+    window.addEventListener('touchstart', onTouchStart, { capture: true, passive: true });
+    window.addEventListener('touchmove', onTouchMove, { capture: true, passive: true });
+    window.addEventListener('touchend', onTouchEnd, { capture: true, passive: false });
+    document.addEventListener('touchcancel', () => {
+      // iOS/Android забирают удержание на ссылке или фото (превью, перетаскивание) — палец не двигался, значит это долгое нажатие
+      if (touch && !touch.fired && Date.now() - touch.t0 >= 300) fireTouch();
+      if (touch && touch.fired) { eatClick = Date.now(); setTimeout(() => { eatClick = 0; }, 700); }
+      cancelTouch(); unlockPage(); touch = null;
+    }, { capture: true, passive: true });
     window.addEventListener('scroll', e => { cancelHold(); if (touch && !touch.fired) { cancelTouch(); } scheduleLayout(e); }, { passive: true, capture: true });
     window.addEventListener('pointerdown', onPointerDown, true);
     window.addEventListener('pointerdown', onHoldDown, true);
