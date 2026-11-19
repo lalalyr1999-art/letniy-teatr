@@ -169,12 +169,35 @@
   const docH = () => Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
   const clamp = (v, a, b) => Math.min(Math.max(v, a), b);
 
+  // Положение элемента в документе по вёрстке, без CSS-трансформаций (наклон за мышью,
+  // параллакс, анимации), чтобы точка не «убегала» вместе с движущимся элементом.
+  function docRect(el) {
+    if (el instanceof HTMLElement && el.offsetWidth + el.offsetHeight > 0) {
+      let x = 0, y = 0, e = el, fixed = false;
+      while (e) {
+        x += e.offsetLeft; y += e.offsetTop;
+        if (getComputedStyle(e).position === 'fixed') { fixed = true; break; }
+        const op = e.offsetParent;
+        if (op) { x += op.clientLeft; y += op.clientTop; }
+        e = op;
+      }
+      if (fixed) { x += scrollX; y += scrollY; }
+      // прокрутка внутренних лент/блоков (свайп-афиша и т. п.)
+      for (let p = el.parentElement; p && p !== document.body && p !== document.documentElement; p = p.parentElement) {
+        x -= p.scrollLeft; y -= p.scrollTop;
+      }
+      return { left: x, top: y, width: el.offsetWidth, height: el.offsetHeight };
+    }
+    const r = el.getBoundingClientRect(); // SVG и пр.
+    return { left: r.left + scrollX, top: r.top + scrollY, width: r.width, height: r.height };
+  }
+
   function makeAnchor(el, cx, cy) {
-    const r = el.getBoundingClientRect();
+    const r = docRect(el), px = cx + scrollX, py = cy + scrollY;
     return {
       selector: cssPath(el),
-      rx: r.width ? clamp((cx - r.left) / r.width, 0, 1) : 0.5,
-      ry: r.height ? clamp((cy - r.top) / r.height, 0, 1) : 0.5,
+      rx: r.width ? clamp((px - r.left) / r.width, 0, 1) : 0.5,
+      ry: r.height ? clamp((py - r.top) / r.height, 0, 1) : 0.5,
       px: clamp((cx + scrollX) / docW(), 0, 1),
       py: Math.round(cy + scrollY),
       vw: innerWidth
@@ -185,9 +208,17 @@
     try { el = a.selector ? document.querySelector(a.selector) : null; } catch (_) {}
     let x, y;
     if (el && visible(el) && getComputedStyle(el).visibility !== 'hidden') {
-      const r = el.getBoundingClientRect();
-      x = r.left + scrollX + r.width * a.rx;
-      y = r.top + scrollY + r.height * a.ry;
+      const r = docRect(el);
+      x = r.left + r.width * a.rx;
+      y = r.top + r.height * a.ry;
+      // точка внутри прокручиваемой ленты, уехавшая за её край, — скрыть до возврата
+      for (let p = el.parentElement; p && p !== document.body && p !== document.documentElement; p = p.parentElement) {
+        if (p.scrollWidth <= p.clientWidth + 1 && p.scrollHeight <= p.clientHeight + 1) continue;
+        const cs = getComputedStyle(p);
+        if (cs.overflowX === 'visible' && cs.overflowY === 'visible') continue;
+        const b = p.getBoundingClientRect(), vx = x - scrollX, vy = y - scrollY;
+        if (vx < b.left || vx > b.right || vy < b.top || vy > b.bottom) return { x, y, hidden: true };
+      }
     } else {
       x = (a.px || 0) * docW();
       y = a.py || 0;
@@ -249,6 +280,7 @@
       const n = d.dataset.id ? notes.get(d.dataset.id) : (tempDot && tempDot.note);
       if (!n) return;
       const p = anchorPos(n.anchor);
+      d.style.display = p.hidden ? 'none' : '';
       d.style.left = (p.x - 6) + 'px';
       d.style.top = (p.y - 6) + 'px';
     });
