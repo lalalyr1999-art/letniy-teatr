@@ -249,7 +249,8 @@
       const n = d.dataset.id ? notes.get(d.dataset.id) : (tempDot && tempDot.note);
       if (!n) return;
       const p = anchorPos(n.anchor);
-      d.style.transform = 'translate(' + (p.x - 6) + 'px,' + (p.y - 6) + 'px)';
+      d.style.left = (p.x - 6) + 'px';
+      d.style.top = (p.y - 6) + 'px';
     });
     if (panel && !fromScroll) placePanel();
   }
@@ -656,7 +657,8 @@
     const path = e.composedPath();
     if (!eligible(e.target, path, true)) return;
     const ring = el('div', 'hold');
-    ring.style.transform = 'translate(' + (e.clientX + scrollX - 14) + 'px,' + (e.clientY + scrollY - 14) + 'px)';
+    ring.style.left = (e.clientX + scrollX - 14) + 'px';
+    ring.style.top = (e.clientY + scrollY - 14) + 'px';
     layer.appendChild(ring);
     const h = hold = {
       x: e.clientX, y: e.clientY, target: e.target, ring,
