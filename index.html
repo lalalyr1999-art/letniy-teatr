@@ -1576,9 +1576,19 @@ html[data-bg="weather"] .wx{display:flex}
 .wx-m button{width:36px;height:36px}
 @media (min-width:901px){.wx-m{display:none!important}}
 @media (max-width:900px){#hdr .wx{display:none!important}}
+/* панель выбора стиля (для показа заказчику) */
+.sty{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:70;display:flex;align-items:center;gap:4px;padding:5px;border-radius:999px;
+  background:#2B2019;color:#fff;box-shadow:0 14px 34px -12px rgba(30,15,5,.55);font:500 13px var(--text);white-space:nowrap}
+.sty span{padding:0 10px 0 12px;opacity:.6}
+.sty button{display:flex;align-items:center;gap:7px;height:34px;padding:0 13px 0 8px;border:0;border-radius:999px;background:transparent;color:#fff;cursor:pointer;font:inherit;transition:background .2s}
+.sty button:hover{background:rgba(255,255,255,.12)}
+.sty button[aria-pressed="true"]{background:#fff;color:#2B2019}
+.sty i{width:16px;height:16px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.18)}
+.demo{display:none}
+@media (max-width:560px){.sty{bottom:10px;max-width:calc(100% - 20px)}.sty span{display:none}.sty button{padding:0 10px 0 7px;font-size:12px;gap:5px}}
 </style>
 <script>
-(()=>{const H=document.documentElement;if(H.dataset.bg!=='weather')return;
+(()=>{const H=document.documentElement;
  const I={snow:'<path d="M12 2v20M3.3 7l17.4 10M3.3 17L20.7 7M9 4l3 2.5L15 4M9 20l3-2.5 3 2.5"/>',
   cloud:'<path d="M7 18h10.5a4 4 0 0 0 .6-7.95A6 6 0 0 0 6.6 9.1 4.5 4.5 0 0 0 7 18z"/>',
   sun:'<circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/>',
@@ -1590,7 +1600,19 @@ html[data-bg="weather"] .wx{display:flex}
  const set=(k,anim)=>{if(anim){H.classList.add('wx-anim');clearTimeout(set.t);set.t=setTimeout(()=>H.classList.remove('wx-anim'),700)}
   H.dataset.wx=k;document.querySelectorAll('.wx button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.wx===k))};
  document.addEventListener('click',e=>{const x=e.target.closest('.wx button');if(x)set(x.dataset.wx,true)});
- set(H.dataset.wx||'snow',false);
+ if(H.dataset.bg==='weather')set(H.dataset.wx||'snow',false);
+ // панель «Стиль сайта»: все варианты на одной ссылке
+ const S=[['beige','Бежевый','#F6EED9'],['white','Белый','#FFFFFF'],['blue','Синий','#8EC5EE'],['weather','Погода','conic-gradient(#fff 0 25%,#EAEBEA 0 50%,#F6EED9 0 75%,#DCEEFA 0)']];
+ const p=document.createElement('div');p.className='sty';p.setAttribute('role','group');p.setAttribute('aria-label','Стиль сайта');
+ p.innerHTML='<span>Стиль сайта</span>'+S.map(([k,n,c])=>`<button type="button" data-bg="${k}" aria-pressed="false"><i style="background:${c}"></i>${n}</button>`).join('');
+ document.body.appendChild(p);
+ const style=(k,anim)=>{if(anim){H.classList.add('wx-anim');clearTimeout(style.t);style.t=setTimeout(()=>H.classList.remove('wx-anim'),700)}
+  if(k==='beige'){delete H.dataset.bg}else H.dataset.bg=k;
+  if(k==='weather')set('snow',false);else delete H.dataset.wx;
+  p.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.bg===k));
+  try{const u=new URL(location.href);k==='beige'?u.searchParams.delete('bg'):u.searchParams.set('bg',k);history.replaceState(null,'',u)}catch(e){}};
+ p.addEventListener('click',e=>{const x=e.target.closest('button');if(x)style(x.dataset.bg,true)});
+ style(H.dataset.bg||'beige',false);
 })();
 </script>
 
