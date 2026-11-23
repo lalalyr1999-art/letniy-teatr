@@ -1,0 +1,1599 @@
+<!doctype html>
+<html lang="ru" data-bg="white">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>(()=>{const H=document.documentElement,q=new URLSearchParams(location.search).get('bg');if(q)H.dataset.bg=q;if(H.dataset.bg==='weather'&&!H.dataset.wx)H.dataset.wx='snow'})()</script>
+<title>Летний театр</title>
+<!-- шрифты локально: сайт без обращений к иностранным сервисам -->
+<link rel="stylesheet" href="fonts.css">
+<style>
+:root{
+  /* палитра брендбука Парка Маяковского */
+  --red:#DA6150; --coral:#DA6150; --page:#F6EED9; --white:#FFFBF3; --beige:#BFB596; --cream:#F6E9D8;
+  --wood:#8A4A22; --green:#00963F; --sky:#8EC5EE; --ink:#111; --grey:#E6DED0; --muted:#6d6e71; --warm:#ffcf8a;
+  --cond:'Mayak','Oswald','Arial Narrow',sans-serif; --text:'Inter',Arial,sans-serif; --hand:'Caveat','Segoe Script',cursive;
+  --g:clamp(16px,4vw,56px); --ease:cubic-bezier(.6,0,.2,1);
+}
+*{box-sizing:border-box;margin:0;padding:0;font-synthesis:none}
+html,body{background:var(--page);color:var(--ink);font-family:var(--text);-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit}
+.pill{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;font-family:var(--cond);text-transform:uppercase;font-weight:600;letter-spacing:.02em;white-space:nowrap}
+.btn-red{background:var(--red);color:#fff;padding:13px 28px;font-size:18px;border:0;cursor:pointer;transition:transform .25s var(--ease),box-shadow .25s}
+.btn-red:hover{transform:translateY(-2px) rotate(-2deg);box-shadow:0 10px 24px rgba(218,97,80,.4)}
+.btn-glass{background:rgba(255,255,255,.14);backdrop-filter:blur(10px);color:#fff;padding:12px 24px;font-size:17px;border:1.5px solid rgba(255,255,255,.4);transition:background .2s}
+.btn-glass:hover{background:rgba(255,255,255,.26)}
+.btn-line{background:transparent;border:1.5px solid #111;padding:10px 20px;font-size:16px;transition:all .2s}
+.btn-line:hover{background:#111;color:#fff}
+
+/* ---------- шапка ---------- */
+header{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:40px;padding:18px var(--g);background:transparent;transition:box-shadow .3s,background .3s}
+header.scrolled{background:rgba(246,238,217,.88);backdrop-filter:blur(14px);box-shadow:0 1px 0 rgba(0,0,0,.06)}
+.logo img{height:26px;display:block;transition:transform .3s var(--ease)}
+.logo:hover img{transform:rotate(-4deg)}
+nav{display:flex;gap:28px;font-size:15px;font-weight:500}
+nav a{position:relative;color:#333;transition:color .2s}
+nav a::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:2px;border-radius:2px;background:var(--red);transform:scaleX(0);transition:transform .3s var(--ease)}
+nav a:hover{color:#000}nav a:hover::after{transform:scaleX(1)}
+.hdr-cta{margin-left:auto;display:flex;gap:12px;align-items:center}
+
+/* ---------- баннер ---------- */
+.hero{padding:0 var(--g)}
+.banner{position:relative;height:clamp(500px,calc(100vh - 210px),720px);border-radius:32px;overflow:hidden;background:#0b1430;isolation:isolate}
+.slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity 1.1s ease,visibility 0s 1.1s}
+.slide.on{opacity:1;visibility:visible;transition:opacity 1.1s ease}
+.slide .ph{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.slide.on .ph{animation:zoom 10s ease-out both}
+@keyframes zoom{from{transform:scale(1.08)}to{transform:scale(1)}}
+/* плёночное зерно — «живое» фото */
+/* зерно: шумовая плитка генерируется один раз (см. скрипт), без фильтров и анимации */
+.grain{position:absolute;inset:0;z-index:7;pointer-events:none;opacity:.08}
+
+/* --- слайд-бренд: закат → ночь --- */
+.dusk::after{content:"";position:absolute;inset:0;z-index:2;background:linear-gradient(0deg,rgba(5,8,20,.72),rgba(5,8,20,0) 60%);pointer-events:none}
+.dusk .ph{transition:opacity 3.4s ease}
+.dusk .night{opacity:0}
+.dusk.dark .night{opacity:1}
+.dusk.dark .day{opacity:0}
+.dusk canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+#stars{z-index:1;mix-blend-mode:screen;-webkit-mask-image:linear-gradient(180deg,#000 0%,#000 32%,transparent 60%);mask-image:linear-gradient(180deg,#000 0%,#000 32%,transparent 60%)}
+#flies{z-index:3}
+.sun{position:absolute;z-index:1;width:70vmax;height:70vmax;border-radius:50%;pointer-events:none;mix-blend-mode:screen;transform:translate(-50%,-50%);
+  background:radial-gradient(circle,rgba(255,214,140,.5) 0%,rgba(255,170,80,.16) 28%,transparent 60%);transition:opacity 2.4s ease}
+.dusk.dark .sun{opacity:0}
+.stage-glow{position:absolute;z-index:1;left:50%;top:42%;width:46%;height:34%;transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;mix-blend-mode:screen;
+  background:radial-gradient(closest-side,rgba(255,90,70,.4),transparent);opacity:0;transition:opacity 3s ease 1s}
+.dusk.dark .stage-glow{opacity:1}
+.daynight{position:absolute;z-index:8;left:50%;transform:translateX(-50%);top:22px;display:flex;gap:4px;padding:4px;border-radius:999px;background:rgba(255,255,255,.16);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.18)}
+.daynight button{border:0;background:none;color:#fff;font-family:var(--cond);text-transform:uppercase;font-size:14px;letter-spacing:.04em;padding:6px 14px;border-radius:999px;cursor:pointer;transition:all .35s var(--ease)}
+.daynight button.on{background:#fff;color:var(--ink)}
+.brand-txt{position:absolute;z-index:6;left:50%;bottom:clamp(30px,6vh,60px);transform:translateX(-50%);width:min(820px,80%);text-align:center;color:#fff}
+.hand{display:block;font-family:var(--hand);font-size:clamp(24px,2.4vw,34px);color:var(--warm);margin-bottom:6px;opacity:0;transform:translateY(10px);transition:all 1s var(--ease) .4s}
+.on .hand{opacity:1;transform:none}
+.stamp{display:block;width:max-content;margin:0 auto}
+.s-logo{background:var(--red);color:#fff;padding:14px 38px 12px;font-size:clamp(38px,4.4vw,66px);gap:14px;box-shadow:0 14px 40px rgba(0,0,0,.32);transform:rotate(-6deg) scale(.6);opacity:0;transition:all .9s cubic-bezier(.4,1.6,.5,1) .15s}
+.s-logo i{font-family:var(--hand);font-style:normal;text-transform:none;font-weight:500;font-size:.64em;letter-spacing:0}
+.s-sub{background:var(--cream);color:var(--red);padding:10px 26px;font-size:clamp(18px,2vw,26px);box-shadow:0 12px 34px rgba(0,0,0,.22);transform:rotate(4deg) translate(40px,-6px) scale(.6);opacity:0;transition:all .9s cubic-bezier(.4,1.6,.5,1) .35s}
+.on .s-logo{transform:rotate(-6deg);opacity:1}
+.on .s-sub{transform:rotate(4deg) translate(40px,-6px);opacity:1}
+.lead{margin:20px auto 22px;font-size:17px;line-height:1.5;max-width:560px;opacity:.95}
+.row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+/* --- слайды-события: редакционная подача --- */
+.ev::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:linear-gradient(90deg,rgba(6,8,16,.9) 0%,rgba(6,8,16,.62) 38%,rgba(6,8,16,.08) 70%),linear-gradient(0deg,rgba(6,8,16,.5),transparent 40%)}
+.ev .body{position:absolute;z-index:5;left:clamp(96px,9vw,140px);bottom:clamp(36px,8vh,76px);width:min(560px,48%);color:#fff}
+.date{display:flex;align-items:flex-end;gap:14px;margin-bottom:18px}
+.date b{font-family:var(--cond);font-weight:600;font-size:clamp(76px,8vw,120px);line-height:.78;letter-spacing:-.01em}
+.date span{font-family:var(--cond);text-transform:uppercase;font-size:20px;line-height:1.15;letter-spacing:.04em;padding-bottom:4px}
+.date span em{display:block;font-style:normal;color:rgba(255,255,255,.66);font-size:16px}
+.tag{background:var(--red);color:#fff;padding:6px 16px;font-size:15px;transform:rotate(-3deg);margin-bottom:14px}
+.ev h2{font-family:var(--cond);text-transform:uppercase;font-weight:600;font-size:clamp(30px,3.3vw,52px);line-height:1;margin-bottom:14px;text-wrap:balance}
+.ev p{font-size:16px;line-height:1.5;color:rgba(255,255,255,.82);margin-bottom:24px;max-width:460px}
+.ev .body>*{opacity:0;transform:translateY(18px);transition:all .8s var(--ease)}
+.ev.on .body>*{opacity:1;transform:none}
+.ev.on .body>*:nth-child(2){transition-delay:.08s}.ev.on .body>*:nth-child(3){transition-delay:.16s}
+.ev.on .body>*:nth-child(4){transition-delay:.24s}.ev.on .body>*:nth-child(5){transition-delay:.32s}
+
+/* фирменные полукруги — баннер как билет */
+.circles{position:absolute;top:0;bottom:0;z-index:9;display:flex;flex-direction:column;justify-content:space-between;pointer-events:none}
+.circles.l{left:0;transform:translateX(-50%)}.circles.r{right:0;transform:translateX(50%)}
+.circles i{display:block;width:clamp(96px,calc((100vh - 210px)/4.4),164px);aspect-ratio:1;border-radius:50%;background:var(--page);transform:scale(0);transition:transform .9s cubic-bezier(.5,1.6,.4,1)}
+.ready .circles i{transform:scale(1)}
+
+/* «далее» — превью следующих событий, как в Яндекс Афише */
+.next{position:absolute;z-index:8;right:clamp(96px,9vw,140px);bottom:clamp(36px,8vh,76px);display:flex;gap:10px;transition:opacity .6s ease,transform .6s var(--ease)}
+.is-brand .next{opacity:0;transform:translateY(24px);pointer-events:none}
+.nx{width:178px;padding:8px;border-radius:16px;background:rgba(10,12,22,.42);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.14);color:#fff;
+  cursor:pointer;text-align:left;transition:transform .35s var(--ease),background .3s}
+.nx:hover{transform:translateY(-4px);background:rgba(10,12,22,.6)}
+.nx img{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:10px}
+.nx b{display:block;font-size:13px;font-weight:600;line-height:1.25;margin:8px 4px 2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.nx span{display:block;font-size:12px;color:rgba(255,255,255,.64);margin:0 4px 2px}
+.prog{position:absolute;z-index:9;left:0;bottom:0;height:3px;background:var(--red);width:0}
+.prog.run{transition:width linear}
+
+/* под баннером */
+.ctrl{display:flex;align-items:center;gap:16px;margin-top:16px;min-height:44px}
+.dots{display:flex;gap:8px;flex:1;justify-content:center}
+.dots button{width:10px;height:10px;border-radius:50%;border:0;background:#d9d9d9;cursor:pointer;transition:all .35s var(--ease);padding:0}
+.dots button.on{width:34px;border-radius:6px;background:var(--red)}
+.arrows{display:flex;gap:8px}
+.arrows button{width:44px;height:44px;border-radius:50%;border:1.5px solid #111;background:transparent;font-size:18px;cursor:pointer;transition:all .2s}
+.arrows button:hover{background:var(--red);border-color:var(--red);color:#fff}
+.sub{display:flex;align-items:center;gap:8px}
+.sub label{font-family:var(--cond);text-transform:uppercase;font-size:15px;margin-right:6px;white-space:nowrap}
+.sub input{width:220px;height:44px;border-radius:999px;border:1.5px solid #cfd0ce;background:var(--white);padding:0 18px;font:15px var(--text);outline:none;transition:border-color .2s}
+.sub input:focus{border-color:var(--red)}
+.sub .btn-red{height:44px;padding:0 20px;font-size:16px}
+
+/* ближайшие события */
+.recs-h{display:flex;align-items:baseline;justify-content:space-between;padding:34px var(--g) 16px}
+.recs-h h3{font-family:var(--cond);text-transform:uppercase;font-weight:600;font-size:30px}
+.recs-h h3 i{font-family:var(--hand);font-style:normal;text-transform:none;font-weight:500;color:var(--red);font-size:.8em;margin-left:10px}
+.recs-h a{font-size:14px;color:var(--muted)}.recs-h a:hover{color:var(--red)}
+.recs{display:flex;gap:22px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding:0 var(--g);padding:6px var(--g) 40px;scrollbar-width:none}
+.recs::-webkit-scrollbar{display:none}
+.card{flex:0 0 210px;scroll-snap-align:start}
+.card .ph{position:relative;aspect-ratio:1;border-radius:50%;overflow:hidden;background:var(--grey);transition:transform .45s var(--ease),box-shadow .45s}
+.card:hover .ph{transform:translateY(-6px);box-shadow:0 18px 30px rgba(0,0,0,.16)}
+.card img{width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease)}
+.card:hover img{transform:scale(1.08)}
+.card .d{position:absolute;left:50%;bottom:12px;transform:translateX(-50%) rotate(-4deg);background:var(--red);color:#fff;padding:4px 12px;font-size:14px;transition:transform .45s var(--ease)}
+.card:hover .d{transform:translateX(-50%) rotate(3deg) scale(1.06)}
+.card b{display:block;margin-top:14px;font-size:15px;font-weight:600;line-height:1.3;text-align:center;text-wrap:balance}
+.card span{display:block;font-size:13px;color:var(--muted);text-align:center;margin-top:4px}
+.demo{position:fixed;left:12px;bottom:12px;z-index:50;font-size:11px;color:#999;background:var(--white);padding:4px 8px;border-radius:6px}
+
+@media (max-width:1180px){ .next .nx:nth-child(3){display:none} }
+@media (max-width:980px){ nav{display:none} .sub label{display:none} .next{display:none} .ev .body{width:70%} }
+@media (max-width:720px){
+  .hdr-sub{display:none}
+  .banner{height:74vh;min-height:540px;border-radius:24px}
+  .circles{display:none}
+  .brand-txt{width:90%}
+  .s-sub,.on .s-sub{transform:rotate(4deg) translate(14px,-6px)}
+  .ev::after{background:linear-gradient(0deg,rgba(6,8,16,.94) 0%,rgba(6,8,16,.55) 55%,rgba(6,8,16,.1) 100%)}
+  .ev .body{left:22px;right:22px;width:auto;bottom:30px}
+  .date b{font-size:72px}
+  .ev p{display:none}
+  .ctrl{flex-wrap:wrap}
+  .arrows{display:none}
+  .sub{width:100%;order:3}.sub input{flex:1;width:auto;min-width:0}
+  .card{flex-basis:150px}
+  .daynight{top:14px}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:1ms!important;animation-delay:0s!important;animation-iteration-count:1!important;transition-duration:1ms!important;transition-delay:0s!important}}
+</style>
+<style>
+/* раздел «Как добраться» */
+#way .wt .num{background:none!important;padding:0!important;border-radius:0!important;box-shadow:none!important;width:auto!important;height:auto!important;display:block!important}
+#way .wt .hand{opacity:1!important;animation:none!important;transform:none!important;display:block}
+#way .card,#way .steps li,#way .steps li>span{text-align:left!important}
+#way .steps b{display:inline!important;font:inherit!important;font-weight:600!important;color:inherit!important;margin:0!important}
+#way svg.map{padding:0!important;border:0!important;background:none!important}
+
+#way{--coral:#DA6150;--coralD:#B8473A;--cream:#F6EED9;--ink:#2B2019;--muted:#7A6A5C;--line:#E6D6BE;
+ --cond:'Mayak','Oswald','Arial Narrow',sans-serif;--text:'Inter',Arial,sans-serif;--hand:'Caveat','Segoe Script',cursive;
+ --g:clamp(16px,4vw,56px);--ease:cubic-bezier(.6,0,.2,1)}
+
+#way{position:relative;min-height:100vh;padding:clamp(60px,9vh,110px) var(--g);overflow:hidden;
+ display:grid;grid-template-columns:minmax(260px,.8fr) minmax(420px,1.6fr) minmax(260px,320px);gap:clamp(16px,2.5vw,40px);align-items:center}
+#way::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.2;mix-blend-mode:multiply;
+ background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .55 0 0 0 0 .45 0 0 0 0 .3 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+#way /* текст */
+.wt{position:relative;z-index:3}
+#way .wt .num{font:500 15px var(--text);color:var(--muted);letter-spacing:.08em}
+#way .wt h2{font:600 clamp(48px,5.2vw,96px)/.88 var(--cond);text-transform:uppercase;color:var(--coral);margin-top:18px;letter-spacing:-.01em}
+#way .wt .hand{font:500 clamp(24px,2.1vw,34px)/1.15 var(--hand);color:var(--ink);margin-top:18px}
+#way .wt p{max-width:340px;margin-top:16px;font-size:15px;line-height:1.6;color:#4a3d33}
+#way .wt .addr{margin-top:22px;padding-top:18px;border-top:1.5px dashed var(--line);font-size:14px;line-height:1.55;color:#4a3d33;max-width:340px}
+#way .wt .addr b{display:block;font:600 16px var(--cond);text-transform:uppercase;letter-spacing:.03em;color:var(--ink);margin-bottom:4px}
+#way .btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+#way .pill{display:inline-flex;align-items:center;gap:10px;height:48px;padding:0 22px;border-radius:999px;font:600 15px var(--cond);text-transform:uppercase;letter-spacing:.04em;text-decoration:none;transition:transform .3s var(--ease),background .3s}
+#way .pill.red{background:var(--coral);color:#fff}#way .pill.red:hover{background:var(--coralD);transform:translateY(-2px)}
+#way .pill.line{border:1.5px solid var(--ink);color:var(--ink)}#way .pill.line:hover{background:var(--ink);color:var(--cream)}
+
+#way /* карта в перспективе */
+.stage{position:relative;height:min(78vh,760px);perspective:1500px;perspective-origin:50% 20%}
+#way .plane{position:absolute;left:50%;top:50%;width:min(100%,560px);aspect-ratio:400/520;transform-style:preserve-3d;
+ transform:translate(-50%,-52%) rotateX(0) rotateZ(0) scale(.86);transition:transform 1.8s var(--ease)}
+#way.in .plane{transform:translate(-50%,-44%) rotateX(var(--rx,50deg)) rotateZ(var(--rz,-16deg)) scale(.98)}
+#way .plane.drag{transition:none}
+#way .stage{cursor:grab;touch-action:pan-y;user-select:none}#way .plane{touch-action:none}#way .stage.grabbing{cursor:grabbing}
+#way .hint{position:absolute;left:50%;bottom:2%;transform:translateX(-50%);z-index:5;display:flex;align-items:center;gap:8px;background:rgba(255,251,243,.92);border-radius:999px;padding:8px 16px;font:600 13px var(--cond);text-transform:uppercase;letter-spacing:.05em;color:var(--ink);box-shadow:0 10px 24px -14px rgba(90,40,10,.45);pointer-events:none;transition:opacity .4s}
+#way .hint svg{width:16px;height:16px;color:var(--coral)}#way .stage.used .hint{opacity:0}
+#way .plane svg.map{position:absolute;inset:0;width:100%;height:100%;display:block;border-radius:22px;overflow:hidden;
+ box-shadow:0 60px 80px -40px rgba(90,50,20,.35),0 0 0 1px rgba(90,60,30,.06)}
+#way .route{fill:none;stroke:var(--coral);stroke-width:5.5;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 4px rgba(218,97,80,.55))}
+#way .route-bg{fill:none;stroke:#fff;stroke-width:11;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
+#way .route,#way .route-bg{stroke-dasharray:var(--L);stroke-dashoffset:var(--L);transition:stroke-dashoffset 2.6s var(--ease) 1.2s}
+#way.in .route,#way.in .route-bg{stroke-dashoffset:0}
+#way .walker{opacity:0;transition:opacity .4s 3.6s}#way.in .walker{opacity:1}
+#way .ring{fill:none;stroke:var(--coral);stroke-width:2;opacity:0;transform-box:fill-box;transform-origin:center;animation:wayring 2.4s ease-out infinite}
+#way.in .ring{opacity:1}
+@keyframes wayring{from{transform:scale(.4);opacity:.9}to{transform:scale(2.6);opacity:0}}
+
+#way /* метки стоят вертикально над картой */
+.pin{position:absolute;transform-style:preserve-3d;transform:translate(-50%,-100%) rotateZ(calc(-1 * var(--rz,-16deg))) rotateX(calc(-1 * var(--rx,50deg)));transform-origin:50% 100%;
+ opacity:0;transition:opacity .6s}
+#way.in .pin{opacity:1}#way.in .pin.p1{transition-delay:1.4s}#way.in .pin.p2{transition-delay:3.6s}
+#way .pin span{display:flex;align-items:center;gap:8px;white-space:nowrap;background:#fff;color:var(--ink);border-radius:14px;padding:8px 14px 8px 10px;
+ font:600 15px var(--cond);text-transform:uppercase;letter-spacing:.03em;box-shadow:0 14px 26px -12px rgba(90,40,10,.4);position:relative}
+#way .pin span::after{content:"";position:absolute;left:50%;bottom:-7px;width:14px;height:14px;background:#fff;transform:translateX(-50%) rotate(45deg);border-radius:2px}
+#way .pin span{margin-bottom:var(--stem,26px)}
+#way .pin::before{content:"";position:absolute;left:50%;bottom:0;width:2px;height:var(--stem,26px);background:var(--ink);opacity:.55;transform:translateX(-50%)}
+#way .pin.p2{--stem:70px}
+#way .pin.p2::before{background:var(--coral);opacity:1}
+#way .pin.p2 span{background:var(--coral);color:#fff}#way .pin.p2 span::after{background:var(--coral)}
+#way .pin i{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--coral);color:#fff}
+#way .pin.p2 i{background:#fff;color:var(--coral)}
+#way .pin svg{width:16px;height:16px}
+
+#way /* карточка шагов */
+.side{display:flex;flex-direction:column;gap:16px}
+#way .card{background:var(--white);border-radius:22px;padding:22px 22px 18px;box-shadow:0 24px 50px -30px rgba(90,50,20,.45);border:1px solid #F0E3CF}
+#way .tabs{display:flex;gap:6px;margin-bottom:18px;background:#F4E8D6;border-radius:999px;padding:4px}
+#way .tabs button{flex:1;border:0;background:transparent;border-radius:999px;padding:8px 6px;font:600 13px var(--cond);text-transform:uppercase;letter-spacing:.03em;color:var(--muted);cursor:pointer}
+#way .tabs button.on{background:#fff;color:var(--ink);box-shadow:0 4px 10px -6px rgba(0,0,0,.3)}
+#way .steps{list-style:none;display:flex;flex-direction:column}
+#way .steps li{display:grid;grid-template-columns:38px 1fr;gap:12px;align-items:center;font-size:14.5px;line-height:1.35;position:relative;padding-bottom:22px}
+#way .steps li:not(:last-child)::after{content:"";position:absolute;left:18px;top:40px;bottom:4px;border-left:2px dotted var(--coral);opacity:.6}
+#way .steps li:last-child{padding-bottom:0}
+#way .steps .ic{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#FBE6DF;color:var(--coral)}
+#way .steps li:last-child .ic{background:var(--coral);color:#fff}
+#way .steps .ic svg{width:19px;height:19px}
+#way .steps b{font-weight:600}
+#way .time{display:flex;align-items:center;gap:12px;margin-top:18px;padding-top:16px;border-top:1.5px dashed var(--line)}
+#way .time strong{font:600 30px/1 var(--cond);color:var(--ink)}
+#way .time small{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+#way .time svg{width:30px;height:30px;color:var(--coral)}
+#way .mini{padding:12px;position:relative;cursor:zoom-in;transition:transform .3s var(--ease),box-shadow .3s}
+#way .mini:hover{transform:translateY(-3px);box-shadow:0 30px 50px -28px rgba(90,50,20,.55)}
+#way .mini .open{position:absolute;right:20px;top:18px;display:flex;align-items:center;gap:6px;background:var(--coral);color:#fff;border-radius:999px;padding:6px 12px;font:600 12px var(--cond);text-transform:uppercase;letter-spacing:.05em}
+#way .mini .open svg{width:13px;height:13px}
+#mapModal{position:fixed;inset:0;z-index:200;background:rgba(43,32,25,.55);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:3vh 3vw}
+#mapModal.mm-open{display:flex;animation:mmIn .35s ease}@keyframes mmIn{from{opacity:0}}
+#mapModal .box{position:relative;width:min(1100px,100%);height:100%;background:var(--page);border-radius:24px;overflow:hidden;box-shadow:0 40px 90px -30px rgba(0,0,0,.6)}
+#mapModal .vp{position:absolute;inset:0;overflow:hidden;cursor:grab;touch-action:none}#mapModal .vp.grabbing{cursor:grabbing}
+#mapModal .mz{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform}
+#mapModal .mz svg{display:block}
+#mapModal .bar{position:absolute;left:20px;top:18px;z-index:2;display:flex;gap:10px;align-items:center;font:600 22px var(--cond);text-transform:uppercase;color:var(--ink)}
+#mapModal .bar small{font:500 13px var(--text);text-transform:none;color:#7A6A5C}
+#mapModal .ctl{position:absolute;right:18px;top:16px;z-index:2;display:flex;flex-direction:column;gap:8px}
+#mapModal .ctl button{width:44px;height:44px;border-radius:50%;border:0;background:#fff;color:var(--ink);font:600 22px/1 var(--text);cursor:pointer;box-shadow:0 8px 20px -10px rgba(0,0,0,.4)}#mapModal .ctl button.x{background:var(--coral);color:#fff}
+#way .mini svg{display:block;width:100%;height:auto;border-radius:14px}
+#way .mini .lbl{position:absolute;left:24px;top:22px;font:600 12px var(--cond);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+#way .mini .n{position:absolute;right:24px;bottom:22px;font:600 12px var(--cond);color:var(--muted)}
+
+@media (max-width:1100px){
+ #way{grid-template-columns:1fr;gap:28px}
+ #way .stage{height:min(92vw,620px)}
+ #way .side{flex-direction:row;flex-wrap:wrap}#way .side .card{flex:1 1 280px}
+}
+@media (prefers-reduced-motion:reduce){#way .plane,#way .route,#way .route-bg,#way .walker,#way .pin{transition:none}#way .ring{animation:none}}
+
+#way{background:var(--page);box-sizing:border-box}#way *{box-sizing:border-box}
+#way h2,#way p,#way ol{margin:0;padding:0}
+</style>
+<style>
+/* подвал: вход в театр */
+.gatewall{position:relative;width:100%;height:max(280px,calc(100vw * 470 / 1600));margin-top:80px;background:var(--page);overflow:hidden}
+.gatewall::before{content:"";position:absolute;inset:0 0 auto;height:40%;background:linear-gradient(var(--page),var(--page))}
+.gw-svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.gw-wheel{animation:gwspin 60s linear infinite}
+@keyframes gwspin{to{transform:rotate(360deg)}}
+.gw-trees .lf{transform-box:fill-box;transform-origin:50% 100%;animation:gwsw 7s ease-in-out infinite alternate}
+.gw-trees .lf:nth-child(3n){animation-duration:9s;animation-delay:-3s}.gw-trees .lf:nth-child(4n){animation-delay:-5s}
+@keyframes gwsw{to{transform:rotate(2deg) translateX(1.5px)}}
+.gc{fill:#FBF9F4;transition:fill .35s var(--ease,ease) var(--d),transform .5s var(--ease,ease) var(--d);transform-box:fill-box;transform-origin:center}
+.gw-gate{cursor:pointer}.gw-gate:hover .gc,.gw-gate:focus .gc{fill:#F2B45A;transform:scale(.86)}
+.gw-sign{transform-box:fill-box;transform-origin:50% 100%;animation:gwsign 2.6s ease-in-out infinite}
+@keyframes gwsign{50%{transform:translateY(-6px)}}
+.gw-gate:hover .gw-sign{animation-play-state:paused}
+footer{margin-top:0!important;border-radius:0!important;background:var(--grey)!important;color:#5A4636!important;padding-top:40px!important}
+footer .ft-top h4{color:#DA6150!important}
+footer .ft-top a{color:#4A3A2E}footer .ft-top a:hover{color:#DA6150}
+footer .ft-brand img{filter:none!important}
+footer .ft-brand p{color:#5A4636}
+footer .ft-brand .soc a{border-color:#CDBFA9!important;color:#4A3A2E}
+footer .ft-brand .soc a:hover{border-color:#DA6150!important;background:#DA6150;color:#fff}
+footer .ft-big{display:none!important}
+.gatewall{margin-bottom:-2px}
+footer{position:relative}
+footer .ft-bot{border-top-color:#D4C7B3!important;color:#8A7864!important}
+footer .ft-bot a{color:#8A7864}
+/* узор из кругов (как на воротах) */
+.ring-row{height:28px;background:radial-gradient(circle,#FBF9F4 0 11px,transparent 12px) 0 50%/32px 28px repeat-x;opacity:.9}
+footer .ring-row{margin:-56px calc(-1*var(--g)) 40px;background-color:var(--grey);background-image:radial-gradient(circle,#C9563F 0 9px,transparent 10px);background-size:30px 28px}
+@media (prefers-reduced-motion:reduce){.gw-trees .lf,.gw-sign,.gw-wheel{animation:none}}
+</style>
+<style>
+/* п.2 Владимир: крупнее театр (обрезка), кнопки по левому краю */
+@media (min-width:901px){
+ .tilt{scale:1.45;transform-origin:60% 60%}
+}
+.sh-txt .row{justify-content:flex-start}
+#stageHero .tag-now{display:none!important}
+</style>
+</head>
+<body>
+<header id="hdr">
+  <a class="logo" href="#"><img src="img/Group 1143.png" alt="Летний театр"></a>
+  <nav class="nav-main" aria-label="Главное меню"><a href="#full">Афиша</a><a href="#about">О театре</a><a href="organizers.html">Организаторам</a><a href="#contacts">Контакты</a></nav>
+  <div class="hdr-cta"><a class="pill btn-line hdr-sub" href="#sub">Рассылка</a><a class="pill btn-red hdr-buy" href="#full"><span class="d">Билеты</span><span class="m">Купить билет</span></a>
+    <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="mnu" aria-label="Открыть меню"><i></i><i></i><i></i></button></div>
+  <div class="mnu" id="mnu" hidden>
+    <div class="mnu-col only-m"><a href="#full">Афиша</a><a href="#about">О театре</a><a href="organizers.html">Организаторам</a><a href="#contacts">Контакты</a></div>
+    <div class="mnu-col">
+      <a href="https://xn--80aj8afc.xn--e1agfrc5b.xn--p1ai/tickets/" target="_blank" rel="noopener">Как купить билет</a><a href="https://xn--80aj8afc.xn--e1agfrc5b.xn--p1ai/certificates" target="_blank" rel="noopener">Сертификаты</a>
+      <a href="https://xn--80aj8afc.xn--e1agfrc5b.xn--p1ai/news" target="_blank" rel="noopener">Новости</a><a href="https://xn--80aj8afc.xn--e1agfrc5b.xn--p1ai/faq" target="_blank" rel="noopener">Вопрос / ответ</a>
+      <a href="https://xn--80aj8afc.xn--e1agfrc5b.xn--p1ai/partners" target="_blank" rel="noopener">Партнёры</a>
+    </div>
+    <div class="mnu-col"><span class="mnu-h">Архив</span>
+      <a href="https://xn--80aj8afc.xn--e1agfrc5b.xn--p1ai/s23" target="_blank" rel="noopener">Сезон 2023</a><a href="https://xn--80aj8afc.xn--e1agfrc5b.xn--p1ai/s24" target="_blank" rel="noopener">Сезон 2024</a>
+      <a href="https://xn--80aj8afc.xn--e1agfrc5b.xn--p1ai/s25" target="_blank" rel="noopener">Сезон 2025</a><a href="https://xn--80aj8afc.xn--e1agfrc5b.xn--p1ai/s26" target="_blank" rel="noopener">Сезон 2026</a>
+    </div>
+    <div class="mnu-col mnu-foot"><a href="https://xn--e1agfrc5b.xn--p1ai/" target="_blank" rel="noopener">Сайт парка ↗</a><a class="only-m" href="#sub">Рассылка</a></div>
+  </div>
+</header>
+<style>
+#hdr{position:sticky}
+#hdr .hdr-buy .m{display:none}
+.burger{width:48px;height:48px;border-radius:50%;border:1.5px solid #2B2019;background:transparent;display:grid;place-content:center;gap:5px;cursor:pointer;transition:background .25s}
+.burger i{display:block;width:18px;height:2px;border-radius:2px;background:#2B2019;transition:transform .3s var(--ease),opacity .2s}
+.burger:hover{background:#2B2019}.burger:hover i{background:var(--page)}
+.burger[aria-expanded="true"] i:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.burger[aria-expanded="true"] i:nth-child(2){opacity:0}
+.burger[aria-expanded="true"] i:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.mnu{position:absolute;right:var(--g);top:calc(100% + 6px);z-index:60;display:flex;gap:40px;background:var(--white);border-radius:22px;padding:26px 30px;
+ box-shadow:0 30px 60px -24px rgba(60,30,10,.45);border:1px solid #F0E3CF;animation:mnuIn .25s ease}
+.mnu[hidden]{display:none}
+@keyframes mnuIn{from{opacity:0;transform:translateY(-6px)}}
+.mnu-col{display:flex;flex-direction:column;gap:12px;min-width:170px}
+.mnu a{font-size:16px;color:#2B2019;text-decoration:none;transition:color .2s}.mnu a:hover{color:var(--coral)}
+.mnu-h{font:600 13px var(--cond);text-transform:uppercase;letter-spacing:.08em;color:#8A7864}
+.mnu .only-m{display:none}
+@media (max-width:900px){
+ #hdr .nav-main,#hdr .hdr-sub{display:none}
+ #hdr .hdr-buy .d{display:none}#hdr .hdr-buy .m{display:inline}
+ .mnu{left:12px;right:12px;flex-direction:column;gap:18px;max-height:calc(100vh - 100px);overflow:auto}
+ .mnu .only-m{display:flex}.mnu a.only-m{display:block}
+ .mnu-col{min-width:0}
+}
+@media (max-width:900px){
+ #hdr{gap:10px;padding-top:12px;padding-bottom:12px}
+ #hdr .logo img{height:22px;width:auto}
+ #hdr .hdr-cta{gap:8px}
+ #hdr .hdr-buy{height:40px;padding:0 14px;font-size:13px;white-space:nowrap}
+ #hdr .burger{width:40px;height:40px;flex:0 0 40px}
+ .sh-in{padding-top:96px!important}
+}
+[hidden]{display:none!important}
+</style>
+<script>
+(()=>{const b=document.getElementById('burger'),m=document.getElementById('mnu');
+ const set=o=>{m.hidden=!o;b.setAttribute('aria-expanded',o);b.setAttribute('aria-label',o?'Закрыть меню':'Открыть меню')};
+ b.addEventListener('click',e=>{e.stopPropagation();set(m.hidden)});
+ m.addEventListener('click',e=>{if(e.target.closest('a'))set(false)});
+ document.addEventListener('click',e=>{if(!m.hidden&&!m.contains(e.target))set(false)});
+ addEventListener('keydown',e=>{if(e.key==='Escape'&&!m.hidden){set(false);b.focus()}});
+})();
+</script>
+
+<!-- ===== Первый экран: плоская мультяшная тумба на белом ===== -->
+<style>
+.fh{background:#fff;min-height:calc(100vh - 66px);padding-bottom:0!important;display:grid;grid-template-columns:1fr auto;align-items:center;gap:clamp(24px,6vw,110px);
+  padding:clamp(28px,5vw,72px) var(--g);max-width:1320px;margin:0 auto}
+.fh-wrap{background:var(--page);overflow:clip visible}
+html,body{overflow-x:clip}
+.fh-txt h1{font:400 clamp(64px,10vw,150px)/.86 var(--cond);text-transform:uppercase;color:var(--coral);letter-spacing:-.01em}
+.fh-txt .sub{font:500 clamp(24px,2.4vw,34px)/1.1 var(--hand);color:var(--ink);margin:18px 0 0}
+.fh-now{margin-top:clamp(28px,4vw,52px);max-width:460px}
+.fh-now small{font:500 26px var(--hand);color:var(--muted)}
+.fh-now b{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;font:400 clamp(26px,2.4vw,36px)/1 var(--cond);text-transform:uppercase;margin-top:6px;min-height:2em}
+.fh-now span{display:inline-block;margin-top:12px;border:2px solid var(--coral);color:var(--coral);border-radius:999px;padding:6px 16px;
+  font:400 20px var(--cond);text-transform:uppercase;transform:rotate(-3deg)}
+.fh-btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+.fh-nav{display:flex;gap:8px;margin-top:22px}
+.fh-nav button{width:12px;height:12px;border-radius:50%;border:0;background:var(--grey);cursor:pointer;padding:0}
+.fh-nav button.on{background:var(--coral)}
+
+/* тумба: только плоские формы, без контуров и теней-градиентов */
+.tb{position:relative;width:300px;display:flex;flex-direction:column;align-items:center;transform-origin:50% 100%;cursor:pointer}
+.tb.boing{animation:boing .55s var(--ease)}
+.tb:hover{animation:wig .5s ease-in-out}
+@keyframes boing{30%{transform:scale(1.04,.95)}60%{transform:scale(.98,1.03)}100%{transform:none}}
+@keyframes wig{25%{transform:rotate(-1.5deg)}75%{transform:rotate(1.5deg)}}
+.tb-ball{width:26px;height:26px;border-radius:50%;background:var(--coral)}
+.tb-stick{width:8px;height:22px;background:var(--ink)}
+.tb-dome{position:relative;width:290px;height:104px;background:var(--coral);border-radius:145px 145px 14px 14px/104px 104px 14px 14px;overflow:hidden}
+.tb-dome::after{content:"";position:absolute;left:40px;top:22px;width:46px;height:60px;border-radius:50%;background:#fff;opacity:.22;transform:rotate(-24deg)}
+.tb-band{width:272px;height:58px;background:var(--cream);display:flex;align-items:center;justify-content:center;
+  background-image:linear-gradient(90deg,rgba(0,0,0,.06) 0 9%,transparent 9% 91%,rgba(0,0,0,.1) 91%)}
+.tb-band img{height:30px}
+.tb-rim{width:292px;height:16px;border-radius:8px;background:var(--coral)}
+.tb-body{position:relative;width:252px;height:430px;background:var(--cream);
+  background-image:linear-gradient(90deg,rgba(0,0,0,.06) 0 9%,transparent 9% 91%,rgba(0,0,0,.1) 91%)}
+.tb-win{position:absolute;left:26px;right:26px;top:20px;bottom:20px;overflow:hidden;border-radius:10px}
+.tb-strip{display:flex;height:100%;transition:transform .8s var(--ease)}
+.pst{flex:0 0 100%;height:100%;background:var(--coral);color:var(--cream);display:flex;flex-direction:column}
+.pst img{width:100%;height:58%;object-fit:cover;display:block}
+.pst b{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;font:400 23px/1 var(--cond);text-transform:uppercase;margin:14px 14px 0}
+.pst i{font:500 22px/1 var(--hand);font-style:normal;color:#fff;padding:6px 14px 0}
+.pst em{margin:auto auto 16px;font:400 18px var(--cond);text-transform:uppercase;font-style:normal;border:2px solid var(--cream);border-radius:999px;padding:5px 16px;transform:rotate(-4deg)}
+.tb-base{width:286px;height:44px;background:var(--coral);border-radius:14px 14px 4px 4px}
+.tb-shadow{width:340px;height:22px;border-radius:50%;background:#000;opacity:.07;margin-top:-6px}
+.tb-note{position:absolute;right:-118px;top:300px;font:500 26px/1 var(--hand);color:var(--muted);transform:rotate(6deg);width:120px}
+.tb-note::before{content:"←";display:block;font-size:34px;color:var(--coral)}
+
+.tb-arr{position:absolute;top:50%;width:54px;height:54px;margin-top:-27px;border-radius:50%;border:0;background:var(--coral);color:var(--cream);
+  font:400 28px/1 var(--cond);cursor:pointer;z-index:2;transition:transform .2s var(--ease)}
+.tb-arr.l{left:-30px}.tb-arr.r{right:-30px}
+.tb-arr:hover{transform:scale(1.12)}.tb-arr:active{transform:scale(.92)}
+.tb-arr:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.tb-win{touch-action:pan-y;cursor:grab}.tb-win.drag{cursor:grabbing}.tb-win.drag .tb-strip{transition:none}
+/* сцена вокруг тумбы */
+.fh-art{position:relative;width:640px;height:760px;display:flex;align-items:flex-end;justify-content:center}
+.fh-art .scene{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.fh-art .tb{transform:scale(.86);margin-bottom:6px}
+.fh-art .tb.boing{animation:boing86 .55s var(--ease)}
+.fh-art .tb:hover{animation:wig86 .5s ease-in-out}
+@keyframes boing86{0%,100%{transform:scale(.86)}30%{transform:scale(.9,.82)}60%{transform:scale(.84,.89)}}
+@keyframes wig86{0%,100%{transform:scale(.86)}25%{transform:scale(.86) rotate(-1.5deg)}75%{transform:scale(.86) rotate(1.5deg)}}
+.tb-note{right:-96px;top:340px}
+.scene .cl1{animation:drift 14s ease-in-out infinite alternate}.scene .cl2{animation:drift 11s ease-in-out infinite alternate-reverse}
+@keyframes drift{to{transform:translateX(24px)}}
+.scene .tw{transform-box:fill-box;transform-origin:center;animation:tw 2.4s ease-in-out infinite}.scene .d2{animation-delay:.8s}.scene .d3{animation-delay:1.6s}
+@keyframes tw{50%{transform:scale(.6) rotate(20deg)}}
+.scene .fsun{transform-box:fill-box;transform-origin:center;animation:pulse 4s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(1.06)}}
+.scene .birds{animation:fly 6s ease-in-out infinite alternate}@keyframes fly{to{transform:translate(18px,-8px)}}
+.fall{position:absolute;width:28px;height:18px;top:0;animation:fall 9s linear infinite;opacity:0}
+.f1{left:60px;animation-delay:0s}.f2{left:160px;animation-delay:3s}.f3{left:560px;animation-delay:6s}
+@keyframes fall{0%{opacity:0;transform:translate(0,280px) rotate(0)}10%{opacity:1}100%{opacity:0;transform:translate(60px,700px) rotate(540deg)}}
+
+@media (max-width:860px){
+  .fh-art{width:min(100%,420px);height:auto;aspect-ratio:640/760}
+  .fh-art .tb,.fh-art .tb.boing,.fh-art .tb:hover{animation:none;transform:scale(.56);transform-origin:50% 100%;margin:0}
+  .fh{grid-template-columns:1fr;justify-items:center;text-align:center;min-height:0;padding-top:24px}
+  .fh-art{order:-1}
+  .tb{transform:scale(.78);margin:-60px 0 -70px}.tb.boing{animation:none}
+  .tb-note{display:none}
+  .fh-now{margin-left:auto;margin-right:auto}.fh-btns,.fh-nav{justify-content:center}
+}
+@media (prefers-reduced-motion:reduce){.tb-strip{transition:none}.tb.boing,.tb:hover{animation:none}}
+</style>
+<div class="fh-wrap">
+<!-- ===== вариант 3: «Сцена под коралловой крышей» — светлый, без ночи ===== -->
+<!-- ===== Первый экран: галерея ближайших событий (вместо иллюстрации сцены) ===== -->
+<style>
+.gl{position:relative;margin:2px var(--g) 0;height:clamp(460px,calc(100svh - 210px),780px);border-radius:32px;overflow:hidden;isolation:isolate;background:#1d1611;color:#fff;display:flex;flex-direction:column;justify-content:flex-end}
+.gl-ph{position:absolute;inset:0;z-index:-2}
+.gl-ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 40%;opacity:0;transition:opacity 1.1s ease}
+.gl-ph img.on{opacity:1;animation:glkb 9s linear forwards}
+@keyframes glkb{from{transform:scale(1.02)}to{transform:scale(1.12)}}
+.gl-shade{position:absolute;inset:0;z-index:-1;pointer-events:none;background:
+  linear-gradient(180deg,rgba(20,12,8,.25) 0%,rgba(20,12,8,0) 30%,rgba(20,12,8,.15) 50%,rgba(20,12,8,.82) 100%),
+  linear-gradient(90deg,rgba(20,12,8,.55) 0%,rgba(20,12,8,0) 62%)}
+.gl-in{padding:0 clamp(22px,4vw,60px) clamp(26px,4vw,54px);max-width:min(980px,78%)}
+.gl-k{font:500 clamp(24px,2.2vw,32px)/1 var(--hand);color:var(--warm);margin-bottom:10px}
+.gl-t{font:400 clamp(44px,6.2vw,104px)/.9 var(--cond);text-transform:uppercase;letter-spacing:-.005em;text-wrap:balance;
+  display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;text-shadow:0 4px 30px rgba(0,0,0,.3)}
+.gl-m{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.gl-m span{padding:7px 15px;border-radius:999px;background:rgba(255,255,255,.14);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);font:600 15px var(--text)}
+.gl-m .d{background:var(--coral)}
+.gl-x{margin-top:14px;max-width:56ch;font:400 16px/1.45 var(--text);color:rgba(255,255,255,.85);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.gl .row{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
+.gl .btn-red{font-size:20px;padding:15px 34px}
+.gl-in>*{transition:opacity .45s ease,transform .45s var(--ease)}
+.gl.swap .gl-in>.gl-t,.gl.swap .gl-in>.gl-m,.gl.swap .gl-in>.gl-x{opacity:0;transform:translateY(14px)}
+.gl-arr{position:absolute;right:clamp(18px,3vw,44px);bottom:clamp(26px,4vw,54px);display:flex;gap:10px}
+.gl-arr button{width:54px;height:54px;border-radius:50%;border:1.5px solid rgba(255,255,255,.45);background:rgba(255,255,255,.1);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#fff;font-size:22px;cursor:pointer;transition:background .2s}
+.gl-arr button:hover{background:rgba(255,255,255,.28)}
+.gl-cnt{position:absolute;right:clamp(18px,3vw,44px);top:clamp(18px,2.4vw,30px);font:400 18px var(--cond);letter-spacing:.06em;color:rgba(255,255,255,.8)}
+.gl-cnt b{color:#fff;font-weight:400;font-size:26px}
+/* лента дат */
+.gl-rib{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:16px var(--g) 6px;scroll-padding:0 var(--g)}
+.gl-rib::-webkit-scrollbar{display:none}
+.rb{position:relative;flex:none;scroll-snap-align:start;display:grid;grid-template-columns:auto 1fr;gap:2px 12px;align-items:center;width:250px;padding:10px 16px 12px 10px;
+  border-radius:18px;border:0;background:var(--white);box-shadow:inset 0 0 0 1px rgba(43,32,25,.08);text-align:left;cursor:pointer;overflow:hidden;transition:background .3s,color .3s,transform .3s var(--ease)}
+.rb:hover{transform:translateY(-2px)}
+.rb.on{background:var(--coral);color:#fff;box-shadow:none}
+.rb-d{grid-row:span 2;width:54px;text-align:center;line-height:1;font-family:var(--cond);text-transform:uppercase}
+.rb-d b{display:block;font-weight:400;font-size:34px;color:var(--coral)}
+.rb.on .rb-d b{color:#fff}
+.rb-d small{display:block;margin-top:3px;font-size:12px;letter-spacing:.05em;opacity:.7}
+.rb-t{font:600 15px/1.15 var(--cond);text-transform:uppercase;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.rb-m{font-size:12px;opacity:.65}
+.rb-p{position:absolute;left:0;bottom:0;height:3px;width:100%;background:#fff;transform-origin:0 50%;transform:scaleX(0)}
+.rb.on .rb-p{animation:rbp var(--dur,7s) linear forwards}
+.gl-wrap.paused .rb.on .rb-p{animation-play-state:paused}
+@keyframes rbp{to{transform:scaleX(1)}}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media (max-width:900px){
+  .gl{height:min(74svh,640px);min-height:460px;border-radius:24px;margin:0 12px}
+  .gl-in{max-width:100%;padding:0 20px 24px}
+  .gl-x{display:none}
+  .gl-arr,.gl .btn-glass{display:none}
+  .gl .row .btn-red{width:100%}
+  .gl-m span{font-size:13px;padding:6px 12px}
+  .gl-rib{padding:12px 12px 4px;scroll-padding:0 12px;gap:8px}
+  .rb{width:210px}
+}
+@media (prefers-reduced-motion:reduce){.gl-ph img.on{animation:none}}
+</style>
+<div class="gl-wrap" id="glWrap">
+<h1 class="sr">Летний театр в парке Маяковского — афиша концертов и спектаклей</h1>
+<section class="gl" id="gl" aria-label="Ближайшие события" aria-roledescription="карусель">
+  <div class="gl-ph" id="glPh"></div>
+  <div class="gl-shade" aria-hidden="true"></div>
+  <div class="gl-cnt" aria-hidden="true"><b id="glN">01</b> / <span id="glAll">08</span></div>
+  <div class="gl-in">
+    <p class="gl-k" id="glK">ближайший концерт</p>
+    <h2 class="gl-t" id="glT"></h2>
+    <p class="gl-m" id="glM"></p>
+    <p class="gl-x" id="glX"></p>
+    <div class="row"><a class="pill btn-red" id="glBuy" href="#full" target="_blank" rel="noopener">Купить билет</a><a class="pill btn-glass" href="#full">Вся афиша</a></div>
+  </div>
+  <div class="gl-arr"><button type="button" id="glPrev" aria-label="Предыдущее событие">←</button><button type="button" id="glNext" aria-label="Следующее событие">→</button></div>
+</section>
+<div class="gl-rib" id="glRib" role="tablist" aria-label="Даты событий"></div>
+</div>
+<script>
+(async()=>{
+ const DUR=7,CALM=matchMedia('(prefers-reduced-motion:reduce)').matches;
+ const ev=(await (await fetch('events2026.json')).json()).filter(e=>e.img).slice(0,8);
+ const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+ const clean=s=>String(s).replace(/[«»]/g,'');
+ const wrap=glWrap,ph=glPh,rib=glRib,gl=document.getElementById('gl');
+ ph.innerHTML=ev.map((e,i)=>`<img src="${esc(e.img)}" alt="${esc(clean(e.t))}" ${i?'loading="lazy"':'fetchpriority="high"'}>`).join('');
+ rib.innerHTML=ev.map((e,i)=>{const[dd,mm]=e.date.split(' ');return `<button class="rb" type="button" role="tab" aria-selected="false" data-i="${i}">
+   <span class="rb-d"><b>${esc(dd)}</b><small>${esc(mm.slice(0,3))} · ${esc(e.wd||'')}</small></span>
+   <span class="rb-t">${esc(clean(e.t))}</span><span class="rb-m">${esc(e.time||'')}</span><i class="rb-p"></i></button>`}).join('');
+ rib.style.setProperty('--dur',DUR+'s');
+ const im=[...ph.children],rb=[...rib.children];glAll.textContent=String(ev.length).padStart(2,'0');
+ let cur=-1,tmr=0,paused=false;
+ function show(n){n=(n+ev.length)%ev.length;if(n===cur)return;const first=cur<0;
+  if(!first){im[cur].classList.remove('on');rb[cur].classList.remove('on');rb[cur].setAttribute('aria-selected','false')}
+  cur=n;im[n].classList.add('on');rb[n].classList.add('on');rb[n].setAttribute('aria-selected','true');
+  const p=rb[n].querySelector('.rb-p');p.style.animation='none';p.offsetWidth;p.style.animation='';
+  const r=rib.getBoundingClientRect(),b=rb[n].getBoundingClientRect();
+  if(b.left<r.left||b.right>r.right)rib.scrollTo({left:rib.scrollLeft+b.left-r.left-12,behavior:'smooth'});
+  const set=()=>{const e=ev[n];glK.textContent=n===0?'ближайшее событие':'скоро на сцене';glT.textContent=clean(e.t);
+   glM.innerHTML=`<span class="d">${esc(e.date)}${e.wd?', '+esc(e.wd):''}</span>${e.time?`<span>${esc(e.time)}</span>`:''}<span>Летний театр</span>`;
+   glX.textContent=e.text||'';glBuy.href=e.url||'#full';glN.textContent=String(n+1).padStart(2,'0')};
+  if(first||CALM){set();return}
+  gl.classList.add('swap');setTimeout(()=>{set();gl.classList.remove('swap')},420)}
+ function arm(){clearTimeout(tmr);if(!paused)tmr=setTimeout(()=>show(cur+1),DUR*1000)}
+ const go=n=>{show(n);arm()};
+ rib.addEventListener('click',e=>{const b=e.target.closest('.rb');if(b)go(+b.dataset.i)});
+ glPrev.onclick=()=>go(cur-1);glNext.onclick=()=>go(cur+1);
+ // свайп по фото на телефоне
+ let sx=null;gl.addEventListener('touchstart',e=>{sx=e.touches[0].clientX},{passive:true});
+ gl.addEventListener('touchend',e=>{if(sx==null)return;const d=e.changedTouches[0].clientX-sx;sx=null;if(Math.abs(d)>50)go(cur+(d<0?1:-1))},{passive:true});
+ // пауза: наведение на фото, уход с экрана, скрытая вкладка
+ const pause=p=>{paused=p;wrap.classList.toggle('paused',p);if(p)clearTimeout(tmr);else{const x=rb[cur].querySelector('.rb-p');x.style.animation='none';x.offsetWidth;x.style.animation='';arm()}};
+ let hov=false,vis=true;const upd=()=>pause(hov||!vis||document.hidden);
+ gl.addEventListener('mouseenter',()=>{hov=true;upd()});gl.addEventListener('mouseleave',()=>{hov=false;upd()});
+ new IntersectionObserver(([x])=>{vis=x.isIntersecting;upd()},{threshold:0}).observe(gl);
+ document.addEventListener('visibilitychange',upd);
+ show(0);arm();
+})();
+</script>
+
+
+
+
+<section class="hero" id="afisha">
+  <div class="banner" id="banner">
+    <article class="slide dusk on" id="dusk">
+      <img class="ph day" src="img/b_sun.jpg" alt="Летний театр на закате, сосны вокруг зала">
+      <img class="ph night" src="img/b_night.jpg" alt="Летний театр вечером, над залом небо">
+      <div class="sun" id="sun"></div>
+      <div class="stage-glow"></div>
+      <canvas id="stars"></canvas>
+      <canvas id="flies"></canvas>
+      <div class="daynight" role="group" aria-label="Время суток"><button id="bDay">Закат</button><button id="bNight">Ночь</button></div>
+      <div class="brand-txt">
+        <span class="hand">звёзды на сцене — и звёзды на небе</span>
+        <span class="stamp"><span class="pill s-logo"><i>летний</i>ТЕАТР</span></span>
+        <span class="stamp"><span class="pill s-sub">лето · сосны · звёзды</span></span>
+        <p class="lead">Концерты под открытым небом в сердце парка Маяковского. Сосны прямо в зале, сезон — с мая по сентябрь</p>
+        <div class="row"><a class="pill btn-red" href="#">Смотреть афишу</a><a class="pill btn-glass" href="#">О театре</a></div>
+      </div>
+    </article>
+    <div class="next" id="next"></div>
+    <div class="circles l"><i></i><i></i><i></i><i></i></div>
+    <div class="circles r"><i></i><i></i><i></i><i></i></div>
+    <div class="grain"></div>
+    <div class="prog" id="prog"></div>
+  </div>
+  <div class="ctrl">
+    <form class="sub" id="sub" onsubmit="event.preventDefault();const i=this.querySelector('input');i.value='';i.placeholder='Спасибо! Ждите анонсов'">
+      <label for="em">Анонсы на почту</label><input id="em" type="email" required placeholder="E-mail"><button class="pill btn-red">Подписаться</button>
+    </form>
+    <div class="dots" id="dots"></div>
+    <div class="arrows"><button id="prev" aria-label="Назад">←</button><button id="fwd" aria-label="Вперёд">→</button></div>
+  </div>
+</section>
+
+<div class="recs-h"><h3>Избранные события<i>этим летом</i></h3></div>
+<style>
+@media (min-width:901px){ #recs .card{flex:0 0 calc((100% - 4 * 22px) / 5)} #recs .card b{font-size:17px} }
+</style>
+<div class="recs" id="recs"></div>
+<div class="demo">демо: афиша сезона 2026</div>
+<!-- ===== хедлайнеры сезона (шаблон 1) ===== -->
+<style>
+.hl{padding:64px 0 40px;overflow:hidden}
+.hl .sec-h{padding:0 var(--g)}
+.hl-row{display:flex;width:max-content;animation:hlrun var(--sp,60s) linear infinite}
+.hl-row.rev{animation-direction:reverse}
+.hl-wrap:hover .hl-row{animation-play-state:paused}
+@keyframes hlrun{to{transform:translateX(-50%)}}
+.hl-it{display:flex;align-items:center;gap:22px;padding:4px 22px;cursor:pointer;white-space:nowrap}
+.hl-it b{font-family:var(--cond);text-transform:uppercase;font-weight:600;font-size:clamp(46px,7.4vw,118px);line-height:1.02;letter-spacing:-.01em;color:#111;transition:color .25s}
+.hl-row.rev .hl-it b{color:transparent;-webkit-text-stroke:1.5px #111}
+.hl-it small{font-family:var(--hand);font-size:clamp(20px,2vw,28px);color:var(--muted);transform:rotate(-6deg);transition:color .25s}
+.hl-it::after{content:"★";color:var(--red);font-size:clamp(26px,3vw,44px);margin-left:22px}
+.hl-it:hover b{color:var(--red);-webkit-text-stroke:0}
+.hl-it:hover small{color:var(--red)}
+.hl-pic{position:fixed;left:0;top:0;z-index:30;width:240px;height:240px;border-radius:50%;overflow:hidden;pointer-events:none;opacity:0;transform:translate(-50%,-50%) scale(.6);transition:opacity .25s,transform .35s var(--ease);box-shadow:0 20px 50px rgba(0,0,0,.25)}
+.hl-pic.on{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.hl-pic img{width:100%;height:100%;object-fit:cover}
+.hl-pic span{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);background:var(--red);color:#fff;border-radius:999px;padding:5px 12px;font-family:var(--cond);text-transform:uppercase;font-size:14px;white-space:nowrap}
+.hl-foot{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;padding:26px var(--g) 0}
+.hl-foot p{font-size:15px;color:#444;max-width:520px}
+@media (prefers-reduced-motion:reduce){.hl-row{animation:none!important}}
+@media (hover:none){.hl-pic{display:none}}
+
+/* ===== видео ===== */
+.vd{display:grid;grid-template-columns:1fr 320px;gap:20px}
+.vd-main{position:relative;border-radius:32px;overflow:hidden;aspect-ratio:16/9;background:#000;cursor:pointer;isolation:isolate}
+.vd-main>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease),filter .6s}
+.vd-main:hover>img{transform:scale(1.04);filter:brightness(.8)}
+.vd-main::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(6,8,16,.8),rgba(6,8,16,0) 55%);pointer-events:none}
+.vd-play{position:absolute;left:50%;top:46%;width:clamp(120px,14vw,170px);aspect-ratio:1;transform:translate(-50%,-50%);z-index:2}
+.vd-play svg.ring{position:absolute;inset:0;width:100%;height:100%;animation:spin 14s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.vd-play i{position:absolute;inset:24%;border-radius:50%;background:var(--red);display:grid;place-items:center;transition:transform .35s var(--ease)}
+.vd-play i::before{content:"";margin-left:8%;border-left:26px solid #fff;border-top:16px solid transparent;border-bottom:16px solid transparent}
+.vd-main:hover .vd-play i{transform:scale(1.12)}
+.vd-cap{position:absolute;left:clamp(20px,3vw,40px);right:clamp(20px,3vw,40px);bottom:clamp(18px,3vw,34px);z-index:2;color:#fff;display:flex;justify-content:space-between;align-items:flex-end;gap:20px}
+.vd-cap h3{font-family:var(--cond);text-transform:uppercase;font-weight:600;font-size:clamp(28px,3.6vw,52px);line-height:.95}
+.vd-cap h3 i{display:block;font-family:var(--hand);font-style:normal;text-transform:none;font-weight:500;color:var(--warm);font-size:.5em;margin-bottom:4px}
+.vd-cap span{font-size:14px;background:rgba(255,255,255,.16);backdrop-filter:blur(8px);border-radius:999px;padding:6px 12px;white-space:nowrap}
+.vd-main iframe,.vd-main video{position:absolute;inset:0;width:100%;height:100%;border:0;z-index:5;background:#000}
+.vd-list{display:flex;flex-direction:column;gap:14px}
+.vd-it{display:grid;grid-template-columns:120px 1fr;gap:14px;align-items:center;background:var(--white);border-radius:20px;padding:10px;cursor:pointer;border:2px solid transparent;transition:border-color .2s,transform .25s var(--ease);text-align:left}
+.vd-it:hover{transform:translateX(-4px)}
+.vd-it.on{border-color:var(--red)}
+.vd-it .th{position:relative;aspect-ratio:4/3;border-radius:14px;overflow:hidden}
+.vd-it .th img{width:100%;height:100%;object-fit:cover}
+.vd-it .th .pl{position:absolute;left:50%;top:50%;width:40px;height:40px;transform:translate(-50%,-50%);border-radius:50%;background:rgba(255,251,243,.92);box-shadow:0 6px 14px -6px rgba(0,0,0,.5);transition:transform .3s var(--ease),background .3s}
+.vd-it .th .pl::after{content:"";position:absolute;left:54%;top:50%;transform:translate(-50%,-50%);border-style:solid;border-width:8px 0 8px 13px;border-color:transparent transparent transparent var(--coral)}
+.vd-it:hover .th .pl{transform:translate(-50%,-50%) scale(1.12);background:#fff}
+.vd-it .th em{position:absolute;right:6px;bottom:6px;background:rgba(0,0,0,.7);color:#fff;font-style:normal;font-size:11px;border-radius:6px;padding:2px 6px}
+.vd-it b{display:block;font-size:15px;line-height:1.25}.vd-it span{display:block;margin-top:4px;font-size:12px;color:var(--muted)}
+.vd-note{margin-top:12px;font-size:12px;color:var(--muted)}
+@media (max-width:980px){.vd{grid-template-columns:1fr}.vd-list{flex-direction:row;overflow-x:auto;scrollbar-width:none}.vd-it{min-width:280px}}
+@media (max-width:560px){.vd-main{border-radius:22px;aspect-ratio:4/5}.vd-cap{flex-direction:column;align-items:flex-start}}
+
+/* ===== звёзды прошлых сезонов (шаблон 2) ===== */
+.st{position:relative;margin:0 var(--g);border-radius:32px;overflow:hidden;color:#fff;padding:clamp(40px,6vw,88px) clamp(22px,5vw,72px);
+  background:radial-gradient(120% 80% at 50% 110%,#3a2a5a 0%,#141a3a 45%,#070a1c 100%)}
+.st canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.st-h{position:relative;text-align:center;margin-bottom:clamp(30px,4vw,56px)}
+.st-h small{font-family:var(--hand);font-size:clamp(22px,2.4vw,32px);color:var(--warm)}
+.st-h h2{font-family:var(--cond);text-transform:uppercase;font-weight:600;font-size:clamp(40px,6vw,92px);line-height:.92;margin-top:6px}
+.st-sky{position:relative;display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:clamp(10px,1.4vw,18px) clamp(22px,3vw,48px);max-width:1180px;margin:0 auto}
+.sn{position:relative;font-family:var(--cond);text-transform:uppercase;font-weight:600;line-height:1;letter-spacing:.01em;color:rgba(255,255,255,.18);transition:color .9s,text-shadow .9s;cursor:default}
+.sn.l1{font-size:clamp(38px,4.6vw,70px)}.sn.l2{font-size:clamp(26px,3vw,44px)}.sn.l3{font-size:clamp(19px,1.9vw,28px)}
+.sn::before{content:"✦";position:absolute;left:-.55em;top:-.35em;font-size:.42em;color:var(--warm);opacity:0;transform:scale(.2) rotate(-90deg);transition:all .6s var(--ease)}
+.sn.lit{color:#fff;text-shadow:0 0 22px rgba(255,214,150,.35)}
+.sn.lit::before{opacity:1;transform:none;animation:tw 2.6s ease-in-out infinite;animation-delay:var(--d,0s)}
+@keyframes tw{50%{opacity:.35;transform:scale(.7)}}
+.sn em{position:absolute;left:50%;top:100%;margin-top:8px;transform:translate(-50%,6px);font-family:var(--text);text-transform:none;font-style:normal;font-weight:500;font-size:13px;letter-spacing:0;white-space:nowrap;background:var(--red);color:#fff;border-radius:999px;padding:5px 11px;opacity:0;pointer-events:none;transition:all .25s;z-index:3}
+.sn:hover{color:var(--warm)}.sn:hover em{opacity:1;transform:translate(-50%,0)}
+.st-foot{position:relative;text-align:center;margin-top:clamp(34px,4vw,56px);display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+@media (prefers-reduced-motion:reduce){.sn{color:#fff}.sn::before{opacity:1;transform:none;animation:none}}
+</style>
+
+<!-- Хедлайнеры скрыты с главной по правкам (п.4); код и дизайн сохранены для «У нас уже выступали» -->
+<section class="hl" id="headliners" hidden>
+  <div class="sec-h reveal"><h2>Хедлайнеры сезона&nbsp;2026<i>кого ждём этим летом</i></h2><a class="pill btn-line" href="#full">Вся афиша</a></div>
+  <div class="hl-wrap">
+    <div class="hl-row" id="hlA" style="--sp:70s"></div>
+    <div class="hl-row rev" id="hlB" style="--sp:80s"></div>
+  </div>
+  <div class="hl-foot"><p>Наведите на имя — покажем, кто это. Нажмите — откроем событие и билеты.</p></div>
+  <div class="hl-pic" id="hlPic"><img alt=""><span></span></div>
+</section>
+
+<!-- ===== секции главной (2D): афиша, о театре, как добраться, организаторам, подвал ===== -->
+<style>
+.sec{padding:72px var(--g)}
+.sec-h{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:28px}
+.sec-h h2{font-family:var(--cond);text-transform:uppercase;font-weight:600;font-size:clamp(38px,5vw,72px);line-height:.92;letter-spacing:-.01em}
+.sec-h h2 i{display:block;font-family:var(--hand);font-style:normal;text-transform:none;font-weight:500;color:var(--red);font-size:.42em;letter-spacing:0;margin-top:6px}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+
+/* --- афиша --- */
+.filters{display:flex;gap:10px;flex-wrap:wrap}
+.chip{padding:9px 18px;border-radius:999px;border:1.5px solid #c9cac8;background:transparent;font-size:14px;font-weight:500;cursor:pointer;transition:all .2s}
+.chip:hover{border-color:#111}
+.chip.on{background:#111;color:#fff;border-color:#111}
+.chip-sep{width:1px;background:#c9cac8;margin:4px 6px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:24px}
+@media (min-width:1101px){#full .grid{grid-template-columns:repeat(4,1fr)}}
+.tk{position:relative;display:flex;flex-direction:column;background:var(--white);border-radius:22px;overflow:hidden;transition:transform .35s var(--ease),box-shadow .35s}
+.tk:hover{transform:translateY(-6px) rotate(-.6deg);box-shadow:0 18px 40px rgba(0,0,0,.12)}
+.tk .ph{position:relative;aspect-ratio:4/3;overflow:hidden;background:#222}
+.tk .ph img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease)}
+.tk:hover .ph img{transform:scale(1.06)}
+.tk .dt{position:absolute;left:14px;top:14px;background:var(--red);color:#fff;border-radius:16px;padding:8px 12px 7px;text-align:center;font-family:var(--cond);text-transform:uppercase;line-height:.9;transform:rotate(-4deg)}
+.tk .dt b{display:block;font-size:30px;font-weight:600}.tk .dt small{font-size:13px}
+/* линия отрыва — как у билета */
+.tk .cut{position:relative;height:0;border-top:2px dashed #d5d6d3;margin:0 18px}
+.tk .cut::before,.tk .cut::after{content:"";position:absolute;top:-12px;width:22px;height:22px;border-radius:50%;background:var(--page)}
+.tk .cut::before{left:-30px}.tk .cut::after{right:-30px}
+.tk .bd{padding:16px 20px 12px;flex:1}
+.tk .bd b{display:block;font-size:17px;line-height:1.25;font-weight:600}
+.tk .bd span{display:block;margin-top:6px;font-size:13px;color:var(--muted)}
+.tk .ft{display:flex;align-items:center;justify-content:space-between;padding:14px 20px 18px}
+.tk .ft em{font-style:normal;font-size:13px;color:var(--muted)}
+.tk .ft .btn-red{padding:9px 18px;font-size:15px}
+.tk .tag{position:absolute;right:14px;top:14px;background:rgba(255,255,255,.92);border-radius:999px;padding:5px 11px;font-size:12px;font-weight:600}
+.more{display:flex;justify-content:center;margin-top:34px}
+.empty{grid-column:1/-1;text-align:center;padding:40px;color:var(--muted)}
+
+/* --- о театре --- */
+.about{display:grid;grid-template-columns:1.05fr 1fr;gap:56px;align-items:center}
+.about p.lead{font-size:19px;line-height:1.55;max-width:560px;margin:18px 0 30px;color:#333}
+.nums{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.num{background:var(--white);border-radius:22px;padding:22px 24px}
+.num b{display:block;text-transform:uppercase;font-family:var(--cond);font-weight:600;font-size:clamp(40px,4vw,58px);line-height:1;color:var(--red)}
+.num span{display:block;margin-top:8px;font-size:14px;color:#444;line-height:1.4}
+.collage{position:relative;aspect-ratio:1/1}
+.collage .c{position:absolute;border-radius:50%;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.18);transition:transform .6s var(--ease)}
+.collage .c img{width:100%;height:100%;object-fit:cover}
+.collage .c:hover{transform:scale(1.04) rotate(-2deg)}
+.collage .c{aspect-ratio:1}
+.collage .c1{width:64%;left:0;top:0}
+.collage .c3{width:50%;right:0;top:26%}
+.collage .c4{width:42%;left:20%;bottom:0}
+.collage .note{position:absolute;left:60%;top:6%;font-family:var(--hand);color:var(--red);font-size:30px;transform:rotate(-8deg);white-space:nowrap}
+
+/* --- как добраться --- */
+.way{display:grid;grid-template-columns:1.3fr 1fr;gap:24px}
+.map{background:var(--white);border-radius:28px;padding:24px;position:relative;overflow:hidden}
+.map svg{width:100%;height:auto;display:block}
+.map .pin{animation:pin 2.4s ease-in-out infinite;transform-origin:center bottom;transform-box:fill-box}
+@keyframes pin{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.ways{display:flex;flex-direction:column;gap:14px}
+.wy{background:var(--white);border-radius:22px;padding:20px 22px;display:flex;gap:16px;align-items:flex-start}
+.wy i{flex:none;width:44px;height:44px;border-radius:50%;background:var(--red);color:#fff;display:grid;place-items:center;font-style:normal;font-size:20px}
+.wy b{display:block;font-size:16px}.wy span{display:block;margin-top:4px;font-size:14px;color:#555;line-height:1.45}
+.ways .btn-red{align-self:flex-start;margin-top:6px}
+
+/* --- организаторам --- */
+.org{background:var(--red);color:#fff;border-radius:32px;padding:clamp(28px,5vw,64px);display:grid;grid-template-columns:1fr 1fr;gap:48px;position:relative;overflow:hidden}
+.org::before{content:"";position:absolute;right:-120px;top:-120px;width:360px;height:360px;border-radius:50%;border:2px dashed rgba(255,255,255,.35)}
+.org h2{font-family:var(--cond);text-transform:uppercase;font-weight:600;font-size:clamp(36px,4.4vw,64px);line-height:.95}
+.org h2 i{display:block;font-family:var(--hand);font-style:normal;text-transform:none;font-weight:500;font-size:.48em;margin-top:8px;color:var(--cream)}
+.org ul{list-style:none;margin-top:24px;display:grid;gap:10px;font-size:16px}
+.org li::before{content:"★";margin-right:10px;color:var(--cream)}
+.org form{display:grid;gap:12px;position:relative}
+.org input,.org select,.org textarea{width:100%;border:0;border-radius:16px;padding:15px 18px;font:inherit;font-size:15px;background:rgba(255,255,255,.95);color:#111}
+.org textarea{min-height:96px;resize:vertical}
+.org .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.org button{background:#111;color:#fff;padding:15px 28px;font-size:18px;border:0;cursor:pointer;justify-self:start;transition:transform .25s var(--ease)}
+.org button:hover{transform:translateY(-2px) rotate(-2deg)}
+.org small{font-size:12px;opacity:.8}
+
+/* --- подвал --- */
+footer{background:#111;color:#cfcfcf;margin-top:72px;padding:56px var(--g) 28px;border-radius:32px 32px 0 0}
+.ft-top{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:32px}
+.ft-top h4{font-family:var(--cond);text-transform:uppercase;font-weight:600;color:#fff;font-size:18px;margin-bottom:14px;letter-spacing:.03em}
+.ft-top a{display:block;font-size:14px;line-height:2;transition:color .2s}.ft-top a:hover{color:var(--red)}
+.ft-brand img{height:30px;filter:brightness(0) invert(1)}
+.ft-brand p{margin-top:16px;font-size:14px;line-height:1.6;max-width:320px}
+.ft-brand .soc{display:flex;gap:10px;margin-top:18px}
+.ft-brand .soc a{width:42px;height:42px;border-radius:50%;border:1.5px solid #444;display:grid;place-items:center;font-size:13px;font-weight:600;line-height:1}
+.ft-brand .soc a:hover{border-color:var(--red);background:var(--red);color:#fff}
+.ft-bot{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-top:44px;padding-top:22px;border-top:1px solid #2a2a2a;font-size:12px;color:#888}
+.ft-big{font-family:var(--cond);text-transform:uppercase;font-weight:600;color:#1c1c1c;font-size:clamp(60px,15vw,230px);line-height:.8;margin-top:36px;letter-spacing:-.02em;white-space:nowrap;overflow:hidden;user-select:none}
+
+@media (max-width:980px){
+  .about,.way,.org{grid-template-columns:1fr}
+  .collage{max-width:520px;width:100%;margin:0 auto}
+  .ft-top{grid-template-columns:1fr 1fr}
+}
+@media (max-width:560px){
+  .sec{padding:52px var(--g)}
+  .nums{grid-template-columns:1fr 1fr;gap:10px}.num{padding:16px}
+  .org .two{grid-template-columns:1fr}
+  .ft-top{grid-template-columns:1fr}
+  .chip-sep{display:none}
+}
+</style>
+
+<section class="sec" id="full">
+  <div class="sec-h reveal">
+    <h2>Афиша сезона<i>с июня по август — под соснами</i></h2>
+    <div class="filters" id="fMonth">
+      <button class="chip on" data-m="">Всё лето</button><button class="chip" data-m="Июня">Июнь</button><button class="chip" data-m="Июля">Июль</button><button class="chip" data-m="Августа">Август</button>
+    </div>
+  </div>
+  <div class="filters reveal" id="fGenre" style="margin-bottom:26px">
+    <button class="chip on" data-g="">Все жанры</button><button class="chip" data-g="orch">С оркестром</button><button class="chip" data-g="kids">Детям</button><button class="chip" data-g="candle">При свечах</button><button class="chip" data-g="red">RED SUMMER</button><button class="chip" data-g="fest">Фестивали</button>
+  </div>
+  <div class="grid" id="grid"></div>
+  <div class="more"><button class="pill btn-line" id="moreBtn">Показать ещё</button></div>
+</section>
+
+<section class="seat" id="about" aria-labelledby="seatH">
+  <div class="seat-h">
+    <div><h2 id="seatH">Выберите своё место</h2><p class="hand">нажмите на скамейку — покажем, как оттуда видно сцену</p></div>
+    <div class="seat-q" aria-label="Быстрый выбор"><button type="button" data-q="front">Первый ряд</button><button type="button" data-q="center">Центр зала</button><button type="button" data-q="side">Сбоку</button><button type="button" data-q="back">Последний ряд</button></div>
+  </div>
+  <div class="seat-g">
+    <div class="seat-plan">
+      <div class="plan-hint"><b>1</b> Нажмите на любое место на плане <span>→</span> <b>2</b> справа покажем вид на сцену</div>
+      <svg id="seatPlan" viewBox="40 0 520 560" role="img" aria-label="План зала: сцена, ряды скамеек слева и справа от центрального прохода, сосны у кирпичной стены"></svg>
+      <div class="seat-leg"><span><i style="background:#F7DDD3"></i>Партер · 3 500 ₽</span><span><i style="background:#F5E8CF"></i>Середина · 2 500 ₽</span><span><i style="background:#E2EBD3"></i>Амфитеатр · 1 800 ₽</span><span><i class="b"></i>занято</span></div>
+      <div class="seat-facts"><span><b id="seatTotal">1 181</b> мест, свободно <b id="seatFree">0</b></span><span><b>+200</b> у столиков</span><span><b>2&nbsp;530&nbsp;М²</b> площадь</span><span class="pn"><i></i> сосны вдоль стены</span></div>
+    </div>
+    <div class="seat-view" id="seatView" aria-label="Вид на сцену с выбранного места">
+      <div class="seat-tip">тяните, чтобы осмотреться</div>
+      <div class="sv-mode" role="group" aria-label="Время"><button type="button" data-m="day" class="on">Днём</button><button type="button" data-m="eve">На закате</button></div>
+      <div class="seat-info">
+        <div class="si-z"><b id="sInfoZone">ПАРТЕР</b><span id="sInfoState">свободно</span><b class="pr" id="sInfoPrice">3 500 ₽</b></div>
+        <div class="si-n"><span>Сторона <b id="sInfoSec">ЛЕВАЯ</b></span><span>Ряд <b id="sInfoRow">7</b></span><span>Место <b id="sInfoNum">12</b></span><span>До сцены <b id="sInfoDist">≈ 15 м</b></span></div>
+        <div class="si-v" id="sInfoView">прямой вид на сцену</div>
+        <div class="si-act"><a class="pill btn-red" id="sInfoBuy" href="#full">Купить это место</a><button type="button" class="sv-btn" id="svWalk">Пройти от входа</button><button type="button" class="sv-btn" id="svPhotoBtn">Фото с этого места</button></div>
+      </div>
+    </div>
+  </div>
+  <p class="seat-note">Это пример: занятость мест, цены и фото — демонстрационные. Рассадку уточним по плану зала театра. Двойной клик по месту на плане — пройти к нему от входа.</p>
+  <div class="sv-photo" id="svPhoto" hidden><figure><button type="button" class="x" aria-label="Закрыть">×</button><img alt=""><figcaption></figcaption></figure></div>
+</section>
+<style>
+.seat{padding:84px var(--g) 70px;background:var(--page)}
+.seat-h{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:26px}
+.seat-h h2{font:600 clamp(40px,5vw,80px)/.9 var(--cond);text-transform:uppercase;color:var(--coral)}
+.seat-h .hand{font:500 clamp(20px,1.8vw,28px)/1.2 var(--hand);color:#2B2019;margin-top:10px;opacity:1!important;animation:none!important;transform:none!important}
+.seat-q{display:flex;gap:8px;flex-wrap:wrap}
+.seat-q button{border:1.5px solid #2B2019;background:transparent;border-radius:999px;padding:10px 16px;font:600 13px var(--cond);text-transform:uppercase;letter-spacing:.05em;color:#2B2019;cursor:pointer;transition:background .25s,color .25s}
+.seat-q button:hover,.seat-q button.on{background:#2B2019;color:#F6EED9}
+.seat-g{display:grid;grid-template-columns:minmax(300px,.85fr) minmax(360px,1.15fr);gap:clamp(16px,2.4vw,36px);align-items:stretch}
+.seat-plan{background:var(--white);border-radius:26px;padding:18px 18px 16px;box-shadow:0 24px 50px -32px rgba(60,30,10,.5)}
+.seat-plan svg{display:block;width:100%;height:auto;touch-action:manipulation}
+.seat-plan .mk{transition:transform .22s cubic-bezier(.3,0,.2,1)}
+.seat-facts{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:10px;font-size:13px;color:#6A5A4C}
+.seat-facts b{font:600 18px var(--cond);color:var(--coral);margin-right:3px}
+.seat-facts .pn i{display:inline-block;width:12px;height:12px;border-radius:50%;background:#2F6B45;vertical-align:-1px;margin-right:4px}
+.seat-view{position:relative;border-radius:26px;overflow:hidden;min-height:480px;background:#CFE3EC;cursor:grab;touch-action:pan-y;box-shadow:0 24px 50px -32px rgba(60,30,10,.5)}
+.seat-view.grab{cursor:grabbing}
+.seat-view canvas{position:absolute;inset:0;width:100%!important;height:100%!important;display:block}
+.seat-tip{position:absolute;left:16px;top:14px;z-index:2;background:rgba(255,251,243,.9);border-radius:999px;padding:6px 12px;font:600 12px var(--cond);text-transform:uppercase;letter-spacing:.05em;color:#2B2019;pointer-events:none}
+.seat-info{position:absolute;left:14px;right:14px;bottom:14px;z-index:2;display:grid;grid-template-columns:1fr auto;align-items:center;gap:6px 16px;
+ background:rgba(255,251,243,.95);border-radius:18px;padding:14px 16px;box-shadow:0 14px 30px -18px rgba(40,20,10,.5)}
+.si-n{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:13px;color:#6A5A4C}
+.si-n b{font:600 22px var(--cond);color:#2B2019;margin-left:3px}
+.si-v{grid-column:1;font:500 19px/1.1 var(--hand);color:var(--coral)}
+.seat-info .pill{grid-column:2;grid-row:1/3}
+.seat-note{margin-top:14px;font-size:12px;color:#8A7864}
+.plan-hint{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:2px 4px 10px;font:600 14px var(--text);color:#2B2019}
+.plan-hint b{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--coral);color:#fff;font:600 13px var(--cond)}
+.plan-hint span{color:var(--coral);animation:hintx 1.4s ease-in-out infinite}
+@keyframes hintx{50%{transform:translateX(5px)}}
+.sv-mode{position:absolute;right:14px;top:12px;z-index:2;display:flex;background:rgba(255,251,243,.92);border-radius:999px;padding:4px}
+.sv-mode button{border:0;background:transparent;border-radius:999px;padding:7px 14px;font:600 12px var(--cond);text-transform:uppercase;letter-spacing:.05em;color:#6A5A4C;cursor:pointer}
+.sv-mode button.on{background:#2B2019;color:#F6EED9}
+.si-z{grid-column:1;display:flex;align-items:baseline;gap:10px}
+.si-z b{font:600 18px var(--cond);color:#2B2019}.si-z span{font-size:12px;color:#2F6B45;background:#E2EBD3;border-radius:999px;padding:2px 8px}
+.si-z .pr{margin-left:auto;color:var(--coral);font-size:22px}
+.si-act{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:4px}
+.sv-btn{border:1.5px solid #2B2019;background:transparent;border-radius:999px;padding:10px 14px;font:600 12px var(--cond);text-transform:uppercase;letter-spacing:.05em;color:#2B2019;cursor:pointer}
+.sv-btn:hover{background:#2B2019;color:#F6EED9}
+.seat-info .pill{grid-column:auto!important;grid-row:auto!important}
+.seat-leg{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:10px;font-size:12px;color:#6A5A4C}
+.seat-leg i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:5px}.seat-leg i.b{background:#5A4636;opacity:.55;border-radius:50%}
+.sv-photo{position:fixed;inset:0;z-index:210;background:rgba(43,32,25,.7);display:grid;place-items:center;padding:4vh 4vw}
+.sv-photo[hidden]{display:none!important}
+.sv-photo figure{position:relative;margin:0;max-width:min(1100px,100%);background:var(--white);border-radius:18px;padding:10px;box-shadow:0 30px 80px -20px rgba(0,0,0,.6)}
+.sv-photo img{display:block;max-width:100%;max-height:78vh;border-radius:12px}
+.sv-photo figcaption{padding:10px 6px 2px;font-size:13px;color:#6A5A4C}
+.sv-photo .x{position:absolute;right:-14px;top:-14px;width:40px;height:40px;border-radius:50%;border:0;background:var(--coral);color:#fff;font-size:22px;cursor:pointer}
+.seat-view{min-height:560px}
+
+@media (max-width:900px){.seat-g{grid-template-columns:1fr}.seat-view{min-height:76vw}.seat-info{grid-template-columns:1fr}.seat-info .pill{grid-column:1;grid-row:auto;justify-self:start}}
+</style>
+<script type="module" src="seat.js?v=3"></script>
+
+<!-- ===== видео: обложка раскрывается на прокрутке, плеер ВК грузится по клику ===== -->
+<style>
+.vd{display:block}
+.vd-stage{padding:0 calc(var(--g) * var(--k,1))}
+.vd-main{aspect-ratio:auto;height:clamp(420px,82vh,820px);border-radius:calc(32px * var(--k,1))}
+.vd-main>img{transform:scale(calc(1.18 - .14 * (1 - var(--k,1))))}
+.vd-main:hover>img{transform:scale(1.06)}
+.vd-list{flex-direction:row;margin:18px var(--g) 0;overflow-x:auto;scrollbar-width:none}
+.vd-list::-webkit-scrollbar{display:none}
+.vd-it{flex:1;min-width:260px}
+.vd-bars{position:absolute;inset:auto 0 0 0;height:0;z-index:4}
+.vd-msg{position:absolute;inset:0;z-index:6;display:grid;place-items:center;background:rgba(6,8,16,.82);color:#fff;text-align:center;padding:24px;font-size:16px;line-height:1.5}
+.vd-msg b{display:block;font-family:var(--cond);text-transform:uppercase;font-size:30px;margin-bottom:8px}
+.vd-msg button{margin-top:16px;background:none;border:1.5px solid #fff;color:#fff;border-radius:999px;padding:8px 18px;cursor:pointer}
+</style>
+
+<section class="sec" id="video" style="padding-left:0;padding-right:0">
+  <div class="sec-h reveal" style="padding:0 var(--g)"><h2>Лето в&nbsp;театре<i>посмотрите, как это было</i></h2><a class="pill btn-line" href="#" target="_blank" rel="noopener">Все видео ВКонтакте</a></div>
+  <div class="vd">
+    <div class="vd-stage" id="vdStage">
+      <div class="vd-main" id="vdMain" role="button" tabindex="0" aria-label="Смотреть видео">
+        <img id="vdImg" src="img/p3.jpg" alt="">
+        <div class="vd-play">
+          <svg class="ring" viewBox="0 0 200 200"><defs><path id="vdc" d="M100,100 m-82,0 a82,82 0 1,1 164,0 a82,82 0 1,1 -164,0"/></defs>
+            <text fill="#fff" font-family="Mayak,Oswald,Arial Narrow" font-size="17" letter-spacing="5"><textPath href="#vdc">СМОТРЕТЬ ВИДЕО ★ ЛЕТНИЙ ТЕАТР ★ СМОТРЕТЬ ВИДЕО ★ ЛЕТНИЙ ТЕАТР ★</textPath></text></svg>
+          <i></i>
+        </div>
+        <div class="vd-cap"><h3 id="vdT"><i>сезон 2026</i>Лето под соснами</h3><span id="vdD">3:12</span></div>
+      </div>
+    </div>
+    <div class="vd-list" id="vdList"></div>
+  </div>
+</section>
+
+<!-- ===== звёзды прошлых сезонов (шаблон 2) ===== -->
+<section class="sec lg" id="legends">
+  <div class="sec-h reveal"><h2>У нас уже выступали<i>звёзды на сцене — звёзды на небе</i></h2></div>
+  <div class="lg-wrap" id="lgWrap"></div>
+  <div class="lg-foot"><a class="pill btn-red" href="#full">Кто выступит этим летом</a><a class="pill btn-line" href="https://xn--80aj8afc.xn--e1agfrc5b.xn--p1ai/s25" target="_blank" rel="noopener">Архив событий</a></div>
+  <div class="hl-pic" id="lgPic"><img alt=""><span></span></div>
+  <div hidden><div class="st"><canvas id="stCv"></canvas><div class="st-sky" id="stSky"></div></div></div>
+</section>
+<style>
+#legends{padding:72px 0 56px;overflow:hidden;background:var(--page)}
+#legends .sec-h{padding:0 var(--g)}
+.lg-wrap{display:grid;margin:26px -2vw;transform:rotate(-1.6deg)}
+.lg-row{display:flex;width:max-content;padding:7px 0;animation:hlrun var(--sp,60s) linear infinite}
+.lg-row.rev{animation-direction:reverse}
+.lg-wrap:hover .lg-row{animation-play-state:paused}
+.lg-row.c{background:var(--coral)}.lg-row.w{background:var(--white)}
+.lg-it{display:flex;align-items:center;gap:11px;padding:2px 11px;cursor:pointer;white-space:nowrap;text-decoration:none}
+.lg-it b{font-family:var(--cond);text-transform:uppercase;font-weight:600;font-size:clamp(23px,3.7vw,59px);line-height:1.02;letter-spacing:-.01em;transition:color .25s}
+.lg-it small{font-family:var(--hand);font-size:clamp(14px,1.1vw,18px);transform:rotate(-6deg);transition:color .25s}
+.lg-it::after{content:"★";font-size:clamp(14px,1.6vw,22px);margin-left:11px}
+.lg-row.c b{color:#fff}.lg-row.c small{color:#FBE3D6}.lg-row.c .lg-it::after{color:#fff}.lg-row.c .lg-it:hover b{color:#2B2019}
+.lg-row.w b{color:transparent;-webkit-text-stroke:1px #2B2019}.lg-row.w small{color:#8A7864}.lg-row.w .lg-it::after{color:var(--coral)}
+.lg-row.w .lg-it:hover b{color:var(--coral);-webkit-text-stroke:0}
+.lg-foot{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;padding:30px var(--g) 0}
+@media (prefers-reduced-motion:reduce){.lg-row{animation:none!important}}
+.lg-m,.lgm-btn{display:none}
+@media (max-width:720px){
+ .lg-wrap{display:none}
+ .lg-m{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:22px var(--g) 0}
+ .lgm-it{display:flex;align-items:center;gap:9px;background:var(--white);border-radius:16px;padding:7px 10px 7px 7px;text-decoration:none;color:#2B2019;min-width:0;box-shadow:0 1px 0 rgba(43,32,25,.06)}
+ .lgm-it:nth-child(4n+1),.lgm-it:nth-child(4n){background:var(--coral);color:#fff}
+ .lgm-it img,.lgm-it i{flex:0 0 38px;width:38px;height:38px;border-radius:50%;object-fit:cover;display:grid;place-items:center;font-style:normal;font-size:16px;background:rgba(255,255,255,.25);color:inherit}
+ .lgm-it span{min-width:0;display:flex;flex-direction:column}
+ .lgm-it b{font:600 15px/1.05 var(--cond);text-transform:uppercase;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+ .lgm-it small{font:500 13px/1.2 var(--hand);opacity:.8;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ .lgm-it.more{display:none}.lg-m.all .lgm-it.more{display:flex}
+ .lgm-btn{display:flex;justify-content:center;padding:16px var(--g) 0}
+}
+</style>
+
+<script>
+/* ======== ДАННЫЕ ШАБЛОНОВ — театр меняет только эти списки ======== */
+/* хедлайнеры: n — имя, t — подпись (рукописная), img — фото, url — событие */
+const HEADLINERS=[
+ {n:'Мельница',t:'20 лет «Невесте Полоза»',img:'img/ev/01.jpg'},
+ {n:'Евгений Цыганов',t:'и группа «МЕ4ТА»',img:'img/ev/02.jpg'},
+ {n:'Виктор Добронравов',t:'и «ЛРК Трио»',img:'img/ev/06.jpg'},
+ {n:'Три дня дождя',t:'RED SUMMER',img:'img/ev/11.jpg'},
+ {n:'Сергей Пенкин',t:'RED SUMMER',img:'img/ev/23.jpg'},
+ {n:'Дельфин',t:'RED SUMMER',img:'img/ev/33.jpg'},
+ {n:'Эпидемия',t:'RED SUMMER',img:'img/ev/35.jpg'},
+ {n:'Пермский академический',t:'театр «Мюзик-Холл»',img:'img/ev/25.jpg'},
+ {n:'Свердловская музкомедия',t:'мюзикл «Алые паруса»',img:'img/ev/04.jpg'},
+ {n:'Ева Власова',t:'сольный концерт',img:'img/ev/22.jpg'},
+ {n:'Palestrina',t:'хиты нулевых хором',img:'img/ev/10.jpg'},
+ {n:'Алекс Лим',t:'сольный концерт',img:'img/ev/19.jpg'}
+];
+/* звёзды прошлых сезонов: n — имя, y — год и жанр, l — размер (1 крупно, 2 средне, 3 мелко) */
+const STARS=[
+ {n:'Мельница',y:'2026 · фолк-рок',l:1},{n:'Евгений Цыганов',y:'2026 · концерт',l:2},{n:'Дельфин',y:'2026 · RED SUMMER',l:1},
+ {n:'Palestrina',y:'2026 · хор',l:3},{n:'Сергей Пенкин',y:'2026 · RED SUMMER',l:2},{n:'Три дня дождя',y:'2026 · рок',l:1},
+ {n:'Виктор Добронравов',y:'2026 · джаз',l:2},{n:'Ева Власова',y:'2026 · поп',l:3},{n:'Эпидемия',y:'2026 · метал',l:2},
+ {n:'Виталий Погосян',y:'2026 · дудук',l:3},{n:'Оркестр «Модерн»',y:'2026 · симфо-шоу',l:3},{n:'Свердловская музкомедия',y:'2026 · мюзикл',l:2},
+ {n:'Алекс Лим',y:'2026 · поп',l:3},{n:'Мюзик-Холл',y:'2026 · Пермь',l:3},{n:'Оркестр Палладиум',y:'2026 · симфо',l:3},{n:'Lumisfera',y:'2026 · при свечах',l:2}
+];
+/* видео: vk — «oid_id» из ссылки vk.com/video-OID_ID (пусто = заглушка) */
+const VIDEOS=[
+ {t:'Лето под соснами',s:'сезон 2026',d:'3:12',img:'img/p3.jpg',vk:''},
+ {t:'RED SUMMER: Дельфин',s:'фрагмент концерта',d:'4:05',img:'img/r5.jpg',vk:''},
+ {t:'Эпидемия в Летнем театре',s:'фрагмент концерта',d:'2:47',img:'img/d2.jpg',vk:''},
+ {t:'Оркестр под открытым небом',s:'симфонические вечера',d:'1:58',img:'img/s3.jpg',vk:''}
+];
+
+/* ---- хедлайнеры: бегущие строки + фото у курсора ---- */
+(()=>{const half=Math.ceil(HEADLINERS.length/2),A=HEADLINERS.slice(0,half),B=HEADLINERS.slice(half);
+ const html=(arr,dup)=>arr.map((h,i)=>`<a class="hl-it" href="${h.url||'#full'}" data-img="${h.img}" data-t="${h.t}"${dup?' aria-hidden="true" tabindex="-1"':''}><b>${h.n}</b><small>${h.t}</small></a>`).join('');
+ hlA.innerHTML=html(A)+html(A,1);hlB.innerHTML=html(B)+html(B,1);
+ const pic=hlPic,pi=pic.querySelector('img'),ps=pic.querySelector('span');let px=0,py=0,x=0,y=0,on=false;
+ document.querySelectorAll('.hl-it').forEach(a=>{a.addEventListener('mouseenter',()=>{pi.src=a.dataset.img;ps.textContent=a.querySelector('b').textContent;pic.classList.add('on');on=true});
+  a.addEventListener('mouseleave',()=>{pic.classList.remove('on');on=false})});
+ addEventListener('mousemove',e=>{x=e.clientX;y=e.clientY},{passive:true});
+ (function f(){px+=(x-px)*.14;py+=(y-py)*.14;if(on||pic.classList.contains('on'))pic.style.left=px+'px',pic.style.top=py+'px';requestAnimationFrame(f)})();
+})();
+
+/* ---- видео ---- */
+(()=>{let cur=0;const main=vdMain,img=vdImg;
+ vdList.innerHTML=VIDEOS.map((v,i)=>`<button class="vd-it${i?'':' on'}" data-i="${i}"><div class="th"><img src="${v.img}" alt="" loading="lazy"><i class="pl" aria-hidden="true"></i><em>${v.d}</em></div><div><b>${v.t}</b><span>${v.s}</span></div></button>`).join('');
+ function clear(){main.querySelectorAll('iframe,.vd-msg').forEach(n=>n.remove())}
+ function pick(i){cur=i;clear();const v=VIDEOS[i];img.src=v.img;vdT.innerHTML=`<i>${v.s}</i>${v.t}`;vdD.textContent=v.d;
+  vdList.querySelectorAll('.vd-it').forEach((b,j)=>b.classList.toggle('on',j===i))}
+ function play(){const v=VIDEOS[cur];clear();
+  if(v.vk){const[o,id]=v.vk.split('_');const f=document.createElement('iframe');
+   f.src=`https://vk.com/video_ext.php?oid=${o}&id=${id}&hd=2&autoplay=1`;f.allow='autoplay; encrypted-media; fullscreen; picture-in-picture';f.allowFullscreen=true;main.appendChild(f)}
+  else{const m=document.createElement('div');m.className='vd-msg';m.innerHTML='<div><b>Здесь будет видео</b>Плеер ВКонтакте откроется прямо в этой рамке — без чужой обложки и рекламы вокруг<br><button>Закрыть</button></div>';
+   m.querySelector('button').onclick=e=>{e.stopPropagation();m.remove()};main.appendChild(m)}}
+ main.addEventListener('click',e=>{if(!main.querySelector('iframe,.vd-msg'))play()});
+ main.addEventListener('keydown',e=>{if(e.key==='Enter')play()});
+ vdList.addEventListener('click',e=>{const b=e.target.closest('.vd-it');if(b){pick(+b.dataset.i);play()}});
+ /* раскрытие на прокрутке: рамка → во всю ширину */
+ const st=vdStage;function k(){const r=st.getBoundingClientRect(),vh=innerHeight;const p=Math.min(Math.max((vh-r.top)/(vh*.9),0),1);st.style.setProperty('--k',(1-p).toFixed(3))}
+ addEventListener('scroll',k,{passive:true});addEventListener('resize',k);k();
+})();
+
+/* ---- звёзды: имена загораются по одной, на фоне — звёздное небо ---- */
+(()=>{const sky=stSky;sky.innerHTML=STARS.map((s,i)=>`<span class="sn l${s.l||2}" style="--d:${(i%5)*.4}s">${s.n}<em>${s.y}</em></span>`).join('');
+ const box=sky.parentNode,cv=stCv,x=cv.getContext('2d');let W,H,pts=[],vis=false,sh=null;
+ function size(){const r=box.getBoundingClientRect(),p=Math.min(devicePixelRatio,2);W=r.width;H=r.height;cv.width=W*p;cv.height=H*p;x.setTransform(p,0,0,p,0,0);
+  pts=Array.from({length:Math.round(W*H/2600)},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()<.07?1.6:Math.random()*.9+.3,s:Math.random()*2+.5,p:Math.random()*6.3}))}
+ function draw(t){if(vis){const T=t/1000;x.clearRect(0,0,W,H);
+   for(const s of pts){x.globalAlpha=.25+.6*(.5+.5*Math.sin(T*s.s+s.p));x.fillStyle='#fff';x.beginPath();x.arc(s.x,s.y,s.r,0,6.283);x.fill()}
+   if(!sh&&Math.random()<.004)sh={x:Math.random()*W*.7+W*.15,y:Math.random()*H*.3,vx:(Math.random()*4+5)*(Math.random()<.5?-1:1),vy:Math.random()*1.5+1.5,l:1};
+   if(sh){const g=x.createLinearGradient(sh.x,sh.y,sh.x-sh.vx*16,sh.y-sh.vy*16);g.addColorStop(0,'rgba(255,230,180,1)');g.addColorStop(1,'rgba(255,230,180,0)');
+    x.globalAlpha=sh.l;x.strokeStyle=g;x.lineWidth=1.6;x.beginPath();x.moveTo(sh.x,sh.y);x.lineTo(sh.x-sh.vx*16,sh.y-sh.vy*16);x.stroke();sh.x+=sh.vx;sh.y+=sh.vy;sh.l-=.015;if(sh.l<=0)sh=null}}
+  requestAnimationFrame(draw)}
+ new IntersectionObserver(e=>{vis=e[0].isIntersecting;if(vis&&!box.dataset.lit){box.dataset.lit=1;
+   const ns=[...sky.children].map((n,i)=>[n,Math.random()]).sort((a,b)=>a[1]-b[1]);ns.forEach(([n],i)=>setTimeout(()=>n.classList.add('lit'),300+i*170))}},{threshold:0}).observe(box);
+ addEventListener('resize',size);size();requestAnimationFrame(draw);
+})();
+</script>
+<script>
+/* ---- «У нас уже выступали»: 5 бегущих лент + круглое фото у курсора ---- */
+(async()=>{let ev=[];try{ev=await (await fetch('events2026.json')).json()}catch(e){}
+ const low=x=>String(x||'').toLowerCase().replace(/[«»"]/g,'');
+ const imgOf=n=>{const h=HEADLINERS.find(h=>low(h.n)===low(n));if(h)return h.img;const e=ev.find(e=>e.img&&low(e.t).includes(low(n)));return e?e.img:''};
+ const esc=x=>String(x||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+ const N=5,rows=Array.from({length:N},()=>[]);STARS.forEach((st,i)=>rows[i%N].push(st));
+ const item=(st,dup)=>`<a class="lg-it" href="#full" data-img="${esc(imgOf(st.n))}"${dup?' aria-hidden="true" tabindex="-1"':''}><b>${esc(st.n)}</b><small>${esc(st.y)}</small></a>`;
+ const W=document.getElementById('lgWrap');
+ W.innerHTML=rows.map((r,k)=>{let f=[...r];while(f.length<7)f=f.concat(r);
+  return `<div class="lg-row ${k%2?'w rev':'c'}" style="--sp:${48+k*9}s">${f.map(x=>item(x)).join('')}${f.map(x=>item(x,1)).join('')}</div>`}).join('');
+ /* телефон: вместо лент — плашки с фото, 12 + «показать всех» */
+ const LIM=12, chip=(st,i)=>{const im=imgOf(st.n);return `<a class="lgm-it${i>=LIM?' more':''}" href="#full">${im?`<img src="${esc(im)}" alt="" loading="lazy">`:`<i>★</i>`}<span><b>${esc(st.n)}</b><small>${esc(st.y)}</small></span></a>`};
+ W.insertAdjacentHTML('afterend',`<div class="lg-m" id="lgM">${STARS.map(chip).join('')}</div>${STARS.length>LIM?`<div class="lgm-btn"><button type="button" class="pill btn-line" id="lgMore">Показать всех · ${STARS.length}</button></div>`:''}`);
+ const lm=document.getElementById('lgMore');if(lm)lm.onclick=()=>{document.getElementById('lgM').classList.add('all');lm.parentElement.remove()};
+ const pic=document.getElementById('lgPic'),pi=pic.querySelector('img'),ps=pic.querySelector('span');let px=0,py=0,x=0,y=0,on=false;
+ W.querySelectorAll('.lg-it').forEach(el=>{el.addEventListener('mouseenter',()=>{if(!el.dataset.img)return;pi.src=el.dataset.img;ps.textContent=el.querySelector('b').textContent;pic.classList.add('on');on=true});
+  el.addEventListener('mouseleave',()=>{pic.classList.remove('on');on=false})});
+ addEventListener('mousemove',e=>{x=e.clientX;y=e.clientY},{passive:true});
+ (function f(){px+=(x-px)*.14;py+=(y-py)*.14;if(on||pic.classList.contains('on')){pic.style.left=px+'px';pic.style.top=py+'px'}requestAnimationFrame(f)})();
+})();
+</script>
+
+<section class="way" id="way" aria-labelledby="wayH">
+  <div class="wt">
+    <div class="num">/ 04</div>
+    <h2 id="wayH">Как<br>добраться?</h2>
+    <p class="hand">через весь парк — под соснами и берёзами</p>
+    <p>Летний театр — в&nbsp;глубине парка Маяковского, за&nbsp;Театральной площадью. От&nbsp;главного входа — прямо по&nbsp;аллее до&nbsp;фонтана и&nbsp;направо.</p>
+    <div class="addr"><b>Парк Маяковского</b>Екатеринбург, ул.&nbsp;Мичурина, 230, корп.&nbsp;25</div>
+    <div class="btns">
+      <a class="pill red" href="https://yandex.ru/maps/-/CXbPVJY6" target="_blank" rel="noopener">Маршрут в&nbsp;Яндекс Картах
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M3 11l18-8-8 18-2-8z"/></svg></a>
+    </div>
+  </div>
+
+  <div class="stage" aria-hidden="true">
+    <div class="hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></svg>Потяните, чтобы повернуть</div>
+    <div class="plane" id="plane">
+      <svg class="map" viewBox="120 60 400 520" preserveAspectRatio="xMidYMid slice">
+        <image href="img/park_map_ours.svg" width="1176" height="1743"/>
+        <path class="route-bg" id="rbg" d=""/>
+        <path class="route" id="rt" d=""/>
+        <rect x="356" y="500" width="30" height="26" rx="4" fill="#DA6150" opacity=".35"/>
+        <circle class="ring" cx="370" cy="512" r="9"/>
+        <circle cx="370" cy="512" r="6.5" fill="#DA6150" stroke="#fff" stroke-width="2.5"/>
+        <circle cx="246" cy="108" r="6.5" fill="#fff" stroke="#DA6150" stroke-width="3"/>
+        <g class="walker"><circle r="5" fill="#fff" stroke="#DA6150" stroke-width="2.5">
+          <animateMotion dur="7s" repeatCount="indefinite" rotate="0"><mpath href="#rt"/></animateMotion></circle></g>
+      </svg>
+      <div class="pin p1" style="left:31.5%;top:9.2%"><span><i><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg></i>Центральный вход</span></div>
+      <div class="pin p2" style="left:62.5%;top:86.9%"><span><i><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 4h9v6a4.5 4.5 0 0 1-9 0zm2.5 3.2a.9.9 0 1 0 1.8 0 .9.9 0 0 0-1.8 0zm3 0a.9.9 0 1 0 1.8 0 .9.9 0 0 0-1.8 0zM5.6 11c.6 1 1.5 1.4 2.4 1.4s1.8-.4 2.4-1.4zM12.8 8H21v6a4.5 4.5 0 0 1-8.6 1.8A6 6 0 0 0 13 13z"/></svg></i>Летний театр</span></div>
+    </div>
+  </div>
+
+  <div class="side">
+    <div class="card">
+      <div class="tabs" role="tablist"><button class="on" role="tab" aria-selected="true">От главного входа</button></div>
+      <ol class="steps">
+        <li><span class="ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg></span><span><b>Центральный вход</b><br>в парк</span></li>
+        <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22v-7M7 15h10l-5-12z"/></svg></span><span>Прямо по <b>аллее Маяковского</b> до фонтана</span></li>
+        <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><path d="M12 4v4M12 16v4"/></svg></span><span>Обойдите <b>фонтан</b> справа — к&nbsp;Театральной площади</span></li>
+        <li><span class="ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 4h9v6a4.5 4.5 0 0 1-9 0zm9.8 4H21v6a4.5 4.5 0 0 1-8.6 1.8A6 6 0 0 0 13 13z"/></svg></span><span><b>Летний театр</b> — сразу за площадью</span></li>
+      </ol>
+      <div class="time"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="13" cy="4" r="2"/><path d="M10 8.5l3-1 2 3 3 1-.5 1.6-3.6-1.2-1-1.4-1 4 2.6 2.6V22h-1.8v-4.2l-2.3-2.3-1 3.5L7 22l-1.6-.6 2.2-6.5 1-4.2-1.4.6V14H5.5V9.6z"/></svg>
+        <div><strong>≈ 7 МИН</strong><small>пешком от главного входа</small></div></div>
+    </div>
+    <div class="card mini" id="miniMap" role="button" tabindex="0" aria-label="Открыть карту всего парка">
+      <span class="lbl">Весь парк</span><span class="open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></svg>Открыть</span>
+      <svg viewBox="0 0 1176 1300"><image href="img/park_map_ours.svg" width="1176" height="1743"/>
+        <rect x="120" y="60" width="400" height="520" fill="none" stroke="#DA6150" stroke-width="6" stroke-dasharray="14 10" rx="16"/>
+        <path id="rmini" d="" fill="none" stroke="#DA6150" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="370" cy="512" r="20" fill="#DA6150" stroke="#fff" stroke-width="6"/></svg>
+      <span class="n">N ↑</span>
+    </div>
+  </div>
+</section>
+<script>
+(()=>{const D='M246 108 L246 397 A24 24 0 0 1 267 430 L318 470 L356 478 L370 512';
+ ['rt','rbg','rmini'].forEach(id=>document.getElementById(id).setAttribute('d',D));
+ const L=Math.ceil(document.getElementById('rt').getTotalLength());
+ document.querySelectorAll('.route,.route-bg').forEach(p=>p.style.setProperty('--L',L));
+ const sec=document.getElementById('way');
+ const io=new IntersectionObserver(e=>{if(e[0].isIntersecting){sec.classList.add('in');io.disconnect()}},{threshold:.35});/*карта: срабатывает по самой карте, раздел на телефоне слишком длинный*/
+ io.observe(sec.querySelector('.stage')||sec);
+})();
+</script>
+
+<!-- Блок «Организаторам» перенесён на organizers.html (п.10) -->
+
+<section class="gatewall" aria-label="Вход в Летний театр"><svg class="gw-svg" viewBox="0 0 1600 470" preserveAspectRatio="xMidYMax slice" role="img" aria-label="Вход в Летний театр: кирпичная стена с надписью и ворота"><defs><pattern id="brk" width="64" height="28" patternUnits="userSpaceOnUse"><rect width="64" height="28" fill="#C9563F"/><path d="M0 13.5H64M0 27.5H64M16 0V13.5M48 0V13.5M0 14V28M32 14V28" stroke="#A9452F" stroke-width="2" opacity=".55"/><rect x="2" y="2" width="12" height="9" fill="#D2654C" opacity=".35"/><rect x="34" y="16" width="12" height="9" fill="#D2654C" opacity=".3"/></pattern><filter id="wht"><feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1 0"/></filter><linearGradient id="roofU" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E06A4F"/><stop offset="1" stop-color="#C24E3A"/></linearGradient></defs><g class="gw-fw"><path d="M230 330 L300 150 L370 330" fill="none" stroke="#D9D3C8" stroke-width="9" stroke-linejoin="round"/><g class="gw-wheel" style="transform-origin:300px 150px"><circle cx="300" cy="150" r="112" fill="none" stroke="#FBF8F1" stroke-width="7"/><circle cx="300" cy="150" r="96" fill="none" stroke="#FBF8F1" stroke-width="2.5"/><line x1="300" y1="150" x2="412.0" y2="150.0" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="403.5" y2="192.9" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="379.2" y2="229.2" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="342.9" y2="253.5" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="300.0" y2="262.0" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="257.1" y2="253.5" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="220.8" y2="229.2" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="196.5" y2="192.9" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="188.0" y2="150.0" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="196.5" y2="107.1" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="220.8" y2="70.8" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="257.1" y2="46.5" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="300.0" y2="38.0" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="342.9" y2="46.5" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="379.2" y2="70.8" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="403.5" y2="107.1" stroke="#FBF8F1" stroke-width="2"/><circle cx="412.0" cy="150.0" r="11" fill="#DA6150" stroke="#E4DED3" stroke-width="1.5"/><circle cx="397.0" cy="206.0" r="11" fill="#F2B45A" stroke="#E4DED3" stroke-width="1.5"/><circle cx="356.0" cy="247.0" r="11" fill="#FBF8F1" stroke="#E4DED3" stroke-width="1.5"/><circle cx="300.0" cy="262.0" r="11" fill="#DA6150" stroke="#E4DED3" stroke-width="1.5"/><circle cx="244.0" cy="247.0" r="11" fill="#F2B45A" stroke="#E4DED3" stroke-width="1.5"/><circle cx="203.0" cy="206.0" r="11" fill="#FBF8F1" stroke="#E4DED3" stroke-width="1.5"/><circle cx="188.0" cy="150.0" r="11" fill="#DA6150" stroke="#E4DED3" stroke-width="1.5"/><circle cx="203.0" cy="94.0" r="11" fill="#F2B45A" stroke="#E4DED3" stroke-width="1.5"/><circle cx="244.0" cy="53.0" r="11" fill="#FBF8F1" stroke="#E4DED3" stroke-width="1.5"/><circle cx="300.0" cy="38.0" r="11" fill="#DA6150" stroke="#E4DED3" stroke-width="1.5"/><circle cx="356.0" cy="53.0" r="11" fill="#F2B45A" stroke="#E4DED3" stroke-width="1.5"/><circle cx="397.0" cy="94.0" r="11" fill="#FBF8F1" stroke="#E4DED3" stroke-width="1.5"/><circle cx="300" cy="150" r="12" fill="#DA6150"/></g></g><g class="gw-trees"><path d="M0 230 Q120 200 260 215 Q400 120 560 100 Q720 40 880 95 Q1000 60 1100 120 L1100 330 L0 330Z" fill="#9CC48A"/><ellipse class="lf" cx="496" cy="193" rx="29" ry="24" fill="#9CC48A"/><ellipse class="lf" cx="191" cy="249" rx="24" ry="30" fill="#B6D89C"/><ellipse class="lf" cx="489" cy="101" rx="23" ry="32" fill="#B6D89C"/><ellipse class="lf" cx="659" cy="157" rx="21" ry="29" fill="#9CC48A"/><ellipse class="lf" cx="690" cy="253" rx="15" ry="17" fill="#9CC48A"/><ellipse class="lf" cx="664" cy="241" rx="19" ry="27" fill="#9CC48A"/><ellipse class="lf" cx="572" cy="211" rx="22" ry="28" fill="#A9CF91"/><ellipse class="lf" cx="726" cy="159" rx="23" ry="33" fill="#B6D89C"/><ellipse class="lf" cx="787" cy="139" rx="18" ry="21" fill="#B6D89C"/><ellipse class="lf" cx="622" cy="94" rx="16" ry="21" fill="#B6D89C"/><ellipse class="lf" cx="1072" cy="256" rx="14" ry="20" fill="#B6D89C"/><ellipse class="lf" cx="516" cy="286" rx="20" ry="17" fill="#9CC48A"/><ellipse class="lf" cx="868" cy="129" rx="15" ry="22" fill="#A9CF91"/><ellipse class="lf" cx="844" cy="96" rx="18" ry="18" fill="#B6D89C"/><ellipse class="lf" cx="510" cy="177" rx="25" ry="19" fill="#9CC48A"/><ellipse class="lf" cx="1103" cy="239" rx="21" ry="23" fill="#A9CF91"/><ellipse class="lf" cx="460" cy="223" rx="18" ry="33" fill="#86B776"/><ellipse class="lf" cx="1118" cy="74" rx="17" ry="34" fill="#B6D89C"/><ellipse class="lf" cx="28" cy="217" rx="21" ry="16" fill="#86B776"/><ellipse class="lf" cx="927" cy="155" rx="15" ry="20" fill="#9CC48A"/><ellipse class="lf" cx="-2" cy="236" rx="24" ry="18" fill="#A9CF91"/><ellipse class="lf" cx="929" cy="100" rx="20" ry="27" fill="#86B776"/><ellipse class="lf" cx="1016" cy="250" rx="18" ry="19" fill="#9CC48A"/><ellipse class="lf" cx="763" cy="155" rx="22" ry="17" fill="#B6D89C"/><ellipse class="lf" cx="98" cy="208" rx="29" ry="20" fill="#A9CF91"/><ellipse class="lf" cx="273" cy="275" rx="24" ry="21" fill="#9CC48A"/><ellipse class="lf" cx="1039" cy="285" rx="16" ry="25" fill="#B6D89C"/><ellipse class="lf" cx="299" cy="283" rx="17" ry="16" fill="#86B776"/><ellipse class="lf" cx="449" cy="226" rx="15" ry="21" fill="#9CC48A"/><ellipse class="lf" cx="85" cy="217" rx="21" ry="22" fill="#9CC48A"/><ellipse class="lf" cx="652" cy="273" rx="22" ry="22" fill="#86B776"/><ellipse class="lf" cx="1078" cy="75" rx="24" ry="25" fill="#86B776"/><ellipse class="lf" cx="344" cy="290" rx="15" ry="26" fill="#B6D89C"/><ellipse class="lf" cx="1006" cy="232" rx="25" ry="30" fill="#86B776"/><ellipse class="lf" cx="381" cy="263" rx="28" ry="32" fill="#A9CF91"/><ellipse class="lf" cx="1056" cy="77" rx="22" ry="16" fill="#A9CF91"/><ellipse class="lf" cx="412" cy="206" rx="15" ry="18" fill="#B6D89C"/><ellipse class="lf" cx="1112" cy="264" rx="26" ry="23" fill="#A9CF91"/><ellipse class="lf" cx="482" cy="254" rx="15" ry="30" fill="#B6D89C"/><ellipse class="lf" cx="334" cy="212" rx="14" ry="33" fill="#B6D89C"/><ellipse class="lf" cx="547" cy="205" rx="29" ry="21" fill="#B6D89C"/><ellipse class="lf" cx="399" cy="217" rx="24" ry="25" fill="#86B776"/><ellipse class="lf" cx="732" cy="167" rx="28" ry="22" fill="#86B776"/><ellipse class="lf" cx="206" cy="242" rx="27" ry="32" fill="#9CC48A"/><ellipse class="lf" cx="418" cy="255" rx="19" ry="18" fill="#A9CF91"/><ellipse class="lf" cx="380" cy="281" rx="15" ry="17" fill="#86B776"/><ellipse class="lf" cx="917" cy="95" rx="22" ry="33" fill="#A9CF91"/><ellipse class="lf" cx="416" cy="249" rx="25" ry="29" fill="#A9CF91"/><ellipse class="lf" cx="345" cy="275" rx="18" ry="27" fill="#86B776"/><ellipse class="lf" cx="630" cy="138" rx="27" ry="16" fill="#9CC48A"/><ellipse class="lf" cx="442" cy="221" rx="26" ry="21" fill="#9CC48A"/><ellipse class="lf" cx="888" cy="286" rx="16" ry="18" fill="#86B776"/><ellipse class="lf" cx="1073" cy="221" rx="17" ry="25" fill="#9CC48A"/><ellipse class="lf" cx="794" cy="236" rx="23" ry="17" fill="#9CC48A"/><ellipse class="lf" cx="290" cy="234" rx="25" ry="25" fill="#9CC48A"/><ellipse class="lf" cx="429" cy="272" rx="28" ry="18" fill="#A9CF91"/><ellipse class="lf" cx="128" cy="244" rx="24" ry="32" fill="#A9CF91"/><ellipse class="lf" cx="607" cy="214" rx="22" ry="31" fill="#86B776"/><ellipse class="lf" cx="509" cy="213" rx="17" ry="29" fill="#B6D89C"/><ellipse class="lf" cx="223" cy="281" rx="30" ry="34" fill="#86B776"/><ellipse class="lf" cx="279" cy="266" rx="14" ry="25" fill="#B6D89C"/><ellipse class="lf" cx="483" cy="191" rx="26" ry="25" fill="#B6D89C"/><ellipse class="lf" cx="229" cy="279" rx="21" ry="17" fill="#86B776"/><ellipse class="lf" cx="763" cy="272" rx="22" ry="34" fill="#A9CF91"/><ellipse class="lf" cx="1058" cy="178" rx="29" ry="18" fill="#9CC48A"/><ellipse class="lf" cx="481" cy="193" rx="27" ry="26" fill="#9CC48A"/><ellipse class="lf" cx="576" cy="256" rx="23" ry="22" fill="#A9CF91"/><ellipse class="lf" cx="1068" cy="261" rx="24" ry="21" fill="#9CC48A"/><ellipse class="lf" cx="1084" cy="185" rx="23" ry="20" fill="#B6D89C"/><ellipse class="lf" cx="554" cy="203" rx="14" ry="33" fill="#A9CF91"/><ellipse class="lf" cx="600" cy="288" rx="16" ry="18" fill="#9CC48A"/><ellipse class="lf" cx="55" cy="251" rx="21" ry="33" fill="#A9CF91"/><ellipse class="lf" cx="287" cy="245" rx="16" ry="24" fill="#A9CF91"/><ellipse class="lf" cx="578" cy="94" rx="21" ry="17" fill="#86B776"/><ellipse class="lf" cx="128" cy="271" rx="14" ry="19" fill="#9CC48A"/><ellipse class="lf" cx="-7" cy="229" rx="26" ry="20" fill="#A9CF91"/><ellipse class="lf" cx="100" cy="267" rx="16" ry="25" fill="#86B776"/><ellipse class="lf" cx="798" cy="224" rx="28" ry="16" fill="#A9CF91"/><ellipse class="lf" cx="921" cy="205" rx="23" ry="32" fill="#9CC48A"/><ellipse class="lf" cx="584" cy="257" rx="24" ry="31" fill="#9CC48A"/><ellipse class="lf" cx="1023" cy="208" rx="20" ry="19" fill="#86B776"/><ellipse class="lf" cx="995" cy="113" rx="26" ry="20" fill="#B6D89C"/><ellipse class="lf" cx="133" cy="225" rx="26" ry="21" fill="#B6D89C"/><ellipse class="lf" cx="476" cy="277" rx="23" ry="29" fill="#9CC48A"/><ellipse class="lf" cx="439" cy="263" rx="14" ry="20" fill="#86B776"/><ellipse class="lf" cx="1019" cy="283" rx="16" ry="25" fill="#86B776"/><ellipse class="lf" cx="553" cy="221" rx="17" ry="17" fill="#B6D89C"/><ellipse class="lf" cx="8" cy="270" rx="24" ry="32" fill="#A9CF91"/><ellipse class="lf" cx="147" cy="221" rx="17" ry="31" fill="#86B776"/><ellipse class="lf" cx="1037" cy="91" rx="15" ry="33" fill="#A9CF91"/><ellipse class="lf" cx="68" cy="213" rx="20" ry="24" fill="#86B776"/><ellipse class="lf" cx="470" cy="202" rx="14" ry="29" fill="#9CC48A"/><ellipse class="lf" cx="187" cy="244" rx="26" ry="23" fill="#9CC48A"/><ellipse class="lf" cx="670" cy="91" rx="27" ry="22" fill="#B6D89C"/><ellipse class="lf" cx="894" cy="225" rx="28" ry="27" fill="#A9CF91"/><ellipse class="lf" cx="629" cy="112" rx="23" ry="22" fill="#86B776"/><ellipse class="lf" cx="299" cy="215" rx="26" ry="19" fill="#A9CF91"/><ellipse class="lf" cx="132" cy="233" rx="23" ry="23" fill="#A9CF91"/><ellipse class="lf" cx="852" cy="159" rx="26" ry="17" fill="#86B776"/><ellipse class="lf" cx="324" cy="214" rx="28" ry="34" fill="#B6D89C"/><ellipse class="lf" cx="245" cy="285" rx="25" ry="22" fill="#A9CF91"/><ellipse class="lf" cx="629" cy="187" rx="20" ry="34" fill="#9CC48A"/><ellipse class="lf" cx="779" cy="238" rx="30" ry="16" fill="#B6D89C"/><ellipse class="lf" cx="822" cy="126" rx="20" ry="17" fill="#9CC48A"/><ellipse class="lf" cx="719" cy="72" rx="18" ry="21" fill="#86B776"/><ellipse class="lf" cx="607" cy="182" rx="29" ry="26" fill="#B6D89C"/><ellipse class="lf" cx="707" cy="248" rx="15" ry="27" fill="#B6D89C"/><ellipse class="lf" cx="421" cy="285" rx="20" ry="33" fill="#A9CF91"/><ellipse class="lf" cx="598" cy="201" rx="21" ry="25" fill="#86B776"/><ellipse class="lf" cx="581" cy="202" rx="20" ry="21" fill="#86B776"/><ellipse class="lf" cx="619" cy="132" rx="25" ry="21" fill="#B6D89C"/><ellipse class="lf" cx="861" cy="199" rx="24" ry="23" fill="#A9CF91"/><ellipse class="lf" cx="40" cy="232" rx="20" ry="26" fill="#86B776"/><ellipse class="lf" cx="64" cy="282" rx="21" ry="25" fill="#9CC48A"/><ellipse class="lf" cx="32" cy="213" rx="27" ry="32" fill="#9CC48A"/><ellipse class="lf" cx="1096" cy="250" rx="24" ry="18" fill="#A9CF91"/><ellipse class="lf" cx="499" cy="115" rx="15" ry="26" fill="#B6D89C"/><ellipse class="lf" cx="394" cy="217" rx="21" ry="27" fill="#A9CF91"/><ellipse class="lf" cx="395" cy="268" rx="27" ry="18" fill="#86B776"/><ellipse class="lf" cx="817" cy="122" rx="16" ry="32" fill="#86B776"/><ellipse class="lf" cx="293" cy="257" rx="26" ry="29" fill="#9CC48A"/><ellipse class="lf" cx="702" cy="236" rx="17" ry="20" fill="#9CC48A"/><ellipse class="lf" cx="982" cy="79" rx="15" ry="21" fill="#A9CF91"/><ellipse class="lf" cx="11" cy="208" rx="18" ry="21" fill="#B6D89C"/><ellipse class="lf" cx="1021" cy="105" rx="18" ry="34" fill="#A9CF91"/><ellipse class="lf" cx="526" cy="116" rx="19" ry="29" fill="#B6D89C"/><ellipse class="lf" cx="895" cy="168" rx="27" ry="31" fill="#9CC48A"/><ellipse class="lf" cx="487" cy="234" rx="20" ry="19" fill="#9CC48A"/><ellipse class="lf" cx="725" cy="288" rx="19" ry="26" fill="#9CC48A"/><ellipse class="lf" cx="468" cy="236" rx="16" ry="32" fill="#B6D89C"/><ellipse class="lf" cx="600" cy="165" rx="23" ry="31" fill="#A9CF91"/><ellipse class="lf" cx="321" cy="271" rx="15" ry="20" fill="#B6D89C"/><ellipse class="lf" cx="772" cy="179" rx="26" ry="22" fill="#9CC48A"/><ellipse class="lf" cx="229" cy="261" rx="19" ry="32" fill="#86B776"/><ellipse class="lf" cx="789" cy="195" rx="29" ry="33" fill="#86B776"/><ellipse class="lf" cx="479" cy="247" rx="19" ry="22" fill="#A9CF91"/><ellipse class="lf" cx="1083" cy="231" rx="22" ry="18" fill="#86B776"/><ellipse class="lf" cx="7" cy="263" rx="23" ry="30" fill="#86B776"/><ellipse class="lf" cx="889" cy="189" rx="27" ry="26" fill="#9CC48A"/><ellipse class="lf" cx="82" cy="244" rx="28" ry="31" fill="#9CC48A"/><ellipse class="lf" cx="568" cy="190" rx="23" ry="33" fill="#A9CF91"/><ellipse class="lf" cx="53" cy="251" rx="27" ry="18" fill="#B6D89C"/><ellipse class="lf" cx="292" cy="214" rx="19" ry="16" fill="#9CC48A"/><ellipse class="lf" cx="91" cy="274" rx="21" ry="29" fill="#A9CF91"/><ellipse class="lf" cx="853" cy="185" rx="26" ry="23" fill="#86B776"/><ellipse class="lf" cx="900" cy="143" rx="16" ry="25" fill="#B6D89C"/><ellipse class="lf" cx="787" cy="271" rx="21" ry="31" fill="#86B776"/><ellipse class="lf" cx="953" cy="247" rx="27" ry="32" fill="#B6D89C"/><ellipse class="lf" cx="577" cy="226" rx="27" ry="24" fill="#A9CF91"/><ellipse class="lf" cx="1024" cy="124" rx="17" ry="27" fill="#9CC48A"/><rect x="353" y="231" width="7" height="99" fill="#FBF8F1"/><rect x="353" y="318" width="3" height="3" fill="#4A3F38"/><rect x="353" y="269" width="3" height="3" fill="#4A3F38"/><rect x="353" y="294" width="6" height="3" fill="#4A3F38"/><rect x="353" y="259" width="3" height="3" fill="#4A3F38"/><rect x="501" y="186" width="9" height="144" fill="#FBF8F1"/><rect x="501" y="238" width="4" height="3" fill="#4A3F38"/><rect x="501" y="244" width="6" height="3" fill="#4A3F38"/><rect x="501" y="272" width="5" height="3" fill="#4A3F38"/><rect x="554" y="167" width="9" height="163" fill="#FBF8F1"/><rect x="554" y="206" width="7" height="3" fill="#4A3F38"/><rect x="554" y="225" width="6" height="3" fill="#4A3F38"/><rect x="554" y="295" width="5" height="3" fill="#4A3F38"/><rect x="554" y="218" width="7" height="3" fill="#4A3F38"/><rect x="988" y="154" width="7" height="176" fill="#FBF8F1"/><rect x="988" y="242" width="4" height="3" fill="#4A3F38"/><rect x="988" y="177" width="6" height="3" fill="#4A3F38"/><rect x="988" y="290" width="4" height="3" fill="#4A3F38"/><rect x="575" y="177" width="6" height="153" fill="#FBF8F1"/><rect x="575" y="276" width="3" height="3" fill="#4A3F38"/><rect x="575" y="193" width="4" height="3" fill="#4A3F38"/><rect x="575" y="240" width="5" height="3" fill="#4A3F38"/><rect x="773" y="189" width="6" height="141" fill="#FBF8F1"/><rect x="773" y="293" width="3" height="3" fill="#4A3F38"/><rect x="773" y="309" width="5" height="3" fill="#4A3F38"/><rect x="773" y="219" width="4" height="3" fill="#4A3F38"/><rect x="673" y="177" width="5" height="153" fill="#FBF8F1"/><rect x="673" y="291" width="2" height="3" fill="#4A3F38"/><rect x="673" y="297" width="4" height="3" fill="#4A3F38"/><rect x="673" y="297" width="2" height="3" fill="#4A3F38"/><rect x="673" y="227" width="4" height="3" fill="#4A3F38"/><rect x="673" y="205" width="3" height="3" fill="#4A3F38"/><rect x="511" y="234" width="7" height="96" fill="#FBF8F1"/><rect x="511" y="271" width="6" height="3" fill="#4A3F38"/><rect x="511" y="279" width="6" height="3" fill="#4A3F38"/><rect x="511" y="256" width="6" height="3" fill="#4A3F38"/><rect x="511" y="264" width="5" height="3" fill="#4A3F38"/><rect x="511" y="286" width="4" height="3" fill="#4A3F38"/><rect x="900" y="150" width="6" height="180" fill="#FBF8F1"/><rect x="900" y="251" width="6" height="3" fill="#4A3F38"/><rect x="900" y="269" width="3" height="3" fill="#4A3F38"/><rect x="900" y="177" width="3" height="3" fill="#4A3F38"/><rect x="724" y="198" width="8" height="132" fill="#FBF8F1"/><rect x="724" y="283" width="3" height="3" fill="#4A3F38"/><rect x="724" y="253" width="6" height="3" fill="#4A3F38"/><rect x="724" y="238" width="5" height="3" fill="#4A3F38"/><rect x="500" y="111" width="9" height="219" fill="#FBF8F1"/><rect x="500" y="166" width="6" height="3" fill="#4A3F38"/><rect x="500" y="183" width="5" height="3" fill="#4A3F38"/><rect x="500" y="231" width="5" height="3" fill="#4A3F38"/><rect x="500" y="192" width="5" height="3" fill="#4A3F38"/><rect x="500" y="255" width="5" height="3" fill="#4A3F38"/><rect x="224" y="236" width="6" height="94" fill="#FBF8F1"/><rect x="224" y="290" width="5" height="3" fill="#4A3F38"/><rect x="224" y="274" width="5" height="3" fill="#4A3F38"/><rect x="224" y="257" width="3" height="3" fill="#4A3F38"/><rect x="224" y="257" width="5" height="3" fill="#4A3F38"/><rect x="768" y="133" width="7" height="197" fill="#FBF8F1"/><rect x="768" y="250" width="3" height="3" fill="#4A3F38"/><rect x="768" y="187" width="3" height="3" fill="#4A3F38"/><rect x="768" y="170" width="4" height="3" fill="#4A3F38"/><rect x="768" y="161" width="6" height="3" fill="#4A3F38"/><rect x="467" y="233" width="8" height="97" fill="#FBF8F1"/><rect x="467" y="307" width="5" height="3" fill="#4A3F38"/><rect x="467" y="272" width="5" height="3" fill="#4A3F38"/><rect x="467" y="249" width="5" height="3" fill="#4A3F38"/><rect x="759" y="238" width="8" height="92" fill="#FBF8F1"/><rect x="759" y="319" width="5" height="3" fill="#4A3F38"/><rect x="759" y="270" width="4" height="3" fill="#4A3F38"/><rect x="759" y="273" width="5" height="3" fill="#4A3F38"/><rect x="759" y="290" width="4" height="3" fill="#4A3F38"/><rect x="759" y="275" width="4" height="3" fill="#4A3F38"/><rect x="120" y="236" width="6" height="94" fill="#FBF8F1"/><rect x="120" y="313" width="4" height="3" fill="#4A3F38"/><rect x="120" y="275" width="4" height="3" fill="#4A3F38"/><rect x="120" y="261" width="5" height="3" fill="#4A3F38"/><rect x="120" y="319" width="4" height="3" fill="#4A3F38"/><rect x="120" y="300" width="5" height="3" fill="#4A3F38"/><rect x="221" y="239" width="8" height="91" fill="#FBF8F1"/><rect x="221" y="305" width="4" height="3" fill="#4A3F38"/><rect x="221" y="286" width="5" height="3" fill="#4A3F38"/><rect x="221" y="276" width="3" height="3" fill="#4A3F38"/><rect x="944" y="145" width="9" height="185" fill="#FBF8F1"/><rect x="944" y="316" width="4" height="3" fill="#4A3F38"/><rect x="944" y="305" width="6" height="3" fill="#4A3F38"/><rect x="944" y="250" width="6" height="3" fill="#4A3F38"/><rect x="944" y="202" width="7" height="3" fill="#4A3F38"/><rect x="1072" y="216" width="7" height="114" fill="#FBF8F1"/><rect x="1072" y="314" width="3" height="3" fill="#4A3F38"/><rect x="1072" y="292" width="4" height="3" fill="#4A3F38"/><rect x="1072" y="299" width="4" height="3" fill="#4A3F38"/><rect x="187" y="234" width="8" height="96" fill="#FBF8F1"/><rect x="187" y="251" width="4" height="3" fill="#4A3F38"/><rect x="187" y="319" width="7" height="3" fill="#4A3F38"/><rect x="187" y="296" width="5" height="3" fill="#4A3F38"/><rect x="187" y="297" width="6" height="3" fill="#4A3F38"/><rect x="418" y="234" width="8" height="96" fill="#FBF8F1"/><rect x="418" y="260" width="5" height="3" fill="#4A3F38"/><rect x="418" y="251" width="5" height="3" fill="#4A3F38"/><rect x="418" y="257" width="5" height="3" fill="#4A3F38"/><rect x="370" y="227" width="6" height="103" fill="#FBF8F1"/><rect x="370" y="246" width="5" height="3" fill="#4A3F38"/><rect x="370" y="298" width="5" height="3" fill="#4A3F38"/><rect x="370" y="273" width="4" height="3" fill="#4A3F38"/><rect x="370" y="250" width="3" height="3" fill="#4A3F38"/><rect x="969" y="229" width="7" height="101" fill="#FBF8F1"/><rect x="969" y="301" width="5" height="3" fill="#4A3F38"/><rect x="969" y="320" width="6" height="3" fill="#4A3F38"/><rect x="969" y="309" width="4" height="3" fill="#4A3F38"/><rect x="969" y="277" width="5" height="3" fill="#4A3F38"/><rect x="979" y="178" width="7" height="152" fill="#FBF8F1"/><rect x="979" y="247" width="3" height="3" fill="#4A3F38"/><rect x="979" y="308" width="4" height="3" fill="#4A3F38"/><rect x="979" y="271" width="4" height="3" fill="#4A3F38"/><rect x="979" y="241" width="4" height="3" fill="#4A3F38"/><rect x="855" y="225" width="9" height="105" fill="#FBF8F1"/><rect x="855" y="250" width="5" height="3" fill="#4A3F38"/><rect x="855" y="280" width="5" height="3" fill="#4A3F38"/><rect x="855" y="244" width="6" height="3" fill="#4A3F38"/><rect x="573" y="141" width="6" height="189" fill="#FBF8F1"/><rect x="573" y="310" width="5" height="3" fill="#4A3F38"/><rect x="573" y="320" width="5" height="3" fill="#4A3F38"/><rect x="573" y="299" width="4" height="3" fill="#4A3F38"/><rect x="573" y="246" width="4" height="3" fill="#4A3F38"/><rect x="186" y="235" width="7" height="95" fill="#FBF8F1"/><rect x="186" y="313" width="3" height="3" fill="#4A3F38"/><rect x="186" y="305" width="3" height="3" fill="#4A3F38"/><rect x="186" y="288" width="6" height="3" fill="#4A3F38"/><rect x="11" y="229" width="6" height="101" fill="#FBF8F1"/><rect x="11" y="257" width="4" height="3" fill="#4A3F38"/><rect x="11" y="278" width="4" height="3" fill="#4A3F38"/><rect x="11" y="254" width="5" height="3" fill="#4A3F38"/><rect x="11" y="261" width="3" height="3" fill="#4A3F38"/><rect x="497" y="151" width="6" height="179" fill="#FBF8F1"/><rect x="497" y="310" width="6" height="3" fill="#4A3F38"/><rect x="497" y="239" width="3" height="3" fill="#4A3F38"/><rect x="497" y="211" width="5" height="3" fill="#4A3F38"/><rect x="970" y="135" width="8" height="195" fill="#FBF8F1"/><rect x="970" y="303" width="3" height="3" fill="#4A3F38"/><rect x="970" y="258" width="6" height="3" fill="#4A3F38"/><rect x="970" y="245" width="6" height="3" fill="#4A3F38"/><rect x="970" y="190" width="7" height="3" fill="#4A3F38"/><ellipse class="lf" cx="1074" cy="177" rx="16" ry="24" fill="#B6D89C"/><ellipse class="lf" cx="955" cy="188" rx="14" ry="22" fill="#B6D89C"/><ellipse class="lf" cx="451" cy="219" rx="22" ry="15" fill="#C3E0A8"/><ellipse class="lf" cx="289" cy="233" rx="18" ry="18" fill="#B6D89C"/><ellipse class="lf" cx="403" cy="232" rx="23" ry="21" fill="#C3E0A8"/><ellipse class="lf" cx="1075" cy="221" rx="14" ry="17" fill="#C3E0A8"/><ellipse class="lf" cx="700" cy="76" rx="24" ry="19" fill="#C3E0A8"/><ellipse class="lf" cx="579" cy="68" rx="19" ry="17" fill="#B6D89C"/><ellipse class="lf" cx="460" cy="229" rx="14" ry="26" fill="#C3E0A8"/><ellipse class="lf" cx="263" cy="222" rx="19" ry="16" fill="#C3E0A8"/><ellipse class="lf" cx="1086" cy="66" rx="18" ry="23" fill="#B6D89C"/><ellipse class="lf" cx="-7" cy="237" rx="13" ry="15" fill="#B6D89C"/><ellipse class="lf" cx="346" cy="227" rx="12" ry="17" fill="#C3E0A8"/><ellipse class="lf" cx="649" cy="199" rx="13" ry="19" fill="#B6D89C"/><ellipse class="lf" cx="598" cy="106" rx="21" ry="23" fill="#B6D89C"/><ellipse class="lf" cx="533" cy="100" rx="19" ry="20" fill="#C3E0A8"/><ellipse class="lf" cx="215" cy="239" rx="13" ry="19" fill="#C3E0A8"/><ellipse class="lf" cx="351" cy="230" rx="19" ry="24" fill="#B6D89C"/><ellipse class="lf" cx="793" cy="214" rx="12" ry="15" fill="#C3E0A8"/><ellipse class="lf" cx="621" cy="158" rx="21" ry="17" fill="#C3E0A8"/><ellipse class="lf" cx="50" cy="226" rx="20" ry="24" fill="#B6D89C"/><ellipse class="lf" cx="839" cy="150" rx="20" ry="20" fill="#B6D89C"/><ellipse class="lf" cx="273" cy="219" rx="20" ry="24" fill="#B6D89C"/><ellipse class="lf" cx="58" cy="225" rx="16" ry="17" fill="#C3E0A8"/><ellipse class="lf" cx="133" cy="234" rx="19" ry="16" fill="#B6D89C"/><ellipse class="lf" cx="569" cy="237" rx="12" ry="19" fill="#C3E0A8"/><ellipse class="lf" cx="91" cy="229" rx="18" ry="25" fill="#C3E0A8"/><ellipse class="lf" cx="745" cy="189" rx="24" ry="21" fill="#B6D89C"/><ellipse class="lf" cx="271" cy="229" rx="15" ry="20" fill="#C3E0A8"/><ellipse class="lf" cx="394" cy="223" rx="24" ry="21" fill="#C3E0A8"/><ellipse class="lf" cx="168" cy="230" rx="24" ry="23" fill="#C3E0A8"/><ellipse class="lf" cx="503" cy="131" rx="22" ry="19" fill="#C3E0A8"/><ellipse class="lf" cx="229" cy="224" rx="14" ry="21" fill="#C3E0A8"/><ellipse class="lf" cx="523" cy="132" rx="19" ry="23" fill="#B6D89C"/><ellipse class="lf" cx="486" cy="239" rx="20" ry="24" fill="#C3E0A8"/><ellipse class="lf" cx="590" cy="135" rx="13" ry="17" fill="#B6D89C"/><ellipse class="lf" cx="679" cy="153" rx="21" ry="20" fill="#C3E0A8"/><ellipse class="lf" cx="288" cy="224" rx="14" ry="25" fill="#B6D89C"/><ellipse class="lf" cx="142" cy="221" rx="22" ry="15" fill="#B6D89C"/><ellipse class="lf" cx="921" cy="141" rx="22" ry="19" fill="#B6D89C"/><ellipse class="lf" cx="845" cy="153" rx="13" ry="19" fill="#C3E0A8"/><ellipse class="lf" cx="532" cy="94" rx="18" ry="16" fill="#C3E0A8"/><ellipse class="lf" cx="337" cy="226" rx="19" ry="16" fill="#B6D89C"/><ellipse class="lf" cx="338" cy="226" rx="17" ry="25" fill="#B6D89C"/><ellipse class="lf" cx="584" cy="141" rx="14" ry="20" fill="#B6D89C"/><ellipse class="lf" cx="241" cy="222" rx="16" ry="17" fill="#C3E0A8"/><ellipse class="lf" cx="932" cy="194" rx="18" ry="14" fill="#B6D89C"/><ellipse class="lf" cx="723" cy="72" rx="22" ry="21" fill="#B6D89C"/><ellipse class="lf" cx="730" cy="232" rx="22" ry="17" fill="#B6D89C"/><ellipse class="lf" cx="90" cy="226" rx="17" ry="15" fill="#B6D89C"/><ellipse class="lf" cx="1023" cy="111" rx="20" ry="17" fill="#B6D89C"/><ellipse class="lf" cx="214" cy="234" rx="16" ry="23" fill="#C3E0A8"/><ellipse class="lf" cx="814" cy="223" rx="22" ry="20" fill="#B6D89C"/><ellipse class="lf" cx="769" cy="160" rx="20" ry="14" fill="#B6D89C"/><ellipse class="lf" cx="124" cy="238" rx="23" ry="17" fill="#B6D89C"/><ellipse class="lf" cx="540" cy="165" rx="18" ry="18" fill="#B6D89C"/><ellipse class="lf" cx="70" cy="216" rx="16" ry="18" fill="#B6D89C"/><ellipse class="lf" cx="281" cy="232" rx="14" ry="20" fill="#B6D89C"/><ellipse class="lf" cx="1050" cy="125" rx="19" ry="25" fill="#C3E0A8"/><ellipse class="lf" cx="686" cy="172" rx="17" ry="19" fill="#B6D89C"/></g><path d="M1130 150 L1600 150 L1600 330 L1110 330 Z" fill="#F4F2EC"/><path d="M1130 150 L1110 330 L1150 330 L1168 160Z" fill="#E4E1DA"/><line x1="1150" x2="1600" y1="165" y2="165" stroke="#E2DED6" stroke-width="1.5"/><line x1="1150" x2="1600" y1="179" y2="179" stroke="#E2DED6" stroke-width="1.5"/><line x1="1150" x2="1600" y1="193" y2="193" stroke="#E2DED6" stroke-width="1.5"/><line x1="1150" x2="1600" y1="207" y2="207" stroke="#E2DED6" stroke-width="1.5"/><line x1="1150" x2="1600" y1="221" y2="221" stroke="#E2DED6" stroke-width="1.5"/><line x1="1150" x2="1600" y1="235" y2="235" stroke="#E2DED6" stroke-width="1.5"/><line x1="1150" x2="1600" y1="249" y2="249" stroke="#E2DED6" stroke-width="1.5"/><line x1="1150" x2="1600" y1="263" y2="263" stroke="#E2DED6" stroke-width="1.5"/><line x1="1150" x2="1600" y1="277" y2="277" stroke="#E2DED6" stroke-width="1.5"/><line x1="1150" x2="1600" y1="291" y2="291" stroke="#E2DED6" stroke-width="1.5"/><line x1="1150" x2="1600" y1="305" y2="305" stroke="#E2DED6" stroke-width="1.5"/><line x1="1150" x2="1600" y1="319" y2="319" stroke="#E2DED6" stroke-width="1.5"/><path d="M1060 30 Q1080 120 1150 200 L1175 210 Q1150 150 1160 110 L1600 110 L1600 45 Q1300 10 1060 30Z" fill="url(#roofU)"/><path d="M1060 30 Q1300 10 1600 45 L1600 58 Q1300 26 1068 44Z" fill="#E98A79"/><rect x="1158" y="150" width="9" height="40" fill="#2B2A33"/><rect x="0" y="318" width="1600" height="106" fill="url(#brk)"/><rect x="0" y="305" width="1600" height="14" fill="#F6F3ED"/><rect x="0" y="318" width="1600" height="3" fill="#D9D2C6"/><rect x="0" y="422" width="1600" height="8" fill="#EEE9E1"/><rect x="0" y="430" width="1600" height="40" fill="#E6DED0"/><image class="gw-logo" href="img/Group%201143.png" x="1010" y="340" width="440" height="50" preserveAspectRatio="xMidYMid meet" filter="url(#wht)"/><clipPath id="gclip"><rect x="560" y="300" width="300" height="124"/></clipPath><linearGradient id="gpark" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A9CF91"/><stop offset=".62" stop-color="#C9DFB5"/><stop offset=".63" stop-color="#E6DED0"/></linearGradient><a class="gw-gate" href="#full" aria-label="Купить билет"><rect x="560" y="300" width="300" height="124" fill="url(#gpark)"/><rect x="578" y="300" width="5" height="77" fill="#FBF8F1" opacity=".8" clip-path="url(#gclip)"/><rect x="628" y="300" width="5" height="77" fill="#FBF8F1" opacity=".8" clip-path="url(#gclip)"/><rect x="678" y="300" width="5" height="77" fill="#FBF8F1" opacity=".8" clip-path="url(#gclip)"/><rect x="728" y="300" width="5" height="77" fill="#FBF8F1" opacity=".8" clip-path="url(#gclip)"/><rect x="778" y="300" width="5" height="77" fill="#FBF8F1" opacity=".8" clip-path="url(#gclip)"/><rect x="828" y="300" width="5" height="77" fill="#FBF8F1" opacity=".8" clip-path="url(#gclip)"/><circle class="gc" cx="597.5" cy="340.9" r="33.8" style="--d:0.00s"/><circle class="gc b" cx="597.5" cy="421.5" r="33.8" clip-path="url(#gclip)" style="--d:0.32s"/><circle class="gc" cx="672.5" cy="340.9" r="33.8" style="--d:0.08s"/><circle class="gc b" cx="672.5" cy="421.5" r="33.8" clip-path="url(#gclip)" style="--d:0.40s"/><circle class="gc" cx="747.5" cy="340.9" r="33.8" style="--d:0.16s"/><circle class="gc b" cx="747.5" cy="421.5" r="33.8" clip-path="url(#gclip)" style="--d:0.48s"/><circle class="gc" cx="822.5" cy="340.9" r="33.8" style="--d:0.24s"/><circle class="gc b" cx="822.5" cy="421.5" r="33.8" clip-path="url(#gclip)" style="--d:0.56s"/><g stroke="#FFFFFF" fill="none"><line x1="585.0" x2="585.0" y1="300" y2="424" stroke-width="2"/><line x1="610.0" x2="610.0" y1="300" y2="424" stroke-width="2"/><line x1="635.0" x2="635.0" y1="300" y2="424" stroke-width="2"/><line x1="660.0" x2="660.0" y1="300" y2="424" stroke-width="2"/><line x1="685.0" x2="685.0" y1="300" y2="424" stroke-width="2"/><line x1="710.0" x2="710.0" y1="300" y2="424" stroke-width="2"/><line x1="735.0" x2="735.0" y1="300" y2="424" stroke-width="2"/><line x1="760.0" x2="760.0" y1="300" y2="424" stroke-width="2"/><line x1="785.0" x2="785.0" y1="300" y2="424" stroke-width="2"/><line x1="810.0" x2="810.0" y1="300" y2="424" stroke-width="2"/><line x1="835.0" x2="835.0" y1="300" y2="424" stroke-width="2"/><line x1="560" x2="860" y1="302" y2="302" stroke-width="4"/><line x1="560" x2="860" y1="381.8" y2="381.8" stroke-width="3"/><line x1="560" x2="860" y1="422" y2="422" stroke-width="4"/><line x1="710.0" x2="710.0" y1="300" y2="424" stroke-width="6"/></g><rect x="551" y="296" width="12" height="130" fill="#F6F3ED"/><rect x="857" y="296" width="12" height="130" fill="#F6F3ED"/><g class="gw-sign"><rect x="618.0" y="234" width="184" height="44" rx="22" fill="#DA6150"/><path d="M702.0 277 L710.0 287 L718.0 277Z" fill="#DA6150"/><text x="710.0" y="263" text-anchor="middle" fill="#fff" font-family="Mayak,Oswald,Arial Narrow,sans-serif" font-weight="600" font-size="19" letter-spacing="1">КУПИТЬ БИЛЕТ →</text></g></a></svg></section>
+<footer id="contacts">
+    <div class="ft-top">
+    <div class="ft-brand">
+      <img src="img/Group 1143.png" alt="Летний театр">
+      <p>Летний театр в парке Маяковского — концерты и спектакли под открытым небом, с мая по сентябрь.</p>
+      <div class="soc"><a href="#" aria-label="ВКонтакте">ВК</a><a href="#" aria-label="Телеграм">ТГ</a><a href="#" aria-label="Одноклассники">ОК</a></div>
+    </div>
+    <div><h4>Зрителям</h4><a href="#full">Афиша</a><a href="#">Как купить билет</a><a href="#">Возврат билетов</a><a href="#">Сертификаты</a><a href="#">Доступная среда</a><a href="#">Вопросы и ответы</a></div>
+    <div><h4>Театр</h4><a href="#about">О театре</a><a href="#">Архив событий</a><a href="#">Новости</a><a href="organizers.html">Организаторам</a><a href="#">Партнёры</a></div>
+    <div><h4>Контакты</h4><a href="#way">ул. Мичурина, 230</a><a href="tel:+7">+7 (343) ___-__-__</a><a href="#">info@___</a><a href="https://xn--e1agfrc5b.xn--p1ai" target="_blank" rel="noopener">ецпкио.рф</a></div>
+  </div>
+  <div class="ft-big">Летний театр</div>
+  <div class="ft-bot"><span>© 2026 МАУК ЕЦПКиО им. Маяковского</span><a href="#">Политика конфиденциальности</a></div>
+</footer>
+
+<script>
+/* ---- полная афиша с фильтрами ---- */
+(async()=>{
+ const all=await (await fetch('events2026.json')).json();
+ const G={orch:/оркестр|симфони/i,kids:/Сойер|Мультконцерт|волшебник|Алые паруса|ГИККОН/i,candle:/Lumisfera|свечах/i,red:/RED SUMMER/i,fest:/фестивал/i};
+ const tagOf=t=>/Lumisfera|свечах/i.test(t)?'при свечах':/RED SUMMER/i.test(t)?'RED SUMMER':G.kids.test(t)?'6+ детям':G.orch.test(t)?'с оркестром':'';
+ let m='',g='',lim=8;const grid=document.getElementById('grid'),more=document.getElementById('moreBtn');
+ function render(){
+  const list=all.filter(e=>(!m||e.date.includes(m))&&(!g||G[g].test(e.t)));
+  grid.innerHTML=list.slice(0,lim).map(e=>{const[d,mo]=e.date.split(' ');const tg=tagOf(e.t);
+   return `<a class="tk" href="${e.url||'#'}" target="_blank" rel="noopener"><div class="ph">${e.img?`<img src="${e.img}" alt="" loading="lazy">`:''}<div class="dt"><b>${d}</b><small>${mo.slice(0,3)}</small></div>${tg?`<span class="tag">${tg}</span>`:''}</div>
+   <div class="bd"><b>${e.t}</b><span>${e.wd?e.wd+' · ':''}${e.time||'время уточняется'}</span></div><div class="cut"></div>
+   <div class="ft"><em>Летний театр</em><span class="pill btn-red">Купить</span></div></a>`}).join('')||'<div class="empty">В этом месяце таких событий нет — загляните в другой</div>';
+  more.style.display=list.length>lim?'':'none'}
+ const bind=(id,set)=>document.getElementById(id).addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;
+  b.parentNode.querySelectorAll('.chip').forEach(x=>x.classList.toggle('on',x===b));set(b);lim=8;render()});
+ bind('fMonth',b=>m=b.dataset.m);bind('fGenre',b=>g=b.dataset.g);
+ more.onclick=()=>{lim+=8;render()};render();
+})();
+/* ---- появление и счётчики ---- */
+(()=>{const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;e.target.classList.add('in');io.unobserve(e.target);
+  e.target.querySelectorAll('[data-n]').forEach(n=>{const to=+n.dataset.n,s=n.dataset.s||'',t0=performance.now();
+   (function f(t){const k=Math.min((t-t0)/1400,1),v=Math.round(to*(1-Math.pow(1-k,3)));n.textContent=v.toLocaleString('ru-RU')+s;if(k<1)requestAnimationFrame(f)})(t0)})}),{threshold:0,rootMargin:'0px 0px -10% 0px'});
+ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+ document.querySelectorAll('a[href="#"]').forEach(a=>{if(/Вся афиша|Смотреть афишу|Афиша/.test(a.textContent))a.href='#full'});
+ document.querySelectorAll('nav a').forEach(a=>{const map={'Афиша':'#full','О театре':'#about','Организаторам':'#org','Контакты':'#way','Как купить':'#way'};if(map[a.textContent.trim()])a.href=map[a.textContent.trim()]});
+})();
+</script>
+
+
+<script>
+/* демо-афиша: реальные события сезона 2026 с сайта театра */
+const SLIDES=[
+ {img:'img/ev/15.jpg',tag:'При свечах',t:'Lumisfera. Симфония в парке при свечах',day:19,mon:'июля',wd:'воскресенье',time:'21:00',
+  p:'Живое звучание оркестра и вокала, свет 3000 свечей и миллиарда звёзд летнего неба'},
+ {img:'img/ev/02.jpg',tag:'Рок',t:'Евгений Цыганов и «МЕ4ТА»: Рок вне гравитации',day:13,mon:'июня',wd:'суббота',time:'21:00',
+  p:'Поистине неземной мультимедийный рок-концерт. Ваш выход в открытый космос!'},
+ {img:'img/ev/04.jpg',tag:'Мюзикл',t:'«Алые паруса» Свердловской музкомедии',day:21,mon:'июня',wd:'воскресенье',time:'19:00',
+  p:'Легендарный мюзикл Максима Дунаевского на сцене под открытым небом'},
+ {img:'img/ev/11.jpg',tag:'Red Summer',t:'Три дня дождя',day:12,mon:'июля',wd:'воскресенье',time:'20:00',
+  p:'Большой концерт под открытым небом одной из самых заметных рок-групп новой волны'},
+ {img:'img/ev/35.jpg',tag:'Red Summer',t:'Эпидемия. Симфоническая рукопись',day:30,mon:'августа',wd:'воскресенье',time:'19:00',
+  p:'Грандиозный концерт с симфоническим оркестром — снова на сцене Летнего театра'}];
+const RECS=[['00','Приключения Тома Сойера','7 июня','вс · 14:00'],['01','Мельница. 20 лет «Невесте Полоза»','10 июня','ср · 20:00'],
+ ['03','Рок-хиты. Симфоническое шоу «Модерн»','14 июня','вс · 20:00'],['05','Виталий Погосян и Дудук-бэнд','23 июня','вт · 20:00'],
+ ['06','Виктор Добронравов и «ЛРК Трио»','30 июня','вт · 20:00'],['09','Queen с оркестром. One Vision','4 июля','сб · 20:00'],
+ ['17','Волынка: от этники до рока','28 июля','вт · 20:00'],['27','Фестиваль волшебников','16 августа','вс · 19:30'],
+ ['29','Три дивы','21 августа','пт · 20:00'],['31','Мультконцерт с оркестром','23 августа','вс · 16:00']];
+const B=document.getElementById('banner');
+document.getElementById('dusk').insertAdjacentHTML('afterend',SLIDES.map(s=>`<article class="slide ev"><img class="ph" src="${s.img}" alt="" loading="lazy">
+ <div class="body"><div class="date"><b>${s.day}</b><span>${s.mon}<em>${s.wd} · ${s.time}</em></span></div>
+ <div><span class="pill tag">${s.tag}</span></div><h2>${s.t}</h2><p>${s.p}</p>
+ <div class="row" style="justify-content:flex-start"><a class="pill btn-red" href="#">Купить билет</a><a class="pill btn-glass" href="#">Подробнее</a></div></div></article>`).join(''));
+document.getElementById('recs').innerHTML=RECS.map(r=>`<a class="card" href="#"><div class="ph"><img src="img/ev/${r[0]}.jpg" alt="" loading="lazy"><span class="pill d">${r[2]}</span></div><b>${r[1]}</b><span>${r[3]}</span></a>`).join('');
+
+/* карусель */
+const sl=[...B.querySelectorAll('.slide')],D=document.getElementById('dots'),NX=document.getElementById('next'),P=document.getElementById('prog');
+const INFO=[{img:'img/b_night.jpg',t:'Летний театр: лето, сосны, звёзды',m:'о театре'}].concat(SLIDES.map(s=>({img:s.img,t:s.t,m:`${s.day} ${s.mon} · ${s.time}`})));
+D.innerHTML=sl.map((_,i)=>`<button aria-label="Слайд ${i+1}"></button>`).join('');const dt=[...D.children];
+let cur=0,timer,paused=false;
+const dur=i=>i===0?10000:6500;
+function progress(i){P.classList.remove('run');P.style.width='0';void P.offsetWidth;if(paused)return;P.style.transitionDuration=dur(i)+'ms';P.classList.add('run');P.style.width='100%'}
+function renderNext(){NX.innerHTML=[1,2,3].map(k=>{const j=(cur+k)%sl.length,x=INFO[j];return `<button class="nx" data-i="${j}"><img src="${x.img}" alt=""><b>${x.t}</b><span>${x.m}</span></button>`}).join('');
+ NX.querySelectorAll('.nx').forEach(b=>b.onclick=()=>go(+b.dataset.i))}
+function go(n){sl[cur].classList.remove('on');dt[cur].classList.remove('on');cur=(n+sl.length)%sl.length;sl[cur].classList.add('on');dt[cur].classList.add('on');
+ B.classList.toggle('is-brand',cur===0);
+ clearTimeout(timer);if(!paused)timer=setTimeout(()=>go(cur+1),dur(cur));progress(cur);renderNext();if(cur===0)playDusk()}
+dt.forEach((b,i)=>b.onclick=()=>go(i));prev.onclick=()=>go(cur-1);fwd.onclick=()=>go(cur+1);
+let x0=null;B.addEventListener('touchstart',e=>x0=e.touches[0].clientX,{passive:true});
+B.addEventListener('touchend',e=>{if(x0===null)return;const dx=e.changedTouches[0].clientX-x0;if(Math.abs(dx)>40)go(cur+(dx<0?1:-1));x0=null});
+B.addEventListener('mouseenter',()=>{paused=true;clearTimeout(timer);P.classList.remove('run');P.style.width='0'});
+B.addEventListener('mouseleave',()=>{paused=false;clearTimeout(timer);timer=setTimeout(()=>go(cur+1),3500)});
+addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(cur+1);if(e.key==='ArrowLeft')go(cur-1)});
+
+/* закат → ночь */
+const dusk=document.getElementById('dusk');let duskT,nightAt=0;
+function setNight(on){dusk.classList.toggle('dark',on);bNight.classList.toggle('on',on);bDay.classList.toggle('on',!on);if(on)nightAt=performance.now()}
+function playDusk(){clearTimeout(duskT);setNight(false);duskT=setTimeout(()=>setNight(true),2800)}
+bDay.onclick=()=>{clearTimeout(duskT);setNight(false)};bNight.onclick=()=>{clearTimeout(duskT);setNight(true)};
+
+/* солнечный блик следует за курсором */
+const sun=document.getElementById('sun');let tx=.5,ty=.12,sx=tx,sy=ty,mouse=false;
+dusk.addEventListener('mousemove',e=>{const r=B.getBoundingClientRect();tx=(e.clientX-r.left)/r.width;ty=(e.clientY-r.top)/r.height;mouse=true});
+dusk.addEventListener('mouseleave',()=>mouse=false);
+
+/* звёзды загораются по одной + светлячки у деревьев */
+const cs=document.getElementById('stars'),xs=cs.getContext('2d'),cf=document.getElementById('flies'),xf=cf.getContext('2d');
+let W,H,st=[],fl=[],sh=null;const R=(a,b)=>a+Math.random()*(b-a);
+function size(){const r=B.getBoundingClientRect(),p=Math.min(devicePixelRatio,2);W=r.width;H=r.height;
+ for(const [c,x] of [[cs,xs],[cf,xf]]){c.width=W*p;c.height=H*p;x.setTransform(p,0,0,p,0,0)}
+ st=Array.from({length:Math.round(W*H/1500)},()=>({x:R(0,W),y:R(0,H*.6),r:Math.random()<.08?R(1.4,2.4):R(.4,1.1),a:R(.45,1),s:R(.6,2),p:R(0,6.3),on:R(0,3200)}));
+ fl=Array.from({length:Math.round(W/38)},()=>({x:R(0,W),y:R(H*.45,H*.9),vx:R(-.25,.25),vy:R(-.15,.15),p:R(0,6.3),s:R(.6,1.4),r:R(1.2,2.4)}))}
+let bannerVis=true;new IntersectionObserver(e=>bannerVis=e[0].isIntersecting).observe(B);
+function draw(t){
+ if(!bannerVis||cur!==0){requestAnimationFrame(draw);return}   // рисуем только видимый первый слайд
+ if(!mouse){tx=.5+Math.sin(t/4200)*.16;ty=.12+Math.cos(t/5200)*.05}sx+=(tx-sx)*.05;sy+=(ty-sy)*.05;sun.style.left=sx*100+'%';sun.style.top=sy*100+'%';
+ const dark=cur===0&&dusk.classList.contains('dark'),since=t-nightAt,T=t/1000;
+ xs.clearRect(0,0,W,H);xf.clearRect(0,0,W,H);
+ if(dark){for(const s of st){const k=Math.min(Math.max((since-1000-s.on)/900,0),1);if(!k)continue;
+   const a=k*s.a*(.5+.5*Math.sin(T*s.s+s.p));xs.globalAlpha=a;xs.fillStyle='#fff';xs.beginPath();xs.arc(s.x,s.y,s.r,0,6.283);xs.fill();
+   if(s.r>1.6){xs.globalAlpha=a*.3;xs.fillRect(s.x-s.r*4,s.y-.4,s.r*8,.8);xs.fillRect(s.x-.4,s.y-s.r*4,.8,s.r*8)}}
+  if(since>4000&&!sh&&Math.random()<.006)sh={x:R(W*.15,W*.85),y:R(0,H*.2),vx:R(5,8)*(Math.random()<.5?-1:1),vy:R(1.6,3),l:1};
+  if(sh){xs.globalAlpha=sh.l;const g=xs.createLinearGradient(sh.x,sh.y,sh.x-sh.vx*14,sh.y-sh.vy*14);g.addColorStop(0,'#fff');g.addColorStop(1,'rgba(255,255,255,0)');
+   xs.strokeStyle=g;xs.lineWidth=1.5;xs.beginPath();xs.moveTo(sh.x,sh.y);xs.lineTo(sh.x-sh.vx*14,sh.y-sh.vy*14);xs.stroke();sh.x+=sh.vx;sh.y+=sh.vy;sh.l-=.02;if(sh.l<=0)sh=null}
+  const fk=Math.min(Math.max((since-2200)/2000,0),1);
+  for(const f of fl){f.x+=f.vx+Math.sin(T*.7+f.p)*.2;f.y+=f.vy+Math.cos(T*.5+f.p)*.15;if(f.x<0)f.x=W;if(f.x>W)f.x=0;if(f.y<H*.4||f.y>H*.95)f.vy*=-1;
+   const a=fk*Math.max(0,Math.sin(T*f.s+f.p));if(a<.02)continue;const g=xf.createRadialGradient(f.x,f.y,0,f.x,f.y,f.r*6);
+   g.addColorStop(0,`rgba(255,226,140,${a})`);g.addColorStop(.25,`rgba(255,200,90,${a*.45})`);g.addColorStop(1,'rgba(255,190,80,0)');
+   xf.globalAlpha=1;xf.fillStyle=g;xf.beginPath();xf.arc(f.x,f.y,f.r*6,0,6.283);xf.fill()}}
+ requestAnimationFrame(draw)}
+addEventListener('resize',size);size();requestAnimationFrame(draw);
+addEventListener('scroll',()=>hdr.classList.toggle('scrolled',scrollY>4),{passive:true});
+
+/* зерно — один раз */
+(()=>{const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d'),d=x.createImageData(128,128);
+ for(let i=0;i<d.data.length;i+=4){const v=Math.random()*255;d.data[i]=d.data[i+1]=d.data[i+2]=v;d.data[i+3]=255}x.putImageData(d,0,0);
+ document.querySelector('.grain').style.backgroundImage=`url(${c.toDataURL()})`})();
+/* старт */
+document.querySelectorAll('.circles i').forEach((c,i)=>c.style.transitionDelay=(.15+i%4*.1)+'s');
+const q=location.search,skip=/[?&]skip/.test(q),night=/[?&]night/.test(q),slide=(q.match(/[?&]slide=(\d)/)||[])[1];
+setTimeout(()=>{document.body.classList.add('ready');go(slide?+slide:0);if(night){clearTimeout(duskT);setNight(true);nightAt-=6000}},skip?0:300);
+</script>
+<!-- ===== летний стиль на всю страницу (вариант 3) ===== -->
+<style>
+/* ночной баннер не нужен: первый экран — сцена */
+#afisha{display:none}
+.recs-h{padding-top:56px}
+
+/* фон страницы: лёгкая «бумага» */
+body{background:var(--page) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* рукописный росчерк под каждым заголовком секции */
+.sec-h h2{position:relative}
+.sec-h h2::after{content:"";position:absolute;left:0;bottom:-14px;height:14px;width:0;max-width:300px;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 14'%3E%3Cpath d='M3 10 C80 3 180 2 297 7' fill='none' stroke='%23DA6150' stroke-width='3.5' stroke-linecap='round'/%3E%3C/svg%3E") left/300px 14px no-repeat;
+  transition:width 1s .3s var(--ease)}
+.reveal.in h2::after,.sec-h.reveal.in h2::after{width:60%}
+.sec-h h2 i{margin-top:18px}
+
+/* хедлайнеры — фестивальные ленты */
+.hl{padding:90px 0 70px}
+.hl-wrap{display:grid;gap:0;margin:20px 0;transform:rotate(-2.2deg)}
+.hl-row{padding:14px 0}
+#hlA{background:var(--coral)}
+#hlA .hl-it b{color:#fff}
+#hlA .hl-it small{color:var(--cream)}
+#hlA .hl-it::after{color:#fff}
+#hlA .hl-it:hover b{color:#111}
+#hlB{background:var(--white);box-shadow:0 10px 30px rgba(0,0,0,.06);transform:rotate(3.4deg) translateY(-8px)}
+.hl-row.rev .hl-it b{-webkit-text-stroke:1.5px #111}
+
+/* «у нас уже выступали» — дневное небо */
+.st{background:linear-gradient(180deg,#bfe0f4 0%,#dcedf6 55%,var(--white) 100%);color:#111}
+.st-h h2{color:#111}.st-h small{color:var(--coral)}
+.sn{color:rgba(17,17,17,.13)}
+.sn.lit{color:#111;text-shadow:none}
+.sn::before{color:var(--coral)}
+.sn:hover{color:var(--coral)}
+.st .btn-glass{background:#fff;color:#111;border-color:#111}
+.st-cloud{position:absolute;z-index:0;fill:#fff;opacity:.95;animation:cloud2 70s linear infinite}
+@keyframes cloud2{from{transform:translateX(-30vw)}to{transform:translateX(110vw)}}
+.st-sun{position:absolute;right:7%;top:9%;width:110px;height:110px;border-radius:50%;background:#F5C26B;box-shadow:0 0 0 18px rgba(245,194,107,.25),0 0 0 40px rgba(245,194,107,.12);animation:pulse 5s ease-in-out infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 26px rgba(245,194,107,.2),0 0 0 54px rgba(245,194,107,.08)}}
+
+/* наклейки-дудлы */
+.stk{position:absolute;pointer-events:none;z-index:2}
+.stk.spin{animation:spin 30s linear infinite}
+#about{position:relative}
+#about .stk.sun{right:4%;top:20px;width:86px}
+#full{position:relative}
+#full .stk.arrow{left:calc(var(--g) + 450px);top:78px;width:120px;transform:rotate(8deg)}
+
+/* видео — летняя рамка */
+.vd-main{box-shadow:0 30px 60px rgba(0,0,0,.12)}
+
+/* силуэт парка над подвалом */
+.park-line{display:block;width:100%;height:auto;margin-top:80px;margin-bottom:-2px}
+footer{margin-top:0;border-radius:0}
+.wheel{transform-box:fill-box;transform-origin:center;animation:spin 40s linear infinite}
+
+/* летящие семена одуванчика */
+#fluff{position:fixed;inset:0;z-index:35;pointer-events:none}
+@media (prefers-reduced-motion:reduce){#fluff{display:none}}
+</style>
+
+<canvas id="fluff" aria-hidden="true"></canvas>
+
+<script>
+/* декор: облака и солнце в «уже выступали», наклейки */
+(()=>{const st=document.querySelector('.st');if(st){
+  st.insertAdjacentHTML('afterbegin','<div class="st-sun"></div>'+
+   '<svg class="st-cloud" style="top:12%;width:180px;animation-delay:-20s" viewBox="0 0 180 60"><ellipse cx="60" cy="40" rx="60" ry="20"/><ellipse cx="100" cy="28" rx="40" ry="26"/><ellipse cx="140" cy="42" rx="40" ry="16"/></svg>'+
+   '<svg class="st-cloud" style="top:55%;width:120px;animation-duration:95s;animation-delay:-60s;opacity:.8" viewBox="0 0 180 60"><ellipse cx="60" cy="40" rx="60" ry="20"/><ellipse cx="100" cy="28" rx="40" ry="26"/></svg>')}
+ const ab=document.getElementById('about');if(ab)ab.insertAdjacentHTML('beforeend','<svg class="stk sun spin" viewBox="0 0 100 100"><g fill="#F5C26B"><circle cx="50" cy="50" r="22"/>'+Array.from({length:12},(_,i)=>`<rect x="47" y="4" width="6" height="16" rx="3" transform="rotate(${i*30} 50 50)"/>`).join('')+'</g></svg>');
+ const fu=document.getElementById('full');if(fu)fu.insertAdjacentHTML('beforeend','<svg class="stk arrow" viewBox="0 0 120 60"><path d="M6 40 C30 10 70 6 104 24" fill="none" stroke="#DA6150" stroke-width="3" stroke-linecap="round"/><path d="M92 12 L106 25 L88 32" fill="none" stroke="#DA6150" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><text x="0" y="58" font-family="Caveat" font-size="20" fill="#DA6150">выбирайте вечер</text></svg>');
+})();
+
+/* семена одуванчика: медленно летят по ветру, немного, очень легко */
+(()=>{const c=document.getElementById('fluff'),x=c.getContext('2d');let W,H,P=[];
+ function size(){const p=Math.min(devicePixelRatio,2);W=innerWidth;H=innerHeight;c.width=W*p;c.height=H*p;x.setTransform(p,0,0,p,0,0)}
+ const N=innerWidth<700?6:12;
+ function seed(init){return{x:init?Math.random()*W:-30,y:Math.random()*H*.9,s:.5+Math.random()*.7,v:.25+Math.random()*.45,p:Math.random()*6.3,r:Math.random()*6.3}}
+ size();for(let i=0;i<N;i++)P.push(seed(1));
+ function draw(t){const T=t/1000;x.clearRect(0,0,W,H);
+  for(const f of P){f.x+=f.v;f.y+=Math.sin(T*.8+f.p)*.35-.05;f.r+=.004;if(f.x>W+30||f.y<-30)Object.assign(f,seed(0));
+   x.save();x.translate(f.x,f.y);x.rotate(Math.sin(T+f.p)*.4);x.scale(f.s,f.s);x.globalAlpha=.75;x.strokeStyle='#fff';x.lineWidth=1;
+   x.beginPath();x.moveTo(0,0);x.lineTo(0,12);x.stroke();x.fillStyle='#c9b48a';x.beginPath();x.arc(0,12,1.6,0,6.283);x.fill();
+   for(let k=0;k<9;k++){const a=-Math.PI/2+(k-4)*.33;x.beginPath();x.moveTo(0,0);x.lineTo(Math.cos(a)*9,Math.sin(a)*9);x.stroke();
+    x.beginPath();x.arc(Math.cos(a)*9,Math.sin(a)*9,.9,0,6.283);x.fillStyle='rgba(255,255,255,.9)';x.fill()}
+   x.globalAlpha=.18;x.strokeStyle='#999';x.beginPath();x.moveTo(0,0);x.lineTo(0,12);x.stroke();x.restore()}
+  requestAnimationFrame(draw)}
+ addEventListener('resize',size);requestAnimationFrame(draw);
+})();
+</script>
+
+
+<div id="mapModal" role="dialog" aria-modal="true" aria-label="Карта парка Маяковского">
+ <div class="box">
+  <div class="bar">Карта парка <small>колёсико или два пальца — приблизить, тянуть — двигать</small></div>
+  <div class="ctl"><button class="x" data-a="x" aria-label="Закрыть">×</button><button data-a="+" aria-label="Приблизить">+</button><button data-a="-" aria-label="Отдалить">−</button></div>
+  <div class="vp" id="mmVp"><div class="mz" id="mmZ">
+   <svg viewBox="0 0 1176 1743" width="1176" height="1743">
+    <image href="img/park_map_ours.svg" width="1176" height="1743"/>
+    <path d="M246 108 L246 397 A24 24 0 0 1 267 430 L318 470 L356 478 L370 512" fill="none" stroke="#fff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M246 108 L246 397 A24 24 0 0 1 267 430 L318 470 L356 478 L370 512" fill="none" stroke="#DA6150" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="356" y="500" width="30" height="26" rx="4" fill="#DA6150" opacity=".35"/>
+    <circle cx="370" cy="512" r="8" fill="#DA6150" stroke="#fff" stroke-width="3"/>
+    <circle cx="246" cy="108" r="7" fill="#fff" stroke="#DA6150" stroke-width="3"/>
+    <g font-family="Mayak,Oswald,Arial Narrow,sans-serif" font-weight="600" font-size="15">
+     <rect x="390" y="470" width="136" height="30" rx="10" fill="#DA6150"/><text x="458" y="490" fill="#fff" text-anchor="middle">ЛЕТНИЙ ТЕАТР</text>
+    </g>
+   </svg>
+  </div></div>
+ </div>
+</div>
+<script>
+(()=>{/* вращение карты */
+ const W=document.getElementById('way'),st=W.querySelector('.stage'),pl=W.querySelector('.plane');let rx=50,rz=-16,d=null;
+ const set=()=>{pl.style.setProperty('--rx',rx+'deg');pl.style.setProperty('--rz',rz+'deg')};
+ st.addEventListener('pointerdown',e=>{if(!W.classList.contains('in'))return;d={x:e.clientX,y:e.clientY,rx,rz,id:e.pointerId};st.setPointerCapture(e.pointerId);pl.classList.add('drag');st.classList.add('grabbing','used')});
+ st.addEventListener('pointermove',e=>{if(!d||e.pointerId!==d.id)return;rz=d.rz+(e.clientX-d.x)*.35;rx=Math.min(78,Math.max(0,d.rx-(e.clientY-d.y)*.3));set()});
+ const up=()=>{if(!d)return;d=null;pl.classList.remove('drag');st.classList.remove('grabbing')};
+ st.addEventListener('pointerup',up);st.addEventListener('pointercancel',up);
+ st.addEventListener('dblclick',()=>{rx=50;rz=-16;set()});
+
+ /* полноэкранная карта */
+ const M=document.getElementById('mapModal');document.body.appendChild(M);const vp=document.getElementById('mmVp'),z=document.getElementById('mmZ');
+ let s=1,tx=0,ty=0,min=1;const P=new Map();let last=null;
+ const apply=()=>{z.style.transform=`translate(${tx}px,${ty}px) scale(${s})`};
+ const clamp=()=>{const w=vp.clientWidth,h=vp.clientHeight,cw=1176*s,ch=1743*s;
+  tx=cw<w?(w-cw)/2:Math.min(0,Math.max(w-cw,tx));ty=ch<h?(h-ch)/2:Math.min(0,Math.max(h-ch,ty))};
+ const zoomAt=(k,cx,cy)=>{const ns=Math.min(min*6,Math.max(min,s*k));tx=cx-(cx-tx)*ns/s;ty=cy-(cy-ty)*ns/s;s=ns;clamp();apply()};
+ const open=()=>{M.classList.add('mm-open');document.body.style.overflow='hidden';
+  const w=vp.clientWidth,h=vp.clientHeight;min=Math.min(w/1176,h/1743);
+  s=Math.max(min,Math.min(w/700,h/700));tx=w/2-310*s;ty=h/2-330*s;clamp();apply()};
+ const close=()=>{M.classList.remove('mm-open');document.body.style.overflow=''};
+ const mini=document.getElementById('miniMap');mini.addEventListener('click',open);
+ mini.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open()}});
+ M.addEventListener('click',e=>{if(e.target===M)close()});
+ addEventListener('keydown',e=>{if(e.key==='Escape'&&M.classList.contains('mm-open'))close()});
+ M.querySelector('.ctl').addEventListener('click',e=>{const a=e.target.dataset.a;if(a==='x')close();
+  else if(a){const r=vp.getBoundingClientRect();zoomAt(a==='+'?1.4:1/1.4,r.width/2,r.height/2)}});
+ vp.addEventListener('wheel',e=>{e.preventDefault();const r=vp.getBoundingClientRect();zoomAt(e.deltaY<0?1.15:1/1.15,e.clientX-r.left,e.clientY-r.top)},{passive:false});
+ vp.addEventListener('pointerdown',e=>{vp.setPointerCapture(e.pointerId);P.set(e.pointerId,{x:e.clientX,y:e.clientY});vp.classList.add('grabbing');last=null});
+ vp.addEventListener('pointermove',e=>{if(!P.has(e.pointerId))return;const p=P.get(e.pointerId);
+  if(P.size===1){tx+=e.clientX-p.x;ty+=e.clientY-p.y;clamp();apply()}
+  else if(P.size===2){const [a,b]=[...P.values()];const o=a===p?b:a;const dist=Math.hypot(e.clientX-o.x,e.clientY-o.y);
+   const r=vp.getBoundingClientRect();if(last)zoomAt(dist/last,(e.clientX+o.x)/2-r.left,(e.clientY+o.y)/2-r.top);last=dist}
+  P.set(e.pointerId,{x:e.clientX,y:e.clientY})});
+ const pu=e=>{P.delete(e.pointerId);last=null;if(!P.size)vp.classList.remove('grabbing')};
+ vp.addEventListener('pointerup',pu);vp.addEventListener('pointercancel',pu);
+ addEventListener('resize',()=>{if(M.classList.contains('mm-open')){const w=vp.clientWidth,h=vp.clientHeight;min=Math.min(w/1176,h/1743);s=Math.max(s,min);clamp();apply()}});
+})();
+</script>
+
+<!-- ===== мобильная версия: доводка ===== -->
+<style>html{scroll-padding-top:84px}@media (max-width:900px){html{scroll-padding-top:66px}}</style>
+<style>
+.nav-main a{white-space:nowrap}
+#sInfoPrice{white-space:nowrap}
+@media (max-width:1100px){
+  #full .stk.arrow{display:none}
+  /* карта «Как добраться»: контейнер по высоте карты (400:520), иначе карта наезжает на карточки */
+  #way .stage{height:calc(min(100vw - 2 * var(--g), 560px) * 1.3 + 48px)}
+}
+@media (min-width:981px) and (max-width:1100px){ .nav-main{gap:22px} }
+@media (max-width:820px){
+  #way .plane{width:min(84%,520px)}
+  #way .stage{height:calc(min((100vw - 2 * var(--g)) * .84, 520px) * 1.3 + 56px)}
+}
+@media (min-width:600px) and (max-width:820px){
+  #way .plane{width:min(74%,500px)}
+  #way .stage{height:calc(min((100vw - 2 * var(--g)) * .74, 500px) * 1.3 + 56px)}
+}
+@media (max-width:720px){
+  /* фильтры афиши — в одну строку с прокруткой */
+  #full .sec-h{gap:16px}
+  #full .filters{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:0 calc(-1 * var(--g));padding:2px var(--g);-webkit-overflow-scrolling:touch}
+  #full .filters::-webkit-scrollbar{display:none}
+  #full .chip{flex:0 0 auto;white-space:nowrap}
+  #fGenre{margin-bottom:20px!important}
+  .demo{display:none}
+  .gatewall{height:calc(100vw * 470 / 1600);margin-top:40px} /* картинка стены целиком, без обрезки краёв */
+  .mnu a{padding:4px 0}
+  #hdr .logo{min-width:0;flex-shrink:1}
+  #hdr .logo img{max-width:100%}
+  #hdr .hdr-cta{flex-shrink:0}
+  /* вид с места: картинка сверху, карточка места под ней (не поверх) */
+  .seat-view{min-height:0;padding-top:78vw;background:var(--white);cursor:default}
+  .seat-view canvas{bottom:auto!important;height:78vw!important}
+  .seat-info{position:relative;left:auto;right:auto;bottom:auto;margin:0;border-radius:0 0 26px 26px;box-shadow:none}
+  .seat-tip{font-size:10px;padding:5px 10px;left:10px;top:10px}
+  .sv-mode{right:10px;top:8px}
+  /* подпись на экране сцены в hero — экран крошечный */
+  .cap{gap:4px}
+  .cap .d{font-size:9px;padding:2px 7px}
+  .cap b{font-size:12px;margin-top:4px;line-height:1.05}
+}
+@media (max-width:560px){
+  /* афиша — 2 колонки, компактные билеты */
+  #full .grid{grid-template-columns:1fr 1fr;gap:12px}
+  .tk{border-radius:18px}
+  .tk:hover{transform:none;box-shadow:none}
+  .tk .ph{aspect-ratio:1/1}
+  .tk .dt{left:8px;top:8px;padding:6px 8px 5px;border-radius:12px}
+  .tk .dt b{font-size:22px}.tk .dt small{font-size:11px}
+  .ft-bot a{display:inline-block;padding:8px 0}
+  .tk .tag{right:8px;top:8px;font-size:11px;padding:3px 8px;max-width:60%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tk .bd{padding:10px 12px 8px}
+  .tk .bd b{font-size:14px;line-height:1.25;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .tk .bd span{font-size:12px;margin-top:4px}
+  .tk .cut{margin:0 10px}
+  .tk .cut::before{left:-21px}.tk .cut::after{right:-21px}
+  .tk .cut::before,.tk .cut::after{width:18px;height:18px;top:-10px}
+  .tk .ft{padding:10px 12px 12px}
+  .tk .ft em{display:none}
+  .tk .ft .btn-red{width:100%;justify-content:center;text-align:center;padding:10px 12px;font-size:14px}
+}
+</style>
+<script>
+/* экран события в hero: когда картинка сцены обрезана (object-fit:cover, не 2:1 — телефон/планшет),
+   ставим экран по координатам самой картинки, чтобы он точно закрывал LED-экран */
+(function(){
+  const stg=document.querySelector('.stg'), p=document.getElementById('portal'); if(!stg||!p) return;
+  const L=.492,T=.586,W=.1935,H=.169;
+  function fit(){
+    const w=stg.clientWidth, h=stg.clientHeight; if(!w||!h) return;
+    if(Math.abs(w/h-2)<.02){ p.style.left=p.style.top=p.style.width=p.style.height=''; return; }
+    const dw=Math.max(w,h*2), dh=dw/2, ox=(w-dw)/2, oy=(h-dh)/2;
+    p.style.left=(ox+L*dw)+'px'; p.style.top=(oy+T*dh)+'px';
+    p.style.width=(W*dw)+'px'; p.style.height=(H*dh)+'px';
+  }
+  fit(); addEventListener('resize',fit); addEventListener('load',fit);
+  if(window.ResizeObserver) new ResizeObserver(fit).observe(stg);
+})();
+</script>
+<style>
+@media (max-width:900px){
+  #hdr{transition:transform .32s cubic-bezier(.2,.7,.2,1)}
+  #hdr.hdr-hide{transform:translateY(-110%)}
+}
+</style>
+<script>
+/* телефон/планшет: шапка прячется при прокрутке вниз и возвращается при прокрутке вверх */
+(function(){
+  var h=document.getElementById('hdr'); if(!h) return;
+  var mq=matchMedia('(max-width:900px)'), last=scrollY, acc=0, tick=false;
+  function upd(){
+    tick=false; var y=scrollY, dy=y-last; last=y;
+    var b=document.getElementById('burger'), open=b&&b.getAttribute('aria-expanded')==='true';
+    if(!mq.matches||open||y<80){h.classList.remove('hdr-hide');acc=0;return}
+    acc=(dy>0)===(acc>0)?acc+dy:dy;          /* копим движение в одну сторону, чтобы не дёргалось */
+    if(acc>24) h.classList.add('hdr-hide');
+    else if(acc<-12) h.classList.remove('hdr-hide');
+  }
+  addEventListener('scroll',function(){if(!tick){tick=true;requestAnimationFrame(upd)}},{passive:true});
+  mq.addEventListener&&mq.addEventListener('change',upd);
+})();
+</script>
+<!-- ===== Фон сайта: бежевый (по умолчанию) / белый / синий / погода (переключатель) ===== -->
+<style>
+html[data-bg="white"]{--page:#FFFFFF;--white:#F6F4F0;--grey:#ECEAE5}
+html[data-bg="blue"]{--page:#8EC5EE;--white:#FFFFFF;--grey:#CFE4F5}
+html[data-wx="snow"]{--page:#FFFFFF;--white:#F6F4F0;--grey:#ECEAE5}
+html[data-wx="cloud"]{--page:#EAEBEA;--white:#FFFFFF;--grey:#DCDDDC}
+html[data-wx="sun"]{--page:#F6EED9;--white:#FFFBF3;--grey:#E6DED0}
+html[data-wx="wind"]{--page:#DCEEFA;--white:#FFFFFF;--grey:#C8E1F2}
+header.scrolled{background:color-mix(in srgb,var(--page) 88%,transparent)}
+html[data-bg="blue"] .rb:not(.on),html[data-wx="wind"] .rb:not(.on){box-shadow:none}
+html.wx-anim,html.wx-anim *{transition:background-color .6s ease,border-color .6s ease!important}
+/* переключатель погоды */
+.wx{display:none;gap:4px;padding:4px;border-radius:999px;background:var(--white);box-shadow:inset 0 0 0 1px rgba(43,32,25,.1)}
+html[data-bg="weather"] .wx{display:flex}
+.wx button{width:40px;height:40px;border-radius:50%;border:0;background:transparent;color:#2B2019;display:grid;place-items:center;cursor:pointer;transition:background .25s,color .25s,transform .25s var(--ease)}
+.wx button:hover{transform:rotate(-8deg)}
+.wx button svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.wx button[aria-pressed="true"]{background:var(--coral);color:#fff}
+.wx-m{position:absolute;left:14px;top:14px;z-index:3}
+.wx-m button{width:36px;height:36px}
+@media (min-width:901px){.wx-m{display:none!important}}
+@media (max-width:900px){#hdr .wx{display:none!important}}
+</style>
+<script>
+(()=>{const H=document.documentElement;if(H.dataset.bg!=='weather')return;
+ const I={snow:'<path d="M12 2v20M3.3 7l17.4 10M3.3 17L20.7 7M9 4l3 2.5L15 4M9 20l3-2.5 3 2.5"/>',
+  cloud:'<path d="M7 18h10.5a4 4 0 0 0 .6-7.95A6 6 0 0 0 6.6 9.1 4.5 4.5 0 0 0 7 18z"/>',
+  sun:'<circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/>',
+  wind:'<path d="M3 9h11a3 3 0 1 0-3-3M3 14h15a3 3 0 1 1-3 3M3 19h7"/>'};
+ const T={snow:'Снежинка — белый фон',cloud:'Облачко — светло-серый фон',sun:'Жаркое солнце — бежевый фон',wind:'Ветер — голубой фон'};
+ const mk=cls=>{const d=document.createElement('div');d.className='wx '+cls;d.setAttribute('role','group');d.setAttribute('aria-label','Погода на сайте');
+  d.innerHTML=Object.keys(I).map(k=>`<button type="button" data-wx="${k}" title="${T[k]}" aria-label="${T[k]}" aria-pressed="false"><svg viewBox="0 0 24 24">${I[k]}</svg></button>`).join('');return d};
+ const a=mk(''),b=mk('wx-m');document.querySelector('#hdr .hdr-cta').prepend(a);(document.getElementById('gl')||document.body).appendChild(b);
+ const set=(k,anim)=>{if(anim){H.classList.add('wx-anim');clearTimeout(set.t);set.t=setTimeout(()=>H.classList.remove('wx-anim'),700)}
+  H.dataset.wx=k;document.querySelectorAll('.wx button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.wx===k))};
+ document.addEventListener('click',e=>{const x=e.target.closest('.wx button');if(x)set(x.dataset.wx,true)});
+ set(H.dataset.wx||'snow',false);
+})();
+</script>
+
+<script src="review-notes.js?v=11191724" defer></script>
+</body>
+</html>
