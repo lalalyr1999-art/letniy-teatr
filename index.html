@@ -472,13 +472,10 @@ html,body{overflow-x:clip}
 <style>
 .gl{position:relative;margin:2px var(--g) 0;height:clamp(460px,calc(100svh - 210px),780px);border-radius:32px;overflow:hidden;isolation:isolate;background:#1d1611;color:#fff;display:flex;flex-direction:column;justify-content:flex-end}
 .gl-ph{position:absolute;inset:0;z-index:-2}
-/* фото целиком на размытой подложке из того же снимка — без тяжёлого крупного плана */
-.gl-ph img{position:absolute;inset:0;width:100%;height:100%;opacity:0;transition:opacity 1.1s ease}
-.gl-ph img.bl{object-fit:cover;object-position:50% 40%;filter:blur(34px) brightness(.52) saturate(1.15);transform:scale(1.2)}
-.gl-ph img.fg{object-fit:contain;object-position:50% 42%}
-.gl-ph img.on{opacity:1}
-.gl-ph img.fg.on{animation:glkb 9s linear forwards}
-@keyframes glkb{from{transform:scale(1)}to{transform:scale(1.045)}}
+/* фото на весь баннер, спокойный наезд — без тяжёлого крупного плана */
+.gl-ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 42%;opacity:0;transition:opacity 1.1s ease}
+.gl-ph img.on{opacity:1;animation:glkb 9s linear forwards}
+@keyframes glkb{from{transform:scale(1.01)}to{transform:scale(1.05)}}
 .gl-shade{position:absolute;inset:0;z-index:-1;pointer-events:none;background:
   linear-gradient(180deg,rgba(20,12,8,.25) 0%,rgba(20,12,8,0) 30%,rgba(20,12,8,.15) 50%,rgba(20,12,8,.82) 100%),
   linear-gradient(90deg,rgba(20,12,8,.55) 0%,rgba(20,12,8,0) 62%)}
@@ -527,7 +524,7 @@ html,body{overflow-x:clip}
   .gl-rib{padding:12px 12px 4px;scroll-padding:0 12px;gap:8px}
   .rb{width:210px}
 }
-@media (prefers-reduced-motion:reduce){.gl-ph img.fg.on{animation:none}}
+@media (prefers-reduced-motion:reduce){.gl-ph img.on{animation:none}}
 </style>
 <div class="gl-wrap" id="glWrap">
 <h1 class="sr">Летний театр в парке Маяковского — афиша концертов и спектаклей</h1>
@@ -553,16 +550,16 @@ html,body{overflow-x:clip}
  const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
  const clean=s=>String(s).replace(/[«»]/g,'');
  const wrap=glWrap,ph=glPh,rib=glRib,gl=document.getElementById('gl');
- ph.innerHTML=ev.map((e,i)=>`<img class="bl" src="${esc(e.img)}" alt="" aria-hidden="true" ${i?'loading="lazy"':'fetchpriority="low"'}><img class="fg" src="${esc(e.img)}" alt="${esc(clean(e.t))}" ${i?'loading="lazy"':'fetchpriority="high"'}>`).join('');
+ ph.innerHTML=ev.map((e,i)=>`<img src="${esc(e.img)}" alt="${esc(clean(e.t))}" ${i?'loading="lazy"':'fetchpriority="high"'}>`).join('');
  rib.innerHTML=ev.map((e,i)=>{const[dd,mm]=e.date.split(' ');return `<button class="rb" type="button" role="tab" aria-selected="false" data-i="${i}">
    <span class="rb-d"><b>${esc(dd)}</b><small>${esc(mm.slice(0,3))} · ${esc(e.wd||'')}</small></span>
    <span class="rb-t">${esc(clean(e.t))}</span><span class="rb-m">${esc(e.time||'')}</span><i class="rb-p"></i></button>`}).join('');
  rib.style.setProperty('--dur',DUR+'s');
- const im=[...ph.querySelectorAll('img.fg')],bl=[...ph.querySelectorAll('img.bl')],rb=[...rib.children];glAll.textContent=String(ev.length).padStart(2,'0');
+ const im=[...ph.children],rb=[...rib.children];glAll.textContent=String(ev.length).padStart(2,'0');
  let cur=-1,tmr=0,paused=false;
  function show(n){n=(n+ev.length)%ev.length;if(n===cur)return;const first=cur<0;
-  if(!first){im[cur].classList.remove('on');bl[cur].classList.remove('on');rb[cur].classList.remove('on');rb[cur].setAttribute('aria-selected','false')}
-  cur=n;im[n].classList.add('on');bl[n].classList.add('on');rb[n].classList.add('on');rb[n].setAttribute('aria-selected','true');
+  if(!first){im[cur].classList.remove('on');rb[cur].classList.remove('on');rb[cur].setAttribute('aria-selected','false')}
+  cur=n;im[n].classList.add('on');rb[n].classList.add('on');rb[n].setAttribute('aria-selected','true');
   const p=rb[n].querySelector('.rb-p');p.style.animation='none';p.offsetWidth;p.style.animation='';
   const r=rib.getBoundingClientRect(),b=rb[n].getBoundingClientRect();
   if(b.left<r.left||b.right>r.right)rib.scrollTo({left:rib.scrollLeft+b.left-r.left-12,behavior:'smooth'});
