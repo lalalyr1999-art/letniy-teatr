@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="img/Group 1143.png" type="image/png">
 <script>(()=>{const H=document.documentElement,q=new URLSearchParams(location.search).get('bg');if(q)H.dataset.bg=q;if(H.dataset.bg==='weather'&&!H.dataset.wx)H.dataset.wx='snow'})()</script>
 <title>Летний театр</title>
 <!-- шрифты локально: сайт без обращений к иностранным сервисам -->
@@ -172,7 +173,7 @@ nav a:hover{color:#000}nav a:hover::after{transform:scaleX(1)}
 #way .wt .hand{opacity:1!important;animation:none!important;transform:none!important;display:block}
 #way .card,#way .steps li,#way .steps li>span{text-align:left!important}
 #way .steps b{display:inline!important;font:inherit!important;font-weight:600!important;color:inherit!important;margin:0!important}
-#way svg.map{padding:0!important;border:0!important;background:none!important}
+#way svg.map{padding:0!important;border:0!important;background:#fff!important}
 
 #way{--coral:#DA6150;--coralD:#B8473A;--cream:#F6EED9;--ink:#2B2019;--muted:#7A6A5C;--line:#E6D6BE;
  --cond:'Mayak','Oswald','Arial Narrow',sans-serif;--text:'Inter',Arial,sans-serif;--hand:'Caveat','Segoe Script',cursive;
@@ -198,27 +199,27 @@ nav a:hover{color:#000}nav a:hover::after{transform:scaleX(1)}
 
 #way /* карта в перспективе */
 .stage{position:relative;height:min(78vh,760px);perspective:1500px;perspective-origin:50% 20%}
-#way .plane{position:absolute;left:50%;top:50%;width:min(100%,560px);aspect-ratio:400/520;transform-style:preserve-3d;
+#way .plane{position:absolute;left:50%;top:50%;width:min(100%,620px);aspect-ratio:586/673;transform-style:preserve-3d;
  transform:translate(-50%,-52%) rotateX(0) rotateZ(0) scale(.86);transition:transform 1.8s var(--ease)}
 #way.in .plane{transform:translate(-50%,-44%) rotateX(var(--rx,50deg)) rotateZ(var(--rz,-16deg)) scale(.98)}
 #way .plane.drag{transition:none}
 #way .stage{cursor:grab;touch-action:pan-y;user-select:none}#way .plane{touch-action:none}#way .stage.grabbing{cursor:grabbing}
 #way .hint{position:absolute;left:50%;bottom:2%;transform:translateX(-50%);z-index:5;display:flex;align-items:center;gap:8px;background:rgba(255,251,243,.92);border-radius:999px;padding:8px 16px;font:600 13px var(--cond);text-transform:uppercase;letter-spacing:.05em;color:var(--ink);box-shadow:0 10px 24px -14px rgba(90,40,10,.45);pointer-events:none;transition:opacity .4s}
 #way .hint svg{width:16px;height:16px;color:var(--coral)}#way .stage.used .hint{opacity:0}
-#way .plane svg.map{position:absolute;inset:0;width:100%;height:100%;display:block;border-radius:22px;overflow:hidden;
+#way .plane svg.map{position:absolute;inset:0;width:100%;height:100%;display:block;background:#fff;border-radius:22px;overflow:hidden;
  box-shadow:0 60px 80px -40px rgba(90,50,20,.35),0 0 0 1px rgba(90,60,30,.06)}
-#way .route{fill:none;stroke:var(--coral);stroke-width:5.5;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 4px rgba(218,97,80,.55))}
-#way .route-bg{fill:none;stroke:#fff;stroke-width:11;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
-#way .route,#way .route-bg{stroke-dasharray:var(--L);stroke-dashoffset:var(--L);transition:stroke-dashoffset 2.6s var(--ease) 1.2s}
-#way.in .route,#way.in .route-bg{stroke-dashoffset:0}
-#way .walker{opacity:0;transition:opacity .4s 3.6s}#way.in .walker{opacity:1}
+#way .route{fill:none;stroke:#E7A096;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;opacity:.85}
+#way [data-route-line].active .route{stroke:#DA6150;stroke-width:6;opacity:1}
+#way .route-bg{fill:none;stroke:#fff;stroke-width:11;stroke-linecap:round;stroke-linejoin:round;opacity:.8}
+#way .walker{opacity:1}
+.map-start{fill:#fff;stroke:#DA6150;stroke-width:2.5;opacity:.75}.map-start.active{fill:#DA6150;stroke:#fff;stroke-width:3;opacity:1}
 #way .ring{fill:none;stroke:var(--coral);stroke-width:2;opacity:0;transform-box:fill-box;transform-origin:center;animation:wayring 2.4s ease-out infinite}
 #way.in .ring{opacity:1}
 @keyframes wayring{from{transform:scale(.4);opacity:.9}to{transform:scale(2.6);opacity:0}}
 
 #way /* метки стоят вертикально над картой */
 .pin{position:absolute;transform-style:preserve-3d;transform:translate(-50%,-100%) rotateZ(calc(-1 * var(--rz,-16deg))) rotateX(calc(-1 * var(--rx,50deg)));transform-origin:50% 100%;
- opacity:0;transition:opacity .6s}
+ opacity:0;transition:opacity .6s;pointer-events:none}
 #way.in .pin{opacity:1}#way.in .pin.p1{transition-delay:1.4s}#way.in .pin.p2{transition-delay:3.6s}
 #way .pin span{display:flex;align-items:center;gap:8px;white-space:nowrap;background:#fff;color:var(--ink);border-radius:14px;padding:8px 14px 8px 10px;
  font:600 15px var(--cond);text-transform:uppercase;letter-spacing:.03em;box-shadow:0 14px 26px -12px rgba(90,40,10,.4);position:relative}
@@ -228,6 +229,8 @@ nav a:hover{color:#000}nav a:hover::after{transform:scaleX(1)}
 #way .pin.p2{--stem:70px}
 #way .pin.p2::before{background:var(--coral);opacity:1}
 #way .pin.p2 span{background:var(--coral);color:#fff}#way .pin.p2 span::after{background:var(--coral)}
+#way .pin.p1[data-pin-route="cleverLower"] span{left:52px;top:8px}
+#way .pin.p1[data-pin-route="cleverLower"] span::after{left:calc(50% - 52px)}
 #way .pin i{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--coral);color:#fff}
 #way .pin.p2 i{background:#fff;color:var(--coral)}
 #way .pin svg{width:16px;height:16px}
@@ -257,7 +260,7 @@ nav a:hover{color:#000}nav a:hover::after{transform:scaleX(1)}
 #mapModal{position:fixed;inset:0;z-index:200;background:rgba(43,32,25,.55);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:3vh 3vw}
 #mapModal.mm-open{display:flex;animation:mmIn .35s ease}@keyframes mmIn{from{opacity:0}}
 #mapModal .box{position:relative;width:min(1100px,100%);height:100%;background:var(--page);border-radius:24px;overflow:hidden;box-shadow:0 40px 90px -30px rgba(0,0,0,.6)}
-#mapModal .vp{position:absolute;inset:0;overflow:hidden;cursor:grab;touch-action:none}#mapModal .vp.grabbing{cursor:grabbing}
+#mapModal .vp{position:absolute;inset:0;overflow:hidden;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}#mapModal .vp.grabbing{cursor:grabbing}
 #mapModal .mz{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform}
 #mapModal .mz svg{display:block}
 #mapModal .bar{position:absolute;left:20px;top:18px;z-index:2;display:flex;gap:10px;align-items:center;font:600 22px var(--cond);text-transform:uppercase;color:var(--ink)}
@@ -321,22 +324,28 @@ footer .ring-row{margin:-56px calc(-1*var(--g)) 40px;background-color:var(--grey
 </head>
 <body>
 <header id="hdr">
-  <a class="logo" href="#"><img src="img/Group 1143.png" alt="Летний театр"></a>
-  <nav class="nav-main" aria-label="Главное меню"><a href="#full">Афиша</a><a href="#about">О театре</a><a href="organizers.html">Организаторам</a><a href="#contacts">Контакты</a></nav>
-  <div class="hdr-cta"><a class="pill btn-line hdr-sub" href="#sub">Рассылка</a><a class="pill btn-red hdr-buy" href="#full"><span class="d">Билеты</span><span class="m">Купить билет</span></a>
+  <a class="logo" href="#gl" aria-label="Летний театр — на первый экран"><img src="img/Group 1143.png" alt="Летний театр"></a>
+  <nav class="nav-main" aria-label="Главное меню"><a href="#full">Афиша</a><a href="#about">О театре</a><a href="#visitors">Зрителям</a><a href="organizers.html">Организаторам</a><a href="news.html" rel="noopener">Новости</a></nav>
+  <div class="hdr-cta"><a class="pill btn-line hdr-sub" href="#sub">Подписаться</a><a class="pill btn-red hdr-buy" href="#full"><span class="d">Билеты</span><span class="m">Купить билет</span></a>
     <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="mnu" aria-label="Открыть меню"><i></i><i></i><i></i></button></div>
   <div class="mnu" id="mnu" hidden>
-    <div class="mnu-col only-m"><a href="#full">Афиша</a><a href="#about">О театре</a><a href="organizers.html">Организаторам</a><a href="#contacts">Контакты</a></div>
-    <div class="mnu-col">
-      <a href="https://xn--80aj8afc.xn--e1agfrc5b.xn--p1ai/tickets/" target="_blank" rel="noopener">Как купить билет</a><a href="https://xn--80aj8afc.xn--e1agfrc5b.xn--p1ai/certificates" target="_blank" rel="noopener">Сертификаты</a>
-      <a href="https://xn--80aj8afc.xn--e1agfrc5b.xn--p1ai/news" target="_blank" rel="noopener">Новости</a><a href="https://xn--80aj8afc.xn--e1agfrc5b.xn--p1ai/faq" target="_blank" rel="noopener">Вопрос / ответ</a>
-      <a href="https://xn--80aj8afc.xn--e1agfrc5b.xn--p1ai/partners" target="_blank" rel="noopener">Партнёры</a>
+    <div class="mnu-col mnu-desktop">
+      <a href="tickets.html" rel="noopener">Как купить билет</a>
+      <a href="certificates.html" rel="noopener">Сертификаты</a>
+      <a href="#fGenre" data-promo-link>Акции</a>
+      <a href="faq.html" rel="noopener">Вопрос / ответ</a>
+      <a href="news.html" rel="noopener">Новости</a>
+      <a href="#contacts">Контакты</a>
     </div>
-    <div class="mnu-col"><span class="mnu-h">Архив</span>
-      <a href="https://xn--80aj8afc.xn--e1agfrc5b.xn--p1ai/s23" target="_blank" rel="noopener">Сезон 2023</a><a href="https://xn--80aj8afc.xn--e1agfrc5b.xn--p1ai/s24" target="_blank" rel="noopener">Сезон 2024</a>
-      <a href="https://xn--80aj8afc.xn--e1agfrc5b.xn--p1ai/s25" target="_blank" rel="noopener">Сезон 2025</a><a href="https://xn--80aj8afc.xn--e1agfrc5b.xn--p1ai/s26" target="_blank" rel="noopener">Сезон 2026</a>
+    <div class="mnu-col mnu-desktop mnu-foot"><a href="https://xn--e1agfrc5b.xn--p1ai/" target="_blank" rel="noopener">Сайт парка ↗</a></div>
+    <div class="mnu-col mnu-mobile">
+      <a href="#full">Афиша</a><a href="#about">О театре</a>
+      <a href="certificates.html" rel="noopener">Сертификаты</a>
+      <a href="#fGenre" data-promo-link>Акции</a>
+      <a href="faq.html" rel="noopener">Вопрос / ответ</a>
+      <a href="news.html" rel="noopener">Новости</a>
+      <a href="organizers.html">Организаторам</a><a href="#contacts">Контакты</a>
     </div>
-    <div class="mnu-col mnu-foot"><a href="https://xn--e1agfrc5b.xn--p1ai/" target="_blank" rel="noopener">Сайт парка ↗</a><a class="only-m" href="#sub">Рассылка</a></div>
   </div>
 </header>
 <style>
@@ -538,12 +547,13 @@ html,body{overflow-x:clip}
     <h2 class="gl-t" id="glT"></h2>
     <p class="gl-m" id="glM"></p>
     <p class="gl-x" id="glX"></p>
-    <div class="row"><a class="pill btn-red" id="glBuy" href="#full" target="_blank" rel="noopener">Купить билет</a><a class="pill btn-glass" href="#full">Вся афиша</a></div>
+    <div class="row"><a class="pill btn-red" id="glBuy" href="#full" rel="noopener">Купить билет</a><a class="pill btn-glass" href="#full">Вся афиша</a></div>
   </div>
   <div class="gl-arr"><button type="button" id="glPrev" aria-label="Предыдущее событие">←</button><button type="button" id="glNext" aria-label="Следующее событие">→</button></div>
 </section>
 <div class="gl-rib" id="glRib" role="tablist" aria-label="Даты событий"></div>
 </div>
+<section class="theatre-intro" aria-label="Коротко о театре"><h2>Театр под открытым небом</h2><p>Концерты и спектакли в парке Маяковского, среди сосен и вечерних огней. Сезон продолжается с мая по сентябрь — от камерных вечеров до больших фестивалей.</p></section>
 <script>
 (async()=>{
  const DUR=7,CALM=matchMedia('(prefers-reduced-motion:reduce)').matches;
@@ -551,12 +561,12 @@ html,body{overflow-x:clip}
  const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
  const clean=s=>String(s).replace(/[«»]/g,'');
  const wrap=glWrap,ph=glPh,rib=glRib,gl=document.getElementById('gl');
- ph.innerHTML=ev.map((e,i)=>`<img src="${esc(e.img).replace(/\.jpg$/,'_wide.jpg')}" alt="${esc(clean(e.t))}" ${i?'loading="lazy"':'fetchpriority="high"'}>`).join('');
+ ph.innerHTML=ev.map((e,i)=>`<picture><source media="(max-width:900px)" srcset="${esc(e.img)}"><img src="${esc(e.img).replace(/\.jpg$/,'_wide.jpg')}" alt="${esc(clean(e.t))}" ${i?'loading="lazy"':'fetchpriority="high"'}></picture>`).join('');
  rib.innerHTML=ev.map((e,i)=>{const[dd,mm]=e.date.split(' ');return `<button class="rb" type="button" role="tab" aria-selected="false" data-i="${i}">
    <span class="rb-d"><b>${esc(dd)}</b><small>${esc(mm.slice(0,3))} · ${esc(e.wd||'')}</small></span>
    <span class="rb-t">${esc(clean(e.t))}</span><span class="rb-m">${esc(e.time||'')}</span><i class="rb-p"></i></button>`}).join('');
  rib.style.setProperty('--dur',DUR+'s');
- const im=[...ph.children],rb=[...rib.children];glAll.textContent=String(ev.length).padStart(2,'0');
+ const im=[...ph.querySelectorAll('img')],rb=[...rib.children];glAll.textContent=String(ev.length).padStart(2,'0');
  let cur=-1,tmr=0,paused=false;
  function show(n){n=(n+ev.length)%ev.length;if(n===cur)return;const first=cur<0;
   if(!first){im[cur].classList.remove('on');rb[cur].classList.remove('on');rb[cur].setAttribute('aria-selected','false')}
@@ -566,7 +576,7 @@ html,body{overflow-x:clip}
   if(b.left<r.left||b.right>r.right)rib.scrollTo({left:rib.scrollLeft+b.left-r.left-12,behavior:'smooth'});
   const set=()=>{const e=ev[n];glK.textContent=n===0?'ближайшее событие':'скоро на сцене';glT.textContent=clean(e.t);
    glM.innerHTML=`<span class="d">${esc(e.date)}${e.wd?', '+esc(e.wd):''}</span>${e.time?`<span>${esc(e.time)}</span>`:''}<span>Летний театр</span>`;
-   glX.textContent=e.text||'';glBuy.href=e.url||'#full';glN.textContent=String(n+1).padStart(2,'0')};
+   glX.textContent=e.text||'';glBuy.href=e.url||'#full';glBuy._event=e;glN.textContent=String(n+1).padStart(2,'0')};
   if(first||CALM){set();return}
   gl.classList.add('swap');setTimeout(()=>{set();gl.classList.remove('swap')},420)}
  function arm(){clearTimeout(tmr);if(!paused)tmr=setTimeout(()=>show(cur+1),DUR*1000)}
@@ -614,19 +624,16 @@ html,body{overflow-x:clip}
     <div class="prog" id="prog"></div>
   </div>
   <div class="ctrl">
-    <form class="sub" id="sub" onsubmit="event.preventDefault();const i=this.querySelector('input');i.value='';i.placeholder='Спасибо! Ждите анонсов'">
-      <label for="em">Анонсы на почту</label><input id="em" type="email" required placeholder="E-mail"><button class="pill btn-red">Подписаться</button>
-    </form>
     <div class="dots" id="dots"></div>
     <div class="arrows"><button id="prev" aria-label="Назад">←</button><button id="fwd" aria-label="Вперёд">→</button></div>
   </div>
 </section>
 
-<div class="recs-h"><h3>Избранные события<i>этим летом</i></h3></div>
+<div class="recs-h"><h3>Избранные события</h3></div>
 <style>
 @media (min-width:901px){ #recs .card{flex:0 0 calc((100% - 4 * 22px) / 5)} #recs .card b{font-size:17px} }
 </style>
-<div class="recs" id="recs"></div>
+<div class="recs-shell"><button class="recs-arrow prev" id="recsPrev" type="button" aria-label="Прокрутить события назад">←</button><div class="recs" id="recs"></div><button class="recs-arrow next" id="recsNext" type="button" aria-label="Прокрутить события вперёд">→</button></div>
 <div class="demo">демо: афиша сезона 2026</div>
 <!-- ===== хедлайнеры сезона (шаблон 1) ===== -->
 <style>
@@ -826,13 +833,13 @@ footer{background:#111;color:#cfcfcf;margin-top:72px;padding:56px var(--g) 28px;
 
 <section class="sec" id="full">
   <div class="sec-h reveal">
-    <h2>Афиша сезона<i>с июня по август — под соснами</i></h2>
+    <h2>Афиша сезона</h2>
     <div class="filters" id="fMonth">
-      <button class="chip on" data-m="">Всё лето</button><button class="chip" data-m="Июня">Июнь</button><button class="chip" data-m="Июля">Июль</button><button class="chip" data-m="Августа">Август</button>
+      <button class="chip on" data-m="">Весь сезон</button><button class="chip" data-m="Мая">Май</button><button class="chip" data-m="Июня">Июнь</button><button class="chip" data-m="Июля">Июль</button><button class="chip" data-m="Августа">Авг</button><button class="chip" data-m="Сентября">Сент</button>
     </div>
   </div>
   <div class="filters reveal" id="fGenre" style="margin-bottom:26px">
-    <button class="chip on" data-g="">Все жанры</button><button class="chip" data-g="orch">С оркестром</button><button class="chip" data-g="kids">Детям</button><button class="chip" data-g="candle">При свечах</button><button class="chip" data-g="red">RED SUMMER</button><button class="chip" data-g="fest">Фестивали</button>
+    <button class="chip on" data-g="">Все события</button><button class="chip" data-g="concert">Концерт</button><button class="chip" data-g="fest">Фестиваль</button><button class="chip" data-g="theatre">Театр</button><button class="chip" data-g="kids">Детям</button><button class="chip promo" data-g="promo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2c1 5-4 6-4 10 0 2 1 3 3 3 3 0 4-3 3-6 3 2 5 5 5 8a8 8 0 0 1-16 0c0-5 4-8 9-15z"/></svg>Акции</button>
   </div>
   <div class="grid" id="grid"></div>
   <div class="more"><button class="pill btn-line" id="moreBtn">Показать ещё</button></div>
@@ -840,12 +847,11 @@ footer{background:#111;color:#cfcfcf;margin-top:72px;padding:56px var(--g) 28px;
 
 <section class="seat" id="about" aria-labelledby="seatH">
   <div class="seat-h">
-    <div><h2 id="seatH">Выберите своё место</h2><p class="hand">нажмите на скамейку — покажем, как оттуда видно сцену</p></div>
+    <div><h2 id="seatH">Выбирайте места</h2><p class="hand">нажмите на место — покажем вид на сцену</p></div>
     <div class="seat-q" aria-label="Быстрый выбор"><button type="button" data-q="front">Первый ряд</button><button type="button" data-q="center">Центр зала</button><button type="button" data-q="side">Сбоку</button><button type="button" data-q="back">Последний ряд</button></div>
   </div>
   <div class="seat-g">
     <div class="seat-plan">
-      <div class="plan-hint"><b>1</b> Нажмите на любое место на плане <span>→</span> <b>2</b> справа покажем вид на сцену</div>
       <svg id="seatPlan" viewBox="40 0 520 560" role="img" aria-label="План зала: сцена, ряды скамеек слева и справа от центрального прохода, сосны у кирпичной стены"></svg>
       <div class="seat-leg"><span><i style="background:#F7DDD3"></i>Партер · 3 500 ₽</span><span><i style="background:#F5E8CF"></i>Середина · 2 500 ₽</span><span><i style="background:#E2EBD3"></i>Амфитеатр · 1 800 ₽</span><span><i class="b"></i>занято</span></div>
       <div class="seat-facts"><span><b id="seatTotal">1 181</b> мест, свободно <b id="seatFree">0</b></span><span><b>+200</b> у столиков</span><span><b>2&nbsp;530&nbsp;М²</b> площадь</span><span class="pn"><i></i> сосны вдоль стены</span></div>
@@ -857,11 +863,11 @@ footer{background:#111;color:#cfcfcf;margin-top:72px;padding:56px var(--g) 28px;
         <div class="si-z"><b id="sInfoZone">ПАРТЕР</b><span id="sInfoState">свободно</span><b class="pr" id="sInfoPrice">3 500 ₽</b></div>
         <div class="si-n"><span>Сторона <b id="sInfoSec">ЛЕВАЯ</b></span><span>Ряд <b id="sInfoRow">7</b></span><span>Место <b id="sInfoNum">12</b></span><span>До сцены <b id="sInfoDist">≈ 15 м</b></span></div>
         <div class="si-v" id="sInfoView">прямой вид на сцену</div>
-        <div class="si-act"><a class="pill btn-red" id="sInfoBuy" href="#full">Купить это место</a><button type="button" class="sv-btn" id="svWalk">Пройти от входа</button><button type="button" class="sv-btn" id="svPhotoBtn">Фото с этого места</button></div>
+        <div class="si-act"><a class="pill btn-red" id="sInfoBuy" href="#full">Выбрать событие</a><button type="button" class="sv-btn" id="svPhotoBtn">Фото с этого места</button></div>
       </div>
     </div>
   </div>
-  <p class="seat-note">Это пример: занятость мест, цены и фото — демонстрационные. Рассадку уточним по плану зала театра. Двойной клик по месту на плане — пройти к нему от входа.</p>
+  <p class="seat-note">Это пример: занятость мест, цены и фото — демонстрационные. Рассадку уточним по плану зала театра.</p>
   <div class="sv-photo" id="svPhoto" hidden><figure><button type="button" class="x" aria-label="Закрыть">×</button><img alt=""><figcaption></figcaption></figure></div>
 </section>
 <style>
@@ -935,7 +941,7 @@ footer{background:#111;color:#cfcfcf;margin-top:72px;padding:56px var(--g) 28px;
 </style>
 
 <section class="sec" id="video" style="padding-left:0;padding-right:0">
-  <div class="sec-h reveal" style="padding:0 var(--g)"><h2>Лето в&nbsp;театре<i>посмотрите, как это было</i></h2><a class="pill btn-line" href="#" target="_blank" rel="noopener">Все видео ВКонтакте</a></div>
+  <div class="sec-h reveal" style="padding:0 var(--g)"><h2>Лето в&nbsp;театре<i>посмотрите, как это было</i></h2><a class="pill btn-line" href="#" rel="noopener">Все видео ВКонтакте</a></div>
   <div class="vd">
     <div class="vd-stage" id="vdStage">
       <div class="vd-main" id="vdMain" role="button" tabindex="0" aria-label="Смотреть видео">
@@ -954,9 +960,9 @@ footer{background:#111;color:#cfcfcf;margin-top:72px;padding:56px var(--g) 28px;
 
 <!-- ===== звёзды прошлых сезонов (шаблон 2) ===== -->
 <section class="sec lg" id="legends">
-  <div class="sec-h reveal"><h2>У нас уже выступали<i>звёзды на сцене — звёзды на небе</i></h2></div>
+  <div class="sec-h reveal"><h2>У нас уже выступали</h2></div>
   <div class="lg-wrap" id="lgWrap"></div>
-  <div class="lg-foot"><a class="pill btn-red" href="#full">Кто выступит этим летом</a><a class="pill btn-line" href="https://xn--80aj8afc.xn--e1agfrc5b.xn--p1ai/s25" target="_blank" rel="noopener">Архив событий</a></div>
+  <div class="lg-foot"><a class="pill btn-red" href="#full">Кто выступит этим летом</a><a class="pill btn-line" href="archive.html#2025">Архив событий</a></div>
   <div class="hl-pic" id="lgPic"><img alt=""><span></span></div>
   <div hidden><div class="st"><canvas id="stCv"></canvas><div class="st-sky" id="stSky"></div></div></div>
 </section>
@@ -1077,13 +1083,13 @@ const VIDEOS=[
  const low=x=>String(x||'').toLowerCase().replace(/[«»"]/g,'');
  const imgOf=n=>{const h=HEADLINERS.find(h=>low(h.n)===low(n));if(h)return h.img;const e=ev.find(e=>e.img&&low(e.t).includes(low(n)));return e?e.img:''};
  const esc=x=>String(x||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
- const N=5,rows=Array.from({length:N},()=>[]);STARS.forEach((st,i)=>rows[i%N].push(st));
- const item=(st,dup)=>`<a class="lg-it" href="#full" data-img="${esc(imgOf(st.n))}"${dup?' aria-hidden="true" tabindex="-1"':''}><b>${esc(st.n)}</b><small>${esc(st.y)}</small></a>`;
+ const N=3,rows=Array.from({length:N},()=>[]);STARS.forEach((st,i)=>rows[i%N].push(st));
+ const item=(st,dup)=>`<a class="lg-it" href="#full" data-img="${esc(imgOf(st.n))}"${dup?' aria-hidden="true" tabindex="-1"':''}><b>${esc(st.n)}</b></a>`;
  const W=document.getElementById('lgWrap');
  W.innerHTML=rows.map((r,k)=>{let f=[...r];while(f.length<7)f=f.concat(r);
   return `<div class="lg-row ${k%2?'w rev':'c'}" style="--sp:${48+k*9}s">${f.map(x=>item(x)).join('')}${f.map(x=>item(x,1)).join('')}</div>`}).join('');
  /* телефон: вместо лент — плашки с фото, 12 + «показать всех» */
- const LIM=12, chip=(st,i)=>{const im=imgOf(st.n);return `<a class="lgm-it${i>=LIM?' more':''}" href="#full">${im?`<img src="${esc(im)}" alt="" loading="lazy">`:`<i>★</i>`}<span><b>${esc(st.n)}</b><small>${esc(st.y)}</small></span></a>`};
+ const LIM=12, chip=(st,i)=>{const im=imgOf(st.n);return `<a class="lgm-it${i>=LIM?' more':''}" href="#full">${im?`<img src="${esc(im)}" alt="" loading="lazy">`:`<i>★</i>`}<span><b>${esc(st.n)}</b></span></a>`};
  W.insertAdjacentHTML('afterend',`<div class="lg-m" id="lgM">${STARS.map(chip).join('')}</div>${STARS.length>LIM?`<div class="lgm-btn"><button type="button" class="pill btn-line" id="lgMore">Показать всех · ${STARS.length}</button></div>`:''}`);
  const lm=document.getElementById('lgMore');if(lm)lm.onclick=()=>{document.getElementById('lgM').classList.add('all');lm.parentElement.remove()};
  const pic=document.getElementById('lgPic'),pi=pic.querySelector('img'),ps=pic.querySelector('span');let px=0,py=0,x=0,y=0,on=false;
@@ -1099,97 +1105,175 @@ const VIDEOS=[
     <div class="num">/ 04</div>
     <h2 id="wayH">Как<br>добраться?</h2>
     <p class="hand">через весь парк — под соснами и берёзами</p>
-    <p>Летний театр — в&nbsp;глубине парка Маяковского, за&nbsp;Театральной площадью. От&nbsp;главного входа — прямо по&nbsp;аллее до&nbsp;фонтана и&nbsp;направо.</p>
+    <p>Летний театр — в&nbsp;глубине парка Маяковского, за&nbsp;Театральной площадью. От&nbsp;главного входа — прямо по&nbsp;аллее до&nbsp;фонтана и&nbsp;налево.</p>
     <div class="addr"><b>Парк Маяковского</b>Екатеринбург, ул.&nbsp;Мичурина, 230, корп.&nbsp;25</div>
     <div class="btns">
       <a class="pill red" href="https://yandex.ru/maps/-/CXbPVJY6" target="_blank" rel="noopener">Маршрут в&nbsp;Яндекс Картах
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M3 11l18-8-8 18-2-8z"/></svg></a>
+    </div>
+    <div class="route-picker" role="group" aria-label="Выберите маршрут">
+      <button type="button" class="on" data-route="main" aria-pressed="true">Центральный вход</button>
+      <button type="button" data-route="cleverUpper" aria-pressed="false">Clever Park · верхний</button>
+      <button type="button" data-route="cleverLower" aria-pressed="false">Clever Park · нижний</button>
+      <button type="button" data-route="shchorsa" aria-pressed="false">Ул. Щорса</button>
     </div>
   </div>
 
   <div class="stage" aria-hidden="true">
     <div class="hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></svg>Потяните, чтобы повернуть</div>
     <div class="plane" id="plane">
-      <svg class="map" viewBox="120 60 400 520" preserveAspectRatio="xMidYMid slice">
+      <svg class="map" viewBox="0 14 586 673" preserveAspectRatio="xMidYMid meet">
         <image href="img/park_map_ours.svg" width="1176" height="1743"/>
-        <path class="route-bg" id="rbg" d=""/>
-        <path class="route" id="rt" d=""/>
-        <rect x="356" y="500" width="30" height="26" rx="4" fill="#DA6150" opacity=".35"/>
-        <circle class="ring" cx="370" cy="512" r="9"/>
-        <circle cx="370" cy="512" r="6.5" fill="#DA6150" stroke="#fff" stroke-width="2.5"/>
-        <circle cx="246" cy="108" r="6.5" fill="#fff" stroke="#DA6150" stroke-width="3"/>
+        <g id="routeLines"></g>
+        <image href="img/park_map_labels.svg" width="1176" height="1743" pointer-events="none"/>
+        <g id="routeStarts"></g>
+        <path id="rt" d="" fill="none" opacity="0" pointer-events="none"/>
+        <rect x="368" y="514" width="30" height="26" rx="4" fill="#DA6150" opacity=".35"/>
+        <circle class="ring" cx="383" cy="527" r="9"/>
+        <circle cx="383" cy="527" r="6.5" fill="#DA6150" stroke="#fff" stroke-width="2.5"/>
+        <circle id="routeStart" cx="246" cy="108" r="6.5" fill="#fff" stroke="#DA6150" stroke-width="3"/>
         <g class="walker"><circle r="5" fill="#fff" stroke="#DA6150" stroke-width="2.5">
           <animateMotion dur="7s" repeatCount="indefinite" rotate="0"><mpath href="#rt"/></animateMotion></circle></g>
       </svg>
-      <div class="pin p1" style="left:31.5%;top:9.2%"><span><i><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg></i>Центральный вход</span></div>
-      <div class="pin p2" style="left:62.5%;top:86.9%"><span><i><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 4h9v6a4.5 4.5 0 0 1-9 0zm2.5 3.2a.9.9 0 1 0 1.8 0 .9.9 0 0 0-1.8 0zm3 0a.9.9 0 1 0 1.8 0 .9.9 0 0 0-1.8 0zM5.6 11c.6 1 1.5 1.4 2.4 1.4s1.8-.4 2.4-1.4zM12.8 8H21v6a4.5 4.5 0 0 1-8.6 1.8A6 6 0 0 0 13 13z"/></svg></i>Летний театр</span></div>
+      <div class="pin p1" style="left:42%;top:14%"><span><i><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg></i>Центральный вход</span></div>
+      <div class="pin p2" style="left:65.4%;top:76.2%"><span><i><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 4h9v6a4.5 4.5 0 0 1-9 0zm2.5 3.2a.9.9 0 1 0 1.8 0 .9.9 0 0 0-1.8 0zm3 0a.9.9 0 1 0 1.8 0 .9.9 0 0 0-1.8 0zM5.6 11c.6 1 1.5 1.4 2.4 1.4s1.8-.4 2.4-1.4zM12.8 8H21v6a4.5 4.5 0 0 1-8.6 1.8A6 6 0 0 0 13 13z"/></svg></i>Летний театр</span></div>
     </div>
   </div>
 
   <div class="side">
-    <div class="card">
-      <div class="tabs" role="tablist"><button class="on" role="tab" aria-selected="true">От главного входа</button></div>
-      <ol class="steps">
-        <li><span class="ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg></span><span><b>Центральный вход</b><br>в парк</span></li>
-        <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22v-7M7 15h10l-5-12z"/></svg></span><span>Прямо по <b>аллее Маяковского</b> до фонтана</span></li>
-        <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><path d="M12 4v4M12 16v4"/></svg></span><span>Обойдите <b>фонтан</b> справа — к&nbsp;Театральной площади</span></li>
-        <li><span class="ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 4h9v6a4.5 4.5 0 0 1-9 0zm9.8 4H21v6a4.5 4.5 0 0 1-8.6 1.8A6 6 0 0 0 13 13z"/></svg></span><span><b>Летний театр</b> — сразу за площадью</span></li>
-      </ol>
-      <div class="time"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="13" cy="4" r="2"/><path d="M10 8.5l3-1 2 3 3 1-.5 1.6-3.6-1.2-1-1.4-1 4 2.6 2.6V22h-1.8v-4.2l-2.3-2.3-1 3.5L7 22l-1.6-.6 2.2-6.5 1-4.2-1.4.6V14H5.5V9.6z"/></svg>
-        <div><strong>≈ 7 МИН</strong><small>пешком от главного входа</small></div></div>
-    </div>
-    <div class="card mini" id="miniMap" role="button" tabindex="0" aria-label="Открыть карту всего парка">
-      <span class="lbl">Весь парк</span><span class="open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></svg>Открыть</span>
-      <svg viewBox="0 0 1176 1300"><image href="img/park_map_ours.svg" width="1176" height="1743"/>
-        <rect x="120" y="60" width="400" height="520" fill="none" stroke="#DA6150" stroke-width="6" stroke-dasharray="14 10" rx="16"/>
-        <path id="rmini" d="" fill="none" stroke="#DA6150" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
-        <circle cx="370" cy="512" r="20" fill="#DA6150" stroke="#fff" stroke-width="6"/></svg>
-      <span class="n">N ↑</span>
+    <div class="card parking">
+      <span class="parking-k">на автомобиле</span><h3>Парковки</h3>
+      <h4>Бесплатные</h4>
+      <p><b>Ближайшая к театру:</b> в парке, въезд с пер. Базового</p>
+      <p>Справа от главной арки — <span>ул. Мичурина, 230/12</span></p>
+      <h4>Платные</h4>
+      <p>На территории ЖК Clever Park — <span>ул. Ткачей, 21</span></p>
+      <p>Рядом со спортивным комплексом «Луч» — <span>ул. Ткачей, 11</span></p>
+      <button type="button" class="pill line park-map-open" id="parkMapOpen">Открыть карту парка</button>
     </div>
   </div>
 </section>
 <script>
-(()=>{const D='M246 108 L246 397 A24 24 0 0 1 267 430 L318 470 L356 478 L370 512';
- ['rt','rbg','rmini'].forEach(id=>document.getElementById(id).setAttribute('d',D));
- const L=Math.ceil(document.getElementById('rt').getTotalLength());
- document.querySelectorAll('.route,.route-bg').forEach(p=>p.style.setProperty('--L',L));
- const sec=document.getElementById('way');
- const io=new IntersectionObserver(e=>{if(e[0].isIntersecting){sec.classList.add('in');io.disconnect()}},{threshold:.35});/*карта: срабатывает по самой карте, раздел на телефоне слишком длинный*/
- io.observe(sec.querySelector('.stage')||sec);
+(()=>{
+ /* Повороты перенесены с фотографий заказчика на координаты park_map_ours.svg. */
+ async function inlineMapArtwork(){
+  const images=[...document.querySelectorAll('svg image[href*="park_map_ours"],svg image[href*="park_map_labels"]')];
+  await Promise.all(images.map(async image=>{
+   try{
+    const response=await fetch(image.getAttribute('href'));if(!response.ok)return;
+    const doc=new DOMParser().parseFromString(await response.text(),'image/svg+xml');
+    const source=doc.documentElement;if(source.nodeName.toLowerCase()!=='svg'||doc.querySelector('parsererror'))return;
+    const g=document.createElementNS('http://www.w3.org/2000/svg','g');
+    g.setAttribute('shape-rendering','geometricPrecision');g.setAttribute('pointer-events','none');g.setAttribute('aria-hidden','true');
+    [...source.children].forEach(child=>g.appendChild(document.importNode(child,true)));
+    g.querySelectorAll('[id]').forEach(el=>el.removeAttribute('id'));
+    image.replaceWith(g);
+   }catch{/* Внешнее векторное изображение остаётся резервным вариантом. */}
+  }));
+ }
+ inlineMapArtwork();
+ const TO_THEATRE='L246 430 L246 465 L360 502 L373 516 L383 527';
+ const VIA_FOUNTAIN='L132 391 L246 430 L246 465 L360 502 L373 516 L383 527';
+ const VIA_PLAZA='L460 1054 L360 965 L289 844 L213 716 L138 576 L243 483 L246 465 L360 502 L373 516 L383 527';
+ const ROUTES={
+  main:{label:'Центральный вход',start:[246,108],d:'M246 108 '+TO_THEATRE},
+  cleverUpper:{label:'ЖК Clever Park · верхний вход',start:[113,219],d:'M113 219 L109 267 L178 280 '+VIA_FOUNTAIN},
+  cleverLower:{label:'ЖК Clever Park · нижний вход',start:[61,303],d:'M61 303 L163 323 '+VIA_FOUNTAIN},
+  shchorsa:{label:'Вход с ул. Щорса',start:[138,576],d:'M138 576 L243 483 L246 465 L360 502 L373 516 L383 527'},
+  bazovyyEast:{label:'Пер. Базовый · восточный вход',start:[1040,978],d:'M1040 978 L1006 892 L984 803 L956 749 L713 620 L416 486 L383 527'},
+  bazovyySouth:{label:'Пер. Базовый · юго-восточный вход',start:[547,1304],d:'M547 1304 L515 1233 L478 1151 L512 1052 '+VIA_PLAZA},
+  bazovyyLower:{label:'Пер. Базовый · юго-западный вход',start:[398,1428],d:'M398 1428 L400 1295 '+VIA_PLAZA},
+  yama:{label:'Вход с ул. Яламова',start:[1019,528],d:'M1019 528 C1011 571 1015 620 1025 665 C1035 709 1017 742 984 756 C972 761 962 758 956 749 L713 620 L416 486 L383 527'}
+ };
+ const PHOTO_ROUTES=['main','cleverUpper','cleverLower','shchorsa'];
+ const rt=document.getElementById('rt'),start=document.getElementById('routeStart'),pin=document.querySelector('#way .pin.p1 span');
+ const motion=document.querySelector('#way animateMotion');
+ const svgNS='http://www.w3.org/2000/svg';
+ function makeRoutes(groupId,startsId,prefix,keys=Object.keys(ROUTES)){
+  const group=document.getElementById(groupId),starts=document.getElementById(startsId);if(!group||!starts)return;
+  keys.forEach(key=>{const r=ROUTES[key];
+   const g=document.createElementNS(svgNS,'g');g.dataset.routeLine=key;
+   if(groupId==='routeLines'){
+    g.style.cursor='pointer';
+    const title=document.createElementNS(svgNS,'title');title.textContent=r.label+' — нажмите, чтобы запустить маршрут';g.appendChild(title);
+    g.addEventListener('click',e=>{e.stopPropagation();select(key)});
+   }
+   for(const cls of [prefix+'-bg',prefix]){
+    const path=document.createElementNS(svgNS,'path');path.setAttribute('d',r.d);path.setAttribute('class',cls);path.setAttribute('fill','none');path.setAttribute('stroke-linecap','round');path.setAttribute('stroke-linejoin','round');g.appendChild(path);
+   }
+   group.appendChild(g);
+   const c=document.createElementNS(svgNS,'circle');c.setAttribute('cx',r.start[0]);c.setAttribute('cy',r.start[1]);c.setAttribute('r','6.5');c.setAttribute('class','map-start');c.dataset.routeStart=key;starts.appendChild(c);
+  });
+ }
+ makeRoutes('routeLines','routeStarts','route',PHOTO_ROUTES);
+ let currentRoute='main',currentPhotoRoute='main';
+ function select(key){const r=ROUTES[key];if(!r)return;
+  const onPhoto=PHOTO_ROUTES.includes(key);currentRoute=key;
+  if(onPhoto){
+   currentPhotoRoute=key;rt.setAttribute('d',r.d);start.setAttribute('cx',r.start[0]);start.setAttribute('cy',r.start[1]);
+   motion.endElement();motion.beginElement();
+   pin.lastChild.textContent=r.label;const pp=pin.parentElement;pp.dataset.pinRoute=key;pp.style.left=(r.start[0]/586*100)+'%';pp.style.top=((r.start[1]-14)/673*100)+'%';
+   pp.style.visibility=r.start[0]>=0&&r.start[0]<=586&&r.start[1]>=14&&r.start[1]<=687?'visible':'hidden';
+  }
+  const mmStart=document.getElementById('mmStart');if(mmStart){mmStart.setAttribute('cx',r.start[0]);mmStart.setAttribute('cy',r.start[1])}
+  document.querySelectorAll('#way [data-route-line],#way [data-route-start]').forEach(el=>{const on=(el.dataset.routeLine||el.dataset.routeStart)===currentPhotoRoute;el.classList.toggle('active',on)});
+  document.querySelectorAll('#mapModal [data-route-line],#mapModal [data-route-start]').forEach(el=>{const on=(el.dataset.routeLine||el.dataset.routeStart)===currentRoute;el.classList.toggle('active',on)});
+  document.querySelectorAll('#routeLines,#mmRouteLines').forEach(group=>{
+   const key=group.id==='routeLines'?currentPhotoRoute:currentRoute;
+   const active=group.querySelector(`[data-route-line="${key}"]`);
+   if(active)group.appendChild(active);
+  });
+  document.querySelectorAll('#way .route-picker button').forEach(b=>{const on=b.dataset.route===currentPhotoRoute;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)});
+  if(!onPhoto)window.openTheatreMap?.();
+ }
+ document.querySelectorAll('.route-picker button').forEach(b=>b.addEventListener('click',()=>select(b.dataset.route)));
+ window.selectTheatreRoute=select;
+ window.initTheatreModalRoutes=async()=>{
+  await inlineMapArtwork();
+  if(!document.querySelector('#mmRouteLines>[data-route-line]'))makeRoutes('mmRouteLines','mmRouteStarts','mm-route');
+  select(currentRoute);
+ };
+ select('main');
+ const sec=document.getElementById('way');const io=new IntersectionObserver(e=>{if(e[0].isIntersecting){sec.classList.add('in');io.disconnect()}},{threshold:.2});io.observe(sec.querySelector('.stage')||sec);
 })();
 </script>
 
 <!-- Блок «Организаторам» перенесён на organizers.html (п.10) -->
 
-<section class="gatewall" aria-label="Вход в Летний театр"><svg class="gw-svg" viewBox="0 0 1600 470" preserveAspectRatio="xMidYMax slice" role="img" aria-label="Вход в Летний театр: кирпичная стена с надписью и ворота"><defs><pattern id="brk" width="64" height="28" patternUnits="userSpaceOnUse"><rect width="64" height="28" fill="#C9563F"/><path d="M0 13.5H64M0 27.5H64M16 0V13.5M48 0V13.5M0 14V28M32 14V28" stroke="#A9452F" stroke-width="2" opacity=".55"/><rect x="2" y="2" width="12" height="9" fill="#D2654C" opacity=".35"/><rect x="34" y="16" width="12" height="9" fill="#D2654C" opacity=".3"/></pattern><filter id="wht"><feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1 0"/></filter><linearGradient id="roofU" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E06A4F"/><stop offset="1" stop-color="#C24E3A"/></linearGradient></defs><g class="gw-fw"><path d="M230 330 L300 150 L370 330" fill="none" stroke="#D9D3C8" stroke-width="9" stroke-linejoin="round"/><g class="gw-wheel" style="transform-origin:300px 150px"><circle cx="300" cy="150" r="112" fill="none" stroke="#FBF8F1" stroke-width="7"/><circle cx="300" cy="150" r="96" fill="none" stroke="#FBF8F1" stroke-width="2.5"/><line x1="300" y1="150" x2="412.0" y2="150.0" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="403.5" y2="192.9" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="379.2" y2="229.2" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="342.9" y2="253.5" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="300.0" y2="262.0" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="257.1" y2="253.5" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="220.8" y2="229.2" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="196.5" y2="192.9" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="188.0" y2="150.0" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="196.5" y2="107.1" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="220.8" y2="70.8" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="257.1" y2="46.5" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="300.0" y2="38.0" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="342.9" y2="46.5" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="379.2" y2="70.8" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="403.5" y2="107.1" stroke="#FBF8F1" stroke-width="2"/><circle cx="412.0" cy="150.0" r="11" fill="#DA6150" stroke="#E4DED3" stroke-width="1.5"/><circle cx="397.0" cy="206.0" r="11" fill="#F2B45A" stroke="#E4DED3" stroke-width="1.5"/><circle cx="356.0" cy="247.0" r="11" fill="#FBF8F1" stroke="#E4DED3" stroke-width="1.5"/><circle cx="300.0" cy="262.0" r="11" fill="#DA6150" stroke="#E4DED3" stroke-width="1.5"/><circle cx="244.0" cy="247.0" r="11" fill="#F2B45A" stroke="#E4DED3" stroke-width="1.5"/><circle cx="203.0" cy="206.0" r="11" fill="#FBF8F1" stroke="#E4DED3" stroke-width="1.5"/><circle cx="188.0" cy="150.0" r="11" fill="#DA6150" stroke="#E4DED3" stroke-width="1.5"/><circle cx="203.0" cy="94.0" r="11" fill="#F2B45A" stroke="#E4DED3" stroke-width="1.5"/><circle cx="244.0" cy="53.0" r="11" fill="#FBF8F1" stroke="#E4DED3" stroke-width="1.5"/><circle cx="300.0" cy="38.0" r="11" fill="#DA6150" stroke="#E4DED3" stroke-width="1.5"/><circle cx="356.0" cy="53.0" r="11" fill="#F2B45A" stroke="#E4DED3" stroke-width="1.5"/><circle cx="397.0" cy="94.0" r="11" fill="#FBF8F1" stroke="#E4DED3" stroke-width="1.5"/><circle cx="300" cy="150" r="12" fill="#DA6150"/></g></g><g class="gw-trees"><path d="M0 230 Q120 200 260 215 Q400 120 560 100 Q720 40 880 95 Q1000 60 1100 120 L1100 330 L0 330Z" fill="#9CC48A"/><ellipse class="lf" cx="496" cy="193" rx="29" ry="24" fill="#9CC48A"/><ellipse class="lf" cx="191" cy="249" rx="24" ry="30" fill="#B6D89C"/><ellipse class="lf" cx="489" cy="101" rx="23" ry="32" fill="#B6D89C"/><ellipse class="lf" cx="659" cy="157" rx="21" ry="29" fill="#9CC48A"/><ellipse class="lf" cx="690" cy="253" rx="15" ry="17" fill="#9CC48A"/><ellipse class="lf" cx="664" cy="241" rx="19" ry="27" fill="#9CC48A"/><ellipse class="lf" cx="572" cy="211" rx="22" ry="28" fill="#A9CF91"/><ellipse class="lf" cx="726" cy="159" rx="23" ry="33" fill="#B6D89C"/><ellipse class="lf" cx="787" cy="139" rx="18" ry="21" fill="#B6D89C"/><ellipse class="lf" cx="622" cy="94" rx="16" ry="21" fill="#B6D89C"/><ellipse class="lf" cx="1072" cy="256" rx="14" ry="20" fill="#B6D89C"/><ellipse class="lf" cx="516" cy="286" rx="20" ry="17" fill="#9CC48A"/><ellipse class="lf" cx="868" cy="129" rx="15" ry="22" fill="#A9CF91"/><ellipse class="lf" cx="844" cy="96" rx="18" ry="18" fill="#B6D89C"/><ellipse class="lf" cx="510" cy="177" rx="25" ry="19" fill="#9CC48A"/><ellipse class="lf" cx="1103" cy="239" rx="21" ry="23" fill="#A9CF91"/><ellipse class="lf" cx="460" cy="223" rx="18" ry="33" fill="#86B776"/><ellipse class="lf" cx="1118" cy="74" rx="17" ry="34" fill="#B6D89C"/><ellipse class="lf" cx="28" cy="217" rx="21" ry="16" fill="#86B776"/><ellipse class="lf" cx="927" cy="155" rx="15" ry="20" fill="#9CC48A"/><ellipse class="lf" cx="-2" cy="236" rx="24" ry="18" fill="#A9CF91"/><ellipse class="lf" cx="929" cy="100" rx="20" ry="27" fill="#86B776"/><ellipse class="lf" cx="1016" cy="250" rx="18" ry="19" fill="#9CC48A"/><ellipse class="lf" cx="763" cy="155" rx="22" ry="17" fill="#B6D89C"/><ellipse class="lf" cx="98" cy="208" rx="29" ry="20" fill="#A9CF91"/><ellipse class="lf" cx="273" cy="275" rx="24" ry="21" fill="#9CC48A"/><ellipse class="lf" cx="1039" cy="285" rx="16" ry="25" fill="#B6D89C"/><ellipse class="lf" cx="299" cy="283" rx="17" ry="16" fill="#86B776"/><ellipse class="lf" cx="449" cy="226" rx="15" ry="21" fill="#9CC48A"/><ellipse class="lf" cx="85" cy="217" rx="21" ry="22" fill="#9CC48A"/><ellipse class="lf" cx="652" cy="273" rx="22" ry="22" fill="#86B776"/><ellipse class="lf" cx="1078" cy="75" rx="24" ry="25" fill="#86B776"/><ellipse class="lf" cx="344" cy="290" rx="15" ry="26" fill="#B6D89C"/><ellipse class="lf" cx="1006" cy="232" rx="25" ry="30" fill="#86B776"/><ellipse class="lf" cx="381" cy="263" rx="28" ry="32" fill="#A9CF91"/><ellipse class="lf" cx="1056" cy="77" rx="22" ry="16" fill="#A9CF91"/><ellipse class="lf" cx="412" cy="206" rx="15" ry="18" fill="#B6D89C"/><ellipse class="lf" cx="1112" cy="264" rx="26" ry="23" fill="#A9CF91"/><ellipse class="lf" cx="482" cy="254" rx="15" ry="30" fill="#B6D89C"/><ellipse class="lf" cx="334" cy="212" rx="14" ry="33" fill="#B6D89C"/><ellipse class="lf" cx="547" cy="205" rx="29" ry="21" fill="#B6D89C"/><ellipse class="lf" cx="399" cy="217" rx="24" ry="25" fill="#86B776"/><ellipse class="lf" cx="732" cy="167" rx="28" ry="22" fill="#86B776"/><ellipse class="lf" cx="206" cy="242" rx="27" ry="32" fill="#9CC48A"/><ellipse class="lf" cx="418" cy="255" rx="19" ry="18" fill="#A9CF91"/><ellipse class="lf" cx="380" cy="281" rx="15" ry="17" fill="#86B776"/><ellipse class="lf" cx="917" cy="95" rx="22" ry="33" fill="#A9CF91"/><ellipse class="lf" cx="416" cy="249" rx="25" ry="29" fill="#A9CF91"/><ellipse class="lf" cx="345" cy="275" rx="18" ry="27" fill="#86B776"/><ellipse class="lf" cx="630" cy="138" rx="27" ry="16" fill="#9CC48A"/><ellipse class="lf" cx="442" cy="221" rx="26" ry="21" fill="#9CC48A"/><ellipse class="lf" cx="888" cy="286" rx="16" ry="18" fill="#86B776"/><ellipse class="lf" cx="1073" cy="221" rx="17" ry="25" fill="#9CC48A"/><ellipse class="lf" cx="794" cy="236" rx="23" ry="17" fill="#9CC48A"/><ellipse class="lf" cx="290" cy="234" rx="25" ry="25" fill="#9CC48A"/><ellipse class="lf" cx="429" cy="272" rx="28" ry="18" fill="#A9CF91"/><ellipse class="lf" cx="128" cy="244" rx="24" ry="32" fill="#A9CF91"/><ellipse class="lf" cx="607" cy="214" rx="22" ry="31" fill="#86B776"/><ellipse class="lf" cx="509" cy="213" rx="17" ry="29" fill="#B6D89C"/><ellipse class="lf" cx="223" cy="281" rx="30" ry="34" fill="#86B776"/><ellipse class="lf" cx="279" cy="266" rx="14" ry="25" fill="#B6D89C"/><ellipse class="lf" cx="483" cy="191" rx="26" ry="25" fill="#B6D89C"/><ellipse class="lf" cx="229" cy="279" rx="21" ry="17" fill="#86B776"/><ellipse class="lf" cx="763" cy="272" rx="22" ry="34" fill="#A9CF91"/><ellipse class="lf" cx="1058" cy="178" rx="29" ry="18" fill="#9CC48A"/><ellipse class="lf" cx="481" cy="193" rx="27" ry="26" fill="#9CC48A"/><ellipse class="lf" cx="576" cy="256" rx="23" ry="22" fill="#A9CF91"/><ellipse class="lf" cx="1068" cy="261" rx="24" ry="21" fill="#9CC48A"/><ellipse class="lf" cx="1084" cy="185" rx="23" ry="20" fill="#B6D89C"/><ellipse class="lf" cx="554" cy="203" rx="14" ry="33" fill="#A9CF91"/><ellipse class="lf" cx="600" cy="288" rx="16" ry="18" fill="#9CC48A"/><ellipse class="lf" cx="55" cy="251" rx="21" ry="33" fill="#A9CF91"/><ellipse class="lf" cx="287" cy="245" rx="16" ry="24" fill="#A9CF91"/><ellipse class="lf" cx="578" cy="94" rx="21" ry="17" fill="#86B776"/><ellipse class="lf" cx="128" cy="271" rx="14" ry="19" fill="#9CC48A"/><ellipse class="lf" cx="-7" cy="229" rx="26" ry="20" fill="#A9CF91"/><ellipse class="lf" cx="100" cy="267" rx="16" ry="25" fill="#86B776"/><ellipse class="lf" cx="798" cy="224" rx="28" ry="16" fill="#A9CF91"/><ellipse class="lf" cx="921" cy="205" rx="23" ry="32" fill="#9CC48A"/><ellipse class="lf" cx="584" cy="257" rx="24" ry="31" fill="#9CC48A"/><ellipse class="lf" cx="1023" cy="208" rx="20" ry="19" fill="#86B776"/><ellipse class="lf" cx="995" cy="113" rx="26" ry="20" fill="#B6D89C"/><ellipse class="lf" cx="133" cy="225" rx="26" ry="21" fill="#B6D89C"/><ellipse class="lf" cx="476" cy="277" rx="23" ry="29" fill="#9CC48A"/><ellipse class="lf" cx="439" cy="263" rx="14" ry="20" fill="#86B776"/><ellipse class="lf" cx="1019" cy="283" rx="16" ry="25" fill="#86B776"/><ellipse class="lf" cx="553" cy="221" rx="17" ry="17" fill="#B6D89C"/><ellipse class="lf" cx="8" cy="270" rx="24" ry="32" fill="#A9CF91"/><ellipse class="lf" cx="147" cy="221" rx="17" ry="31" fill="#86B776"/><ellipse class="lf" cx="1037" cy="91" rx="15" ry="33" fill="#A9CF91"/><ellipse class="lf" cx="68" cy="213" rx="20" ry="24" fill="#86B776"/><ellipse class="lf" cx="470" cy="202" rx="14" ry="29" fill="#9CC48A"/><ellipse class="lf" cx="187" cy="244" rx="26" ry="23" fill="#9CC48A"/><ellipse class="lf" cx="670" cy="91" rx="27" ry="22" fill="#B6D89C"/><ellipse class="lf" cx="894" cy="225" rx="28" ry="27" fill="#A9CF91"/><ellipse class="lf" cx="629" cy="112" rx="23" ry="22" fill="#86B776"/><ellipse class="lf" cx="299" cy="215" rx="26" ry="19" fill="#A9CF91"/><ellipse class="lf" cx="132" cy="233" rx="23" ry="23" fill="#A9CF91"/><ellipse class="lf" cx="852" cy="159" rx="26" ry="17" fill="#86B776"/><ellipse class="lf" cx="324" cy="214" rx="28" ry="34" fill="#B6D89C"/><ellipse class="lf" cx="245" cy="285" rx="25" ry="22" fill="#A9CF91"/><ellipse class="lf" cx="629" cy="187" rx="20" ry="34" fill="#9CC48A"/><ellipse class="lf" cx="779" cy="238" rx="30" ry="16" fill="#B6D89C"/><ellipse class="lf" cx="822" cy="126" rx="20" ry="17" fill="#9CC48A"/><ellipse class="lf" cx="719" cy="72" rx="18" ry="21" fill="#86B776"/><ellipse class="lf" cx="607" cy="182" rx="29" ry="26" fill="#B6D89C"/><ellipse class="lf" cx="707" cy="248" rx="15" ry="27" fill="#B6D89C"/><ellipse class="lf" cx="421" cy="285" rx="20" ry="33" fill="#A9CF91"/><ellipse class="lf" cx="598" cy="201" rx="21" ry="25" fill="#86B776"/><ellipse class="lf" cx="581" cy="202" rx="20" ry="21" fill="#86B776"/><ellipse class="lf" cx="619" cy="132" rx="25" ry="21" fill="#B6D89C"/><ellipse class="lf" cx="861" cy="199" rx="24" ry="23" fill="#A9CF91"/><ellipse class="lf" cx="40" cy="232" rx="20" ry="26" fill="#86B776"/><ellipse class="lf" cx="64" cy="282" rx="21" ry="25" fill="#9CC48A"/><ellipse class="lf" cx="32" cy="213" rx="27" ry="32" fill="#9CC48A"/><ellipse class="lf" cx="1096" cy="250" rx="24" ry="18" fill="#A9CF91"/><ellipse class="lf" cx="499" cy="115" rx="15" ry="26" fill="#B6D89C"/><ellipse class="lf" cx="394" cy="217" rx="21" ry="27" fill="#A9CF91"/><ellipse class="lf" cx="395" cy="268" rx="27" ry="18" fill="#86B776"/><ellipse class="lf" cx="817" cy="122" rx="16" ry="32" fill="#86B776"/><ellipse class="lf" cx="293" cy="257" rx="26" ry="29" fill="#9CC48A"/><ellipse class="lf" cx="702" cy="236" rx="17" ry="20" fill="#9CC48A"/><ellipse class="lf" cx="982" cy="79" rx="15" ry="21" fill="#A9CF91"/><ellipse class="lf" cx="11" cy="208" rx="18" ry="21" fill="#B6D89C"/><ellipse class="lf" cx="1021" cy="105" rx="18" ry="34" fill="#A9CF91"/><ellipse class="lf" cx="526" cy="116" rx="19" ry="29" fill="#B6D89C"/><ellipse class="lf" cx="895" cy="168" rx="27" ry="31" fill="#9CC48A"/><ellipse class="lf" cx="487" cy="234" rx="20" ry="19" fill="#9CC48A"/><ellipse class="lf" cx="725" cy="288" rx="19" ry="26" fill="#9CC48A"/><ellipse class="lf" cx="468" cy="236" rx="16" ry="32" fill="#B6D89C"/><ellipse class="lf" cx="600" cy="165" rx="23" ry="31" fill="#A9CF91"/><ellipse class="lf" cx="321" cy="271" rx="15" ry="20" fill="#B6D89C"/><ellipse class="lf" cx="772" cy="179" rx="26" ry="22" fill="#9CC48A"/><ellipse class="lf" cx="229" cy="261" rx="19" ry="32" fill="#86B776"/><ellipse class="lf" cx="789" cy="195" rx="29" ry="33" fill="#86B776"/><ellipse class="lf" cx="479" cy="247" rx="19" ry="22" fill="#A9CF91"/><ellipse class="lf" cx="1083" cy="231" rx="22" ry="18" fill="#86B776"/><ellipse class="lf" cx="7" cy="263" rx="23" ry="30" fill="#86B776"/><ellipse class="lf" cx="889" cy="189" rx="27" ry="26" fill="#9CC48A"/><ellipse class="lf" cx="82" cy="244" rx="28" ry="31" fill="#9CC48A"/><ellipse class="lf" cx="568" cy="190" rx="23" ry="33" fill="#A9CF91"/><ellipse class="lf" cx="53" cy="251" rx="27" ry="18" fill="#B6D89C"/><ellipse class="lf" cx="292" cy="214" rx="19" ry="16" fill="#9CC48A"/><ellipse class="lf" cx="91" cy="274" rx="21" ry="29" fill="#A9CF91"/><ellipse class="lf" cx="853" cy="185" rx="26" ry="23" fill="#86B776"/><ellipse class="lf" cx="900" cy="143" rx="16" ry="25" fill="#B6D89C"/><ellipse class="lf" cx="787" cy="271" rx="21" ry="31" fill="#86B776"/><ellipse class="lf" cx="953" cy="247" rx="27" ry="32" fill="#B6D89C"/><ellipse class="lf" cx="577" cy="226" rx="27" ry="24" fill="#A9CF91"/><ellipse class="lf" cx="1024" cy="124" rx="17" ry="27" fill="#9CC48A"/><rect x="353" y="231" width="7" height="99" fill="#FBF8F1"/><rect x="353" y="318" width="3" height="3" fill="#4A3F38"/><rect x="353" y="269" width="3" height="3" fill="#4A3F38"/><rect x="353" y="294" width="6" height="3" fill="#4A3F38"/><rect x="353" y="259" width="3" height="3" fill="#4A3F38"/><rect x="501" y="186" width="9" height="144" fill="#FBF8F1"/><rect x="501" y="238" width="4" height="3" fill="#4A3F38"/><rect x="501" y="244" width="6" height="3" fill="#4A3F38"/><rect x="501" y="272" width="5" height="3" fill="#4A3F38"/><rect x="554" y="167" width="9" height="163" fill="#FBF8F1"/><rect x="554" y="206" width="7" height="3" fill="#4A3F38"/><rect x="554" y="225" width="6" height="3" fill="#4A3F38"/><rect x="554" y="295" width="5" height="3" fill="#4A3F38"/><rect x="554" y="218" width="7" height="3" fill="#4A3F38"/><rect x="988" y="154" width="7" height="176" fill="#FBF8F1"/><rect x="988" y="242" width="4" height="3" fill="#4A3F38"/><rect x="988" y="177" width="6" height="3" fill="#4A3F38"/><rect x="988" y="290" width="4" height="3" fill="#4A3F38"/><rect x="575" y="177" width="6" height="153" fill="#FBF8F1"/><rect x="575" y="276" width="3" height="3" fill="#4A3F38"/><rect x="575" y="193" width="4" height="3" fill="#4A3F38"/><rect x="575" y="240" width="5" height="3" fill="#4A3F38"/><rect x="773" y="189" width="6" height="141" fill="#FBF8F1"/><rect x="773" y="293" width="3" height="3" fill="#4A3F38"/><rect x="773" y="309" width="5" height="3" fill="#4A3F38"/><rect x="773" y="219" width="4" height="3" fill="#4A3F38"/><rect x="673" y="177" width="5" height="153" fill="#FBF8F1"/><rect x="673" y="291" width="2" height="3" fill="#4A3F38"/><rect x="673" y="297" width="4" height="3" fill="#4A3F38"/><rect x="673" y="297" width="2" height="3" fill="#4A3F38"/><rect x="673" y="227" width="4" height="3" fill="#4A3F38"/><rect x="673" y="205" width="3" height="3" fill="#4A3F38"/><rect x="511" y="234" width="7" height="96" fill="#FBF8F1"/><rect x="511" y="271" width="6" height="3" fill="#4A3F38"/><rect x="511" y="279" width="6" height="3" fill="#4A3F38"/><rect x="511" y="256" width="6" height="3" fill="#4A3F38"/><rect x="511" y="264" width="5" height="3" fill="#4A3F38"/><rect x="511" y="286" width="4" height="3" fill="#4A3F38"/><rect x="900" y="150" width="6" height="180" fill="#FBF8F1"/><rect x="900" y="251" width="6" height="3" fill="#4A3F38"/><rect x="900" y="269" width="3" height="3" fill="#4A3F38"/><rect x="900" y="177" width="3" height="3" fill="#4A3F38"/><rect x="724" y="198" width="8" height="132" fill="#FBF8F1"/><rect x="724" y="283" width="3" height="3" fill="#4A3F38"/><rect x="724" y="253" width="6" height="3" fill="#4A3F38"/><rect x="724" y="238" width="5" height="3" fill="#4A3F38"/><rect x="500" y="111" width="9" height="219" fill="#FBF8F1"/><rect x="500" y="166" width="6" height="3" fill="#4A3F38"/><rect x="500" y="183" width="5" height="3" fill="#4A3F38"/><rect x="500" y="231" width="5" height="3" fill="#4A3F38"/><rect x="500" y="192" width="5" height="3" fill="#4A3F38"/><rect x="500" y="255" width="5" height="3" fill="#4A3F38"/><rect x="224" y="236" width="6" height="94" fill="#FBF8F1"/><rect x="224" y="290" width="5" height="3" fill="#4A3F38"/><rect x="224" y="274" width="5" height="3" fill="#4A3F38"/><rect x="224" y="257" width="3" height="3" fill="#4A3F38"/><rect x="224" y="257" width="5" height="3" fill="#4A3F38"/><rect x="768" y="133" width="7" height="197" fill="#FBF8F1"/><rect x="768" y="250" width="3" height="3" fill="#4A3F38"/><rect x="768" y="187" width="3" height="3" fill="#4A3F38"/><rect x="768" y="170" width="4" height="3" fill="#4A3F38"/><rect x="768" y="161" width="6" height="3" fill="#4A3F38"/><rect x="467" y="233" width="8" height="97" fill="#FBF8F1"/><rect x="467" y="307" width="5" height="3" fill="#4A3F38"/><rect x="467" y="272" width="5" height="3" fill="#4A3F38"/><rect x="467" y="249" width="5" height="3" fill="#4A3F38"/><rect x="759" y="238" width="8" height="92" fill="#FBF8F1"/><rect x="759" y="319" width="5" height="3" fill="#4A3F38"/><rect x="759" y="270" width="4" height="3" fill="#4A3F38"/><rect x="759" y="273" width="5" height="3" fill="#4A3F38"/><rect x="759" y="290" width="4" height="3" fill="#4A3F38"/><rect x="759" y="275" width="4" height="3" fill="#4A3F38"/><rect x="120" y="236" width="6" height="94" fill="#FBF8F1"/><rect x="120" y="313" width="4" height="3" fill="#4A3F38"/><rect x="120" y="275" width="4" height="3" fill="#4A3F38"/><rect x="120" y="261" width="5" height="3" fill="#4A3F38"/><rect x="120" y="319" width="4" height="3" fill="#4A3F38"/><rect x="120" y="300" width="5" height="3" fill="#4A3F38"/><rect x="221" y="239" width="8" height="91" fill="#FBF8F1"/><rect x="221" y="305" width="4" height="3" fill="#4A3F38"/><rect x="221" y="286" width="5" height="3" fill="#4A3F38"/><rect x="221" y="276" width="3" height="3" fill="#4A3F38"/><rect x="944" y="145" width="9" height="185" fill="#FBF8F1"/><rect x="944" y="316" width="4" height="3" fill="#4A3F38"/><rect x="944" y="305" width="6" height="3" fill="#4A3F38"/><rect x="944" y="250" width="6" height="3" fill="#4A3F38"/><rect x="944" y="202" width="7" height="3" fill="#4A3F38"/><rect x="1072" y="216" width="7" height="114" fill="#FBF8F1"/><rect x="1072" y="314" width="3" height="3" fill="#4A3F38"/><rect x="1072" y="292" width="4" height="3" fill="#4A3F38"/><rect x="1072" y="299" width="4" height="3" fill="#4A3F38"/><rect x="187" y="234" width="8" height="96" fill="#FBF8F1"/><rect x="187" y="251" width="4" height="3" fill="#4A3F38"/><rect x="187" y="319" width="7" height="3" fill="#4A3F38"/><rect x="187" y="296" width="5" height="3" fill="#4A3F38"/><rect x="187" y="297" width="6" height="3" fill="#4A3F38"/><rect x="418" y="234" width="8" height="96" fill="#FBF8F1"/><rect x="418" y="260" width="5" height="3" fill="#4A3F38"/><rect x="418" y="251" width="5" height="3" fill="#4A3F38"/><rect x="418" y="257" width="5" height="3" fill="#4A3F38"/><rect x="370" y="227" width="6" height="103" fill="#FBF8F1"/><rect x="370" y="246" width="5" height="3" fill="#4A3F38"/><rect x="370" y="298" width="5" height="3" fill="#4A3F38"/><rect x="370" y="273" width="4" height="3" fill="#4A3F38"/><rect x="370" y="250" width="3" height="3" fill="#4A3F38"/><rect x="969" y="229" width="7" height="101" fill="#FBF8F1"/><rect x="969" y="301" width="5" height="3" fill="#4A3F38"/><rect x="969" y="320" width="6" height="3" fill="#4A3F38"/><rect x="969" y="309" width="4" height="3" fill="#4A3F38"/><rect x="969" y="277" width="5" height="3" fill="#4A3F38"/><rect x="979" y="178" width="7" height="152" fill="#FBF8F1"/><rect x="979" y="247" width="3" height="3" fill="#4A3F38"/><rect x="979" y="308" width="4" height="3" fill="#4A3F38"/><rect x="979" y="271" width="4" height="3" fill="#4A3F38"/><rect x="979" y="241" width="4" height="3" fill="#4A3F38"/><rect x="855" y="225" width="9" height="105" fill="#FBF8F1"/><rect x="855" y="250" width="5" height="3" fill="#4A3F38"/><rect x="855" y="280" width="5" height="3" fill="#4A3F38"/><rect x="855" y="244" width="6" height="3" fill="#4A3F38"/><rect x="573" y="141" width="6" height="189" fill="#FBF8F1"/><rect x="573" y="310" width="5" height="3" fill="#4A3F38"/><rect x="573" y="320" width="5" height="3" fill="#4A3F38"/><rect x="573" y="299" width="4" height="3" fill="#4A3F38"/><rect x="573" y="246" width="4" height="3" fill="#4A3F38"/><rect x="186" y="235" width="7" height="95" fill="#FBF8F1"/><rect x="186" y="313" width="3" height="3" fill="#4A3F38"/><rect x="186" y="305" width="3" height="3" fill="#4A3F38"/><rect x="186" y="288" width="6" height="3" fill="#4A3F38"/><rect x="11" y="229" width="6" height="101" fill="#FBF8F1"/><rect x="11" y="257" width="4" height="3" fill="#4A3F38"/><rect x="11" y="278" width="4" height="3" fill="#4A3F38"/><rect x="11" y="254" width="5" height="3" fill="#4A3F38"/><rect x="11" y="261" width="3" height="3" fill="#4A3F38"/><rect x="497" y="151" width="6" height="179" fill="#FBF8F1"/><rect x="497" y="310" width="6" height="3" fill="#4A3F38"/><rect x="497" y="239" width="3" height="3" fill="#4A3F38"/><rect x="497" y="211" width="5" height="3" fill="#4A3F38"/><rect x="970" y="135" width="8" height="195" fill="#FBF8F1"/><rect x="970" y="303" width="3" height="3" fill="#4A3F38"/><rect x="970" y="258" width="6" height="3" fill="#4A3F38"/><rect x="970" y="245" width="6" height="3" fill="#4A3F38"/><rect x="970" y="190" width="7" height="3" fill="#4A3F38"/><ellipse class="lf" cx="1074" cy="177" rx="16" ry="24" fill="#B6D89C"/><ellipse class="lf" cx="955" cy="188" rx="14" ry="22" fill="#B6D89C"/><ellipse class="lf" cx="451" cy="219" rx="22" ry="15" fill="#C3E0A8"/><ellipse class="lf" cx="289" cy="233" rx="18" ry="18" fill="#B6D89C"/><ellipse class="lf" cx="403" cy="232" rx="23" ry="21" fill="#C3E0A8"/><ellipse class="lf" cx="1075" cy="221" rx="14" ry="17" fill="#C3E0A8"/><ellipse class="lf" cx="700" cy="76" rx="24" ry="19" fill="#C3E0A8"/><ellipse class="lf" cx="579" cy="68" rx="19" ry="17" fill="#B6D89C"/><ellipse class="lf" cx="460" cy="229" rx="14" ry="26" fill="#C3E0A8"/><ellipse class="lf" cx="263" cy="222" rx="19" ry="16" fill="#C3E0A8"/><ellipse class="lf" cx="1086" cy="66" rx="18" ry="23" fill="#B6D89C"/><ellipse class="lf" cx="-7" cy="237" rx="13" ry="15" fill="#B6D89C"/><ellipse class="lf" cx="346" cy="227" rx="12" ry="17" fill="#C3E0A8"/><ellipse class="lf" cx="649" cy="199" rx="13" ry="19" fill="#B6D89C"/><ellipse class="lf" cx="598" cy="106" rx="21" ry="23" fill="#B6D89C"/><ellipse class="lf" cx="533" cy="100" rx="19" ry="20" fill="#C3E0A8"/><ellipse class="lf" cx="215" cy="239" rx="13" ry="19" fill="#C3E0A8"/><ellipse class="lf" cx="351" cy="230" rx="19" ry="24" fill="#B6D89C"/><ellipse class="lf" cx="793" cy="214" rx="12" ry="15" fill="#C3E0A8"/><ellipse class="lf" cx="621" cy="158" rx="21" ry="17" fill="#C3E0A8"/><ellipse class="lf" cx="50" cy="226" rx="20" ry="24" fill="#B6D89C"/><ellipse class="lf" cx="839" cy="150" rx="20" ry="20" fill="#B6D89C"/><ellipse class="lf" cx="273" cy="219" rx="20" ry="24" fill="#B6D89C"/><ellipse class="lf" cx="58" cy="225" rx="16" ry="17" fill="#C3E0A8"/><ellipse class="lf" cx="133" cy="234" rx="19" ry="16" fill="#B6D89C"/><ellipse class="lf" cx="569" cy="237" rx="12" ry="19" fill="#C3E0A8"/><ellipse class="lf" cx="91" cy="229" rx="18" ry="25" fill="#C3E0A8"/><ellipse class="lf" cx="745" cy="189" rx="24" ry="21" fill="#B6D89C"/><ellipse class="lf" cx="271" cy="229" rx="15" ry="20" fill="#C3E0A8"/><ellipse class="lf" cx="394" cy="223" rx="24" ry="21" fill="#C3E0A8"/><ellipse class="lf" cx="168" cy="230" rx="24" ry="23" fill="#C3E0A8"/><ellipse class="lf" cx="503" cy="131" rx="22" ry="19" fill="#C3E0A8"/><ellipse class="lf" cx="229" cy="224" rx="14" ry="21" fill="#C3E0A8"/><ellipse class="lf" cx="523" cy="132" rx="19" ry="23" fill="#B6D89C"/><ellipse class="lf" cx="486" cy="239" rx="20" ry="24" fill="#C3E0A8"/><ellipse class="lf" cx="590" cy="135" rx="13" ry="17" fill="#B6D89C"/><ellipse class="lf" cx="679" cy="153" rx="21" ry="20" fill="#C3E0A8"/><ellipse class="lf" cx="288" cy="224" rx="14" ry="25" fill="#B6D89C"/><ellipse class="lf" cx="142" cy="221" rx="22" ry="15" fill="#B6D89C"/><ellipse class="lf" cx="921" cy="141" rx="22" ry="19" fill="#B6D89C"/><ellipse class="lf" cx="845" cy="153" rx="13" ry="19" fill="#C3E0A8"/><ellipse class="lf" cx="532" cy="94" rx="18" ry="16" fill="#C3E0A8"/><ellipse class="lf" cx="337" cy="226" rx="19" ry="16" fill="#B6D89C"/><ellipse class="lf" cx="338" cy="226" rx="17" ry="25" fill="#B6D89C"/><ellipse class="lf" cx="584" cy="141" rx="14" ry="20" fill="#B6D89C"/><ellipse class="lf" cx="241" cy="222" rx="16" ry="17" fill="#C3E0A8"/><ellipse class="lf" cx="932" cy="194" rx="18" ry="14" fill="#B6D89C"/><ellipse class="lf" cx="723" cy="72" rx="22" ry="21" fill="#B6D89C"/><ellipse class="lf" cx="730" cy="232" rx="22" ry="17" fill="#B6D89C"/><ellipse class="lf" cx="90" cy="226" rx="17" ry="15" fill="#B6D89C"/><ellipse class="lf" cx="1023" cy="111" rx="20" ry="17" fill="#B6D89C"/><ellipse class="lf" cx="214" cy="234" rx="16" ry="23" fill="#C3E0A8"/><ellipse class="lf" cx="814" cy="223" rx="22" ry="20" fill="#B6D89C"/><ellipse class="lf" cx="769" cy="160" rx="20" ry="14" fill="#B6D89C"/><ellipse class="lf" cx="124" cy="238" rx="23" ry="17" fill="#B6D89C"/><ellipse class="lf" cx="540" cy="165" rx="18" ry="18" fill="#B6D89C"/><ellipse class="lf" cx="70" cy="216" rx="16" ry="18" fill="#B6D89C"/><ellipse class="lf" cx="281" cy="232" rx="14" ry="20" fill="#B6D89C"/><ellipse class="lf" cx="1050" cy="125" rx="19" ry="25" fill="#C3E0A8"/><ellipse class="lf" cx="686" cy="172" rx="17" ry="19" fill="#B6D89C"/></g><path d="M1130 150 L1600 150 L1600 330 L1110 330 Z" fill="#F4F2EC"/><path d="M1130 150 L1110 330 L1150 330 L1168 160Z" fill="#E4E1DA"/><line x1="1150" x2="1600" y1="165" y2="165" stroke="#E2DED6" stroke-width="1.5"/><line x1="1150" x2="1600" y1="179" y2="179" stroke="#E2DED6" stroke-width="1.5"/><line x1="1150" x2="1600" y1="193" y2="193" stroke="#E2DED6" stroke-width="1.5"/><line x1="1150" x2="1600" y1="207" y2="207" stroke="#E2DED6" stroke-width="1.5"/><line x1="1150" x2="1600" y1="221" y2="221" stroke="#E2DED6" stroke-width="1.5"/><line x1="1150" x2="1600" y1="235" y2="235" stroke="#E2DED6" stroke-width="1.5"/><line x1="1150" x2="1600" y1="249" y2="249" stroke="#E2DED6" stroke-width="1.5"/><line x1="1150" x2="1600" y1="263" y2="263" stroke="#E2DED6" stroke-width="1.5"/><line x1="1150" x2="1600" y1="277" y2="277" stroke="#E2DED6" stroke-width="1.5"/><line x1="1150" x2="1600" y1="291" y2="291" stroke="#E2DED6" stroke-width="1.5"/><line x1="1150" x2="1600" y1="305" y2="305" stroke="#E2DED6" stroke-width="1.5"/><line x1="1150" x2="1600" y1="319" y2="319" stroke="#E2DED6" stroke-width="1.5"/><path d="M1060 30 Q1080 120 1150 200 L1175 210 Q1150 150 1160 110 L1600 110 L1600 45 Q1300 10 1060 30Z" fill="url(#roofU)"/><path d="M1060 30 Q1300 10 1600 45 L1600 58 Q1300 26 1068 44Z" fill="#E98A79"/><rect x="1158" y="150" width="9" height="40" fill="#2B2A33"/><rect x="0" y="318" width="1600" height="106" fill="url(#brk)"/><rect x="0" y="305" width="1600" height="14" fill="#F6F3ED"/><rect x="0" y="318" width="1600" height="3" fill="#D9D2C6"/><rect x="0" y="422" width="1600" height="8" fill="#EEE9E1"/><rect x="0" y="430" width="1600" height="40" fill="#E6DED0"/><image class="gw-logo" href="img/Group%201143.png" x="1010" y="340" width="440" height="50" preserveAspectRatio="xMidYMid meet" filter="url(#wht)"/><clipPath id="gclip"><rect x="560" y="300" width="300" height="124"/></clipPath><linearGradient id="gpark" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A9CF91"/><stop offset=".62" stop-color="#C9DFB5"/><stop offset=".63" stop-color="#E6DED0"/></linearGradient><a class="gw-gate" href="#full" aria-label="Купить билет"><rect x="560" y="300" width="300" height="124" fill="url(#gpark)"/><rect x="578" y="300" width="5" height="77" fill="#FBF8F1" opacity=".8" clip-path="url(#gclip)"/><rect x="628" y="300" width="5" height="77" fill="#FBF8F1" opacity=".8" clip-path="url(#gclip)"/><rect x="678" y="300" width="5" height="77" fill="#FBF8F1" opacity=".8" clip-path="url(#gclip)"/><rect x="728" y="300" width="5" height="77" fill="#FBF8F1" opacity=".8" clip-path="url(#gclip)"/><rect x="778" y="300" width="5" height="77" fill="#FBF8F1" opacity=".8" clip-path="url(#gclip)"/><rect x="828" y="300" width="5" height="77" fill="#FBF8F1" opacity=".8" clip-path="url(#gclip)"/><circle class="gc" cx="597.5" cy="340.9" r="33.8" style="--d:0.00s"/><circle class="gc b" cx="597.5" cy="421.5" r="33.8" clip-path="url(#gclip)" style="--d:0.32s"/><circle class="gc" cx="672.5" cy="340.9" r="33.8" style="--d:0.08s"/><circle class="gc b" cx="672.5" cy="421.5" r="33.8" clip-path="url(#gclip)" style="--d:0.40s"/><circle class="gc" cx="747.5" cy="340.9" r="33.8" style="--d:0.16s"/><circle class="gc b" cx="747.5" cy="421.5" r="33.8" clip-path="url(#gclip)" style="--d:0.48s"/><circle class="gc" cx="822.5" cy="340.9" r="33.8" style="--d:0.24s"/><circle class="gc b" cx="822.5" cy="421.5" r="33.8" clip-path="url(#gclip)" style="--d:0.56s"/><g stroke="#FFFFFF" fill="none"><line x1="585.0" x2="585.0" y1="300" y2="424" stroke-width="2"/><line x1="610.0" x2="610.0" y1="300" y2="424" stroke-width="2"/><line x1="635.0" x2="635.0" y1="300" y2="424" stroke-width="2"/><line x1="660.0" x2="660.0" y1="300" y2="424" stroke-width="2"/><line x1="685.0" x2="685.0" y1="300" y2="424" stroke-width="2"/><line x1="710.0" x2="710.0" y1="300" y2="424" stroke-width="2"/><line x1="735.0" x2="735.0" y1="300" y2="424" stroke-width="2"/><line x1="760.0" x2="760.0" y1="300" y2="424" stroke-width="2"/><line x1="785.0" x2="785.0" y1="300" y2="424" stroke-width="2"/><line x1="810.0" x2="810.0" y1="300" y2="424" stroke-width="2"/><line x1="835.0" x2="835.0" y1="300" y2="424" stroke-width="2"/><line x1="560" x2="860" y1="302" y2="302" stroke-width="4"/><line x1="560" x2="860" y1="381.8" y2="381.8" stroke-width="3"/><line x1="560" x2="860" y1="422" y2="422" stroke-width="4"/><line x1="710.0" x2="710.0" y1="300" y2="424" stroke-width="6"/></g><rect x="551" y="296" width="12" height="130" fill="#F6F3ED"/><rect x="857" y="296" width="12" height="130" fill="#F6F3ED"/><g class="gw-sign"><rect x="618.0" y="234" width="184" height="44" rx="22" fill="#DA6150"/><path d="M702.0 277 L710.0 287 L718.0 277Z" fill="#DA6150"/><text x="710.0" y="263" text-anchor="middle" fill="#fff" font-family="Mayak,Oswald,Arial Narrow,sans-serif" font-weight="600" font-size="19" letter-spacing="1">КУПИТЬ БИЛЕТ →</text></g></a></svg></section>
+<section class="gatewall" aria-label="Вход в Летний театр"><svg class="gw-svg" viewBox="0 0 1600 470" preserveAspectRatio="xMidYMax slice" role="img" aria-label="Вход в Летний театр: кирпичная стена с надписью и ворота"><defs><pattern id="brk" width="64" height="28" patternUnits="userSpaceOnUse"><rect width="64" height="28" fill="#C9563F"/><path d="M0 13.5H64M0 27.5H64M16 0V13.5M48 0V13.5M0 14V28M32 14V28" stroke="#A9452F" stroke-width="2" opacity=".55"/><rect x="2" y="2" width="12" height="9" fill="#D2654C" opacity=".35"/><rect x="34" y="16" width="12" height="9" fill="#D2654C" opacity=".3"/></pattern><filter id="wht"><feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1 0"/></filter><linearGradient id="roofU" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E06A4F"/><stop offset="1" stop-color="#C24E3A"/></linearGradient></defs><g class="gw-fw"><path d="M230 330 L300 150 L370 330" fill="none" stroke="#D9D3C8" stroke-width="9" stroke-linejoin="round"/><g class="gw-wheel" style="transform-origin:300px 150px"><circle cx="300" cy="150" r="112" fill="none" stroke="#FBF8F1" stroke-width="7"/><circle cx="300" cy="150" r="96" fill="none" stroke="#FBF8F1" stroke-width="2.5"/><line x1="300" y1="150" x2="412.0" y2="150.0" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="403.5" y2="192.9" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="379.2" y2="229.2" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="342.9" y2="253.5" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="300.0" y2="262.0" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="257.1" y2="253.5" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="220.8" y2="229.2" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="196.5" y2="192.9" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="188.0" y2="150.0" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="196.5" y2="107.1" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="220.8" y2="70.8" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="257.1" y2="46.5" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="300.0" y2="38.0" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="342.9" y2="46.5" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="379.2" y2="70.8" stroke="#FBF8F1" stroke-width="2"/><line x1="300" y1="150" x2="403.5" y2="107.1" stroke="#FBF8F1" stroke-width="2"/><circle cx="412.0" cy="150.0" r="11" fill="#DA6150" stroke="#E4DED3" stroke-width="1.5"/><circle cx="397.0" cy="206.0" r="11" fill="#F2B45A" stroke="#E4DED3" stroke-width="1.5"/><circle cx="356.0" cy="247.0" r="11" fill="#FBF8F1" stroke="#E4DED3" stroke-width="1.5"/><circle cx="300.0" cy="262.0" r="11" fill="#DA6150" stroke="#E4DED3" stroke-width="1.5"/><circle cx="244.0" cy="247.0" r="11" fill="#F2B45A" stroke="#E4DED3" stroke-width="1.5"/><circle cx="203.0" cy="206.0" r="11" fill="#FBF8F1" stroke="#E4DED3" stroke-width="1.5"/><circle cx="188.0" cy="150.0" r="11" fill="#DA6150" stroke="#E4DED3" stroke-width="1.5"/><circle cx="203.0" cy="94.0" r="11" fill="#F2B45A" stroke="#E4DED3" stroke-width="1.5"/><circle cx="244.0" cy="53.0" r="11" fill="#FBF8F1" stroke="#E4DED3" stroke-width="1.5"/><circle cx="300.0" cy="38.0" r="11" fill="#DA6150" stroke="#E4DED3" stroke-width="1.5"/><circle cx="356.0" cy="53.0" r="11" fill="#F2B45A" stroke="#E4DED3" stroke-width="1.5"/><circle cx="397.0" cy="94.0" r="11" fill="#FBF8F1" stroke="#E4DED3" stroke-width="1.5"/><circle cx="300" cy="150" r="12" fill="#DA6150"/></g></g><g class="gw-trees"><path d="M0 230 Q120 200 260 215 Q400 120 560 100 Q720 40 880 95 Q1000 60 1100 120 L1100 330 L0 330Z" fill="#9CC48A"/><ellipse class="lf" cx="496" cy="193" rx="29" ry="24" fill="#9CC48A"/><ellipse class="lf" cx="191" cy="249" rx="24" ry="30" fill="#B6D89C"/><ellipse class="lf" cx="489" cy="101" rx="23" ry="32" fill="#B6D89C"/><ellipse class="lf" cx="659" cy="157" rx="21" ry="29" fill="#9CC48A"/><ellipse class="lf" cx="690" cy="253" rx="15" ry="17" fill="#9CC48A"/><ellipse class="lf" cx="664" cy="241" rx="19" ry="27" fill="#9CC48A"/><ellipse class="lf" cx="572" cy="211" rx="22" ry="28" fill="#A9CF91"/><ellipse class="lf" cx="726" cy="159" rx="23" ry="33" fill="#B6D89C"/><ellipse class="lf" cx="787" cy="139" rx="18" ry="21" fill="#B6D89C"/><ellipse class="lf" cx="622" cy="94" rx="16" ry="21" fill="#B6D89C"/><ellipse class="lf" cx="1072" cy="256" rx="14" ry="20" fill="#B6D89C"/><ellipse class="lf" cx="516" cy="286" rx="20" ry="17" fill="#9CC48A"/><ellipse class="lf" cx="868" cy="129" rx="15" ry="22" fill="#A9CF91"/><ellipse class="lf" cx="844" cy="96" rx="18" ry="18" fill="#B6D89C"/><ellipse class="lf" cx="510" cy="177" rx="25" ry="19" fill="#9CC48A"/><ellipse class="lf" cx="1103" cy="239" rx="21" ry="23" fill="#A9CF91"/><ellipse class="lf" cx="460" cy="223" rx="18" ry="33" fill="#86B776"/><ellipse class="lf" cx="1118" cy="74" rx="17" ry="34" fill="#B6D89C"/><ellipse class="lf" cx="28" cy="217" rx="21" ry="16" fill="#86B776"/><ellipse class="lf" cx="927" cy="155" rx="15" ry="20" fill="#9CC48A"/><ellipse class="lf" cx="-2" cy="236" rx="24" ry="18" fill="#A9CF91"/><ellipse class="lf" cx="929" cy="100" rx="20" ry="27" fill="#86B776"/><ellipse class="lf" cx="1016" cy="250" rx="18" ry="19" fill="#9CC48A"/><ellipse class="lf" cx="763" cy="155" rx="22" ry="17" fill="#B6D89C"/><ellipse class="lf" cx="98" cy="208" rx="29" ry="20" fill="#A9CF91"/><ellipse class="lf" cx="273" cy="275" rx="24" ry="21" fill="#9CC48A"/><ellipse class="lf" cx="1039" cy="285" rx="16" ry="25" fill="#B6D89C"/><ellipse class="lf" cx="299" cy="283" rx="17" ry="16" fill="#86B776"/><ellipse class="lf" cx="449" cy="226" rx="15" ry="21" fill="#9CC48A"/><ellipse class="lf" cx="85" cy="217" rx="21" ry="22" fill="#9CC48A"/><ellipse class="lf" cx="652" cy="273" rx="22" ry="22" fill="#86B776"/><ellipse class="lf" cx="1078" cy="75" rx="24" ry="25" fill="#86B776"/><ellipse class="lf" cx="344" cy="290" rx="15" ry="26" fill="#B6D89C"/><ellipse class="lf" cx="1006" cy="232" rx="25" ry="30" fill="#86B776"/><ellipse class="lf" cx="381" cy="263" rx="28" ry="32" fill="#A9CF91"/><ellipse class="lf" cx="1056" cy="77" rx="22" ry="16" fill="#A9CF91"/><ellipse class="lf" cx="412" cy="206" rx="15" ry="18" fill="#B6D89C"/><ellipse class="lf" cx="1112" cy="264" rx="26" ry="23" fill="#A9CF91"/><ellipse class="lf" cx="482" cy="254" rx="15" ry="30" fill="#B6D89C"/><ellipse class="lf" cx="334" cy="212" rx="14" ry="33" fill="#B6D89C"/><ellipse class="lf" cx="547" cy="205" rx="29" ry="21" fill="#B6D89C"/><ellipse class="lf" cx="399" cy="217" rx="24" ry="25" fill="#86B776"/><ellipse class="lf" cx="732" cy="167" rx="28" ry="22" fill="#86B776"/><ellipse class="lf" cx="206" cy="242" rx="27" ry="32" fill="#9CC48A"/><ellipse class="lf" cx="418" cy="255" rx="19" ry="18" fill="#A9CF91"/><ellipse class="lf" cx="380" cy="281" rx="15" ry="17" fill="#86B776"/><ellipse class="lf" cx="917" cy="95" rx="22" ry="33" fill="#A9CF91"/><ellipse class="lf" cx="416" cy="249" rx="25" ry="29" fill="#A9CF91"/><ellipse class="lf" cx="345" cy="275" rx="18" ry="27" fill="#86B776"/><ellipse class="lf" cx="630" cy="138" rx="27" ry="16" fill="#9CC48A"/><ellipse class="lf" cx="442" cy="221" rx="26" ry="21" fill="#9CC48A"/><ellipse class="lf" cx="888" cy="286" rx="16" ry="18" fill="#86B776"/><ellipse class="lf" cx="1073" cy="221" rx="17" ry="25" fill="#9CC48A"/><ellipse class="lf" cx="794" cy="236" rx="23" ry="17" fill="#9CC48A"/><ellipse class="lf" cx="290" cy="234" rx="25" ry="25" fill="#9CC48A"/><ellipse class="lf" cx="429" cy="272" rx="28" ry="18" fill="#A9CF91"/><ellipse class="lf" cx="128" cy="244" rx="24" ry="32" fill="#A9CF91"/><ellipse class="lf" cx="607" cy="214" rx="22" ry="31" fill="#86B776"/><ellipse class="lf" cx="509" cy="213" rx="17" ry="29" fill="#B6D89C"/><ellipse class="lf" cx="223" cy="281" rx="30" ry="34" fill="#86B776"/><ellipse class="lf" cx="279" cy="266" rx="14" ry="25" fill="#B6D89C"/><ellipse class="lf" cx="483" cy="191" rx="26" ry="25" fill="#B6D89C"/><ellipse class="lf" cx="229" cy="279" rx="21" ry="17" fill="#86B776"/><ellipse class="lf" cx="763" cy="272" rx="22" ry="34" fill="#A9CF91"/><ellipse class="lf" cx="1058" cy="178" rx="29" ry="18" fill="#9CC48A"/><ellipse class="lf" cx="481" cy="193" rx="27" ry="26" fill="#9CC48A"/><ellipse class="lf" cx="576" cy="256" rx="23" ry="22" fill="#A9CF91"/><ellipse class="lf" cx="1068" cy="261" rx="24" ry="21" fill="#9CC48A"/><ellipse class="lf" cx="1084" cy="185" rx="23" ry="20" fill="#B6D89C"/><ellipse class="lf" cx="554" cy="203" rx="14" ry="33" fill="#A9CF91"/><ellipse class="lf" cx="600" cy="288" rx="16" ry="18" fill="#9CC48A"/><ellipse class="lf" cx="55" cy="251" rx="21" ry="33" fill="#A9CF91"/><ellipse class="lf" cx="287" cy="245" rx="16" ry="24" fill="#A9CF91"/><ellipse class="lf" cx="578" cy="94" rx="21" ry="17" fill="#86B776"/><ellipse class="lf" cx="128" cy="271" rx="14" ry="19" fill="#9CC48A"/><ellipse class="lf" cx="-7" cy="229" rx="26" ry="20" fill="#A9CF91"/><ellipse class="lf" cx="100" cy="267" rx="16" ry="25" fill="#86B776"/><ellipse class="lf" cx="798" cy="224" rx="28" ry="16" fill="#A9CF91"/><ellipse class="lf" cx="921" cy="205" rx="23" ry="32" fill="#9CC48A"/><ellipse class="lf" cx="584" cy="257" rx="24" ry="31" fill="#9CC48A"/><ellipse class="lf" cx="1023" cy="208" rx="20" ry="19" fill="#86B776"/><ellipse class="lf" cx="995" cy="113" rx="26" ry="20" fill="#B6D89C"/><ellipse class="lf" cx="133" cy="225" rx="26" ry="21" fill="#B6D89C"/><ellipse class="lf" cx="476" cy="277" rx="23" ry="29" fill="#9CC48A"/><ellipse class="lf" cx="439" cy="263" rx="14" ry="20" fill="#86B776"/><ellipse class="lf" cx="1019" cy="283" rx="16" ry="25" fill="#86B776"/><ellipse class="lf" cx="553" cy="221" rx="17" ry="17" fill="#B6D89C"/><ellipse class="lf" cx="8" cy="270" rx="24" ry="32" fill="#A9CF91"/><ellipse class="lf" cx="147" cy="221" rx="17" ry="31" fill="#86B776"/><ellipse class="lf" cx="1037" cy="91" rx="15" ry="33" fill="#A9CF91"/><ellipse class="lf" cx="68" cy="213" rx="20" ry="24" fill="#86B776"/><ellipse class="lf" cx="470" cy="202" rx="14" ry="29" fill="#9CC48A"/><ellipse class="lf" cx="187" cy="244" rx="26" ry="23" fill="#9CC48A"/><ellipse class="lf" cx="670" cy="91" rx="27" ry="22" fill="#B6D89C"/><ellipse class="lf" cx="894" cy="225" rx="28" ry="27" fill="#A9CF91"/><ellipse class="lf" cx="629" cy="112" rx="23" ry="22" fill="#86B776"/><ellipse class="lf" cx="299" cy="215" rx="26" ry="19" fill="#A9CF91"/><ellipse class="lf" cx="132" cy="233" rx="23" ry="23" fill="#A9CF91"/><ellipse class="lf" cx="852" cy="159" rx="26" ry="17" fill="#86B776"/><ellipse class="lf" cx="324" cy="214" rx="28" ry="34" fill="#B6D89C"/><ellipse class="lf" cx="245" cy="285" rx="25" ry="22" fill="#A9CF91"/><ellipse class="lf" cx="629" cy="187" rx="20" ry="34" fill="#9CC48A"/><ellipse class="lf" cx="779" cy="238" rx="30" ry="16" fill="#B6D89C"/><ellipse class="lf" cx="822" cy="126" rx="20" ry="17" fill="#9CC48A"/><ellipse class="lf" cx="719" cy="72" rx="18" ry="21" fill="#86B776"/><ellipse class="lf" cx="607" cy="182" rx="29" ry="26" fill="#B6D89C"/><ellipse class="lf" cx="707" cy="248" rx="15" ry="27" fill="#B6D89C"/><ellipse class="lf" cx="421" cy="285" rx="20" ry="33" fill="#A9CF91"/><ellipse class="lf" cx="598" cy="201" rx="21" ry="25" fill="#86B776"/><ellipse class="lf" cx="581" cy="202" rx="20" ry="21" fill="#86B776"/><ellipse class="lf" cx="619" cy="132" rx="25" ry="21" fill="#B6D89C"/><ellipse class="lf" cx="861" cy="199" rx="24" ry="23" fill="#A9CF91"/><ellipse class="lf" cx="40" cy="232" rx="20" ry="26" fill="#86B776"/><ellipse class="lf" cx="64" cy="282" rx="21" ry="25" fill="#9CC48A"/><ellipse class="lf" cx="32" cy="213" rx="27" ry="32" fill="#9CC48A"/><ellipse class="lf" cx="1096" cy="250" rx="24" ry="18" fill="#A9CF91"/><ellipse class="lf" cx="499" cy="115" rx="15" ry="26" fill="#B6D89C"/><ellipse class="lf" cx="394" cy="217" rx="21" ry="27" fill="#A9CF91"/><ellipse class="lf" cx="395" cy="268" rx="27" ry="18" fill="#86B776"/><ellipse class="lf" cx="817" cy="122" rx="16" ry="32" fill="#86B776"/><ellipse class="lf" cx="293" cy="257" rx="26" ry="29" fill="#9CC48A"/><ellipse class="lf" cx="702" cy="236" rx="17" ry="20" fill="#9CC48A"/><ellipse class="lf" cx="982" cy="79" rx="15" ry="21" fill="#A9CF91"/><ellipse class="lf" cx="11" cy="208" rx="18" ry="21" fill="#B6D89C"/><ellipse class="lf" cx="1021" cy="105" rx="18" ry="34" fill="#A9CF91"/><ellipse class="lf" cx="526" cy="116" rx="19" ry="29" fill="#B6D89C"/><ellipse class="lf" cx="895" cy="168" rx="27" ry="31" fill="#9CC48A"/><ellipse class="lf" cx="487" cy="234" rx="20" ry="19" fill="#9CC48A"/><ellipse class="lf" cx="725" cy="288" rx="19" ry="26" fill="#9CC48A"/><ellipse class="lf" cx="468" cy="236" rx="16" ry="32" fill="#B6D89C"/><ellipse class="lf" cx="600" cy="165" rx="23" ry="31" fill="#A9CF91"/><ellipse class="lf" cx="321" cy="271" rx="15" ry="20" fill="#B6D89C"/><ellipse class="lf" cx="772" cy="179" rx="26" ry="22" fill="#9CC48A"/><ellipse class="lf" cx="229" cy="261" rx="19" ry="32" fill="#86B776"/><ellipse class="lf" cx="789" cy="195" rx="29" ry="33" fill="#86B776"/><ellipse class="lf" cx="479" cy="247" rx="19" ry="22" fill="#A9CF91"/><ellipse class="lf" cx="1083" cy="231" rx="22" ry="18" fill="#86B776"/><ellipse class="lf" cx="7" cy="263" rx="23" ry="30" fill="#86B776"/><ellipse class="lf" cx="889" cy="189" rx="27" ry="26" fill="#9CC48A"/><ellipse class="lf" cx="82" cy="244" rx="28" ry="31" fill="#9CC48A"/><ellipse class="lf" cx="568" cy="190" rx="23" ry="33" fill="#A9CF91"/><ellipse class="lf" cx="53" cy="251" rx="27" ry="18" fill="#B6D89C"/><ellipse class="lf" cx="292" cy="214" rx="19" ry="16" fill="#9CC48A"/><ellipse class="lf" cx="91" cy="274" rx="21" ry="29" fill="#A9CF91"/><ellipse class="lf" cx="853" cy="185" rx="26" ry="23" fill="#86B776"/><ellipse class="lf" cx="900" cy="143" rx="16" ry="25" fill="#B6D89C"/><ellipse class="lf" cx="787" cy="271" rx="21" ry="31" fill="#86B776"/><ellipse class="lf" cx="953" cy="247" rx="27" ry="32" fill="#B6D89C"/><ellipse class="lf" cx="577" cy="226" rx="27" ry="24" fill="#A9CF91"/><ellipse class="lf" cx="1024" cy="124" rx="17" ry="27" fill="#9CC48A"/><rect x="353" y="231" width="7" height="99" fill="#FBF8F1"/><rect x="353" y="318" width="3" height="3" fill="#4A3F38"/><rect x="353" y="269" width="3" height="3" fill="#4A3F38"/><rect x="353" y="294" width="6" height="3" fill="#4A3F38"/><rect x="353" y="259" width="3" height="3" fill="#4A3F38"/><rect x="501" y="186" width="9" height="144" fill="#FBF8F1"/><rect x="501" y="238" width="4" height="3" fill="#4A3F38"/><rect x="501" y="244" width="6" height="3" fill="#4A3F38"/><rect x="501" y="272" width="5" height="3" fill="#4A3F38"/><rect x="554" y="167" width="9" height="163" fill="#FBF8F1"/><rect x="554" y="206" width="7" height="3" fill="#4A3F38"/><rect x="554" y="225" width="6" height="3" fill="#4A3F38"/><rect x="554" y="295" width="5" height="3" fill="#4A3F38"/><rect x="554" y="218" width="7" height="3" fill="#4A3F38"/><rect x="988" y="154" width="7" height="176" fill="#FBF8F1"/><rect x="988" y="242" width="4" height="3" fill="#4A3F38"/><rect x="988" y="177" width="6" height="3" fill="#4A3F38"/><rect x="988" y="290" width="4" height="3" fill="#4A3F38"/><rect x="575" y="177" width="6" height="153" fill="#FBF8F1"/><rect x="575" y="276" width="3" height="3" fill="#4A3F38"/><rect x="575" y="193" width="4" height="3" fill="#4A3F38"/><rect x="575" y="240" width="5" height="3" fill="#4A3F38"/><rect x="773" y="189" width="6" height="141" fill="#FBF8F1"/><rect x="773" y="293" width="3" height="3" fill="#4A3F38"/><rect x="773" y="309" width="5" height="3" fill="#4A3F38"/><rect x="773" y="219" width="4" height="3" fill="#4A3F38"/><rect x="673" y="177" width="5" height="153" fill="#FBF8F1"/><rect x="673" y="291" width="2" height="3" fill="#4A3F38"/><rect x="673" y="297" width="4" height="3" fill="#4A3F38"/><rect x="673" y="297" width="2" height="3" fill="#4A3F38"/><rect x="673" y="227" width="4" height="3" fill="#4A3F38"/><rect x="673" y="205" width="3" height="3" fill="#4A3F38"/><rect x="511" y="234" width="7" height="96" fill="#FBF8F1"/><rect x="511" y="271" width="6" height="3" fill="#4A3F38"/><rect x="511" y="279" width="6" height="3" fill="#4A3F38"/><rect x="511" y="256" width="6" height="3" fill="#4A3F38"/><rect x="511" y="264" width="5" height="3" fill="#4A3F38"/><rect x="511" y="286" width="4" height="3" fill="#4A3F38"/><rect x="900" y="150" width="6" height="180" fill="#FBF8F1"/><rect x="900" y="251" width="6" height="3" fill="#4A3F38"/><rect x="900" y="269" width="3" height="3" fill="#4A3F38"/><rect x="900" y="177" width="3" height="3" fill="#4A3F38"/><rect x="724" y="198" width="8" height="132" fill="#FBF8F1"/><rect x="724" y="283" width="3" height="3" fill="#4A3F38"/><rect x="724" y="253" width="6" height="3" fill="#4A3F38"/><rect x="724" y="238" width="5" height="3" fill="#4A3F38"/><rect x="500" y="111" width="9" height="219" fill="#FBF8F1"/><rect x="500" y="166" width="6" height="3" fill="#4A3F38"/><rect x="500" y="183" width="5" height="3" fill="#4A3F38"/><rect x="500" y="231" width="5" height="3" fill="#4A3F38"/><rect x="500" y="192" width="5" height="3" fill="#4A3F38"/><rect x="500" y="255" width="5" height="3" fill="#4A3F38"/><rect x="224" y="236" width="6" height="94" fill="#FBF8F1"/><rect x="224" y="290" width="5" height="3" fill="#4A3F38"/><rect x="224" y="274" width="5" height="3" fill="#4A3F38"/><rect x="224" y="257" width="3" height="3" fill="#4A3F38"/><rect x="224" y="257" width="5" height="3" fill="#4A3F38"/><rect x="768" y="133" width="7" height="197" fill="#FBF8F1"/><rect x="768" y="250" width="3" height="3" fill="#4A3F38"/><rect x="768" y="187" width="3" height="3" fill="#4A3F38"/><rect x="768" y="170" width="4" height="3" fill="#4A3F38"/><rect x="768" y="161" width="6" height="3" fill="#4A3F38"/><rect x="467" y="233" width="8" height="97" fill="#FBF8F1"/><rect x="467" y="307" width="5" height="3" fill="#4A3F38"/><rect x="467" y="272" width="5" height="3" fill="#4A3F38"/><rect x="467" y="249" width="5" height="3" fill="#4A3F38"/><rect x="759" y="238" width="8" height="92" fill="#FBF8F1"/><rect x="759" y="319" width="5" height="3" fill="#4A3F38"/><rect x="759" y="270" width="4" height="3" fill="#4A3F38"/><rect x="759" y="273" width="5" height="3" fill="#4A3F38"/><rect x="759" y="290" width="4" height="3" fill="#4A3F38"/><rect x="759" y="275" width="4" height="3" fill="#4A3F38"/><rect x="120" y="236" width="6" height="94" fill="#FBF8F1"/><rect x="120" y="313" width="4" height="3" fill="#4A3F38"/><rect x="120" y="275" width="4" height="3" fill="#4A3F38"/><rect x="120" y="261" width="5" height="3" fill="#4A3F38"/><rect x="120" y="319" width="4" height="3" fill="#4A3F38"/><rect x="120" y="300" width="5" height="3" fill="#4A3F38"/><rect x="221" y="239" width="8" height="91" fill="#FBF8F1"/><rect x="221" y="305" width="4" height="3" fill="#4A3F38"/><rect x="221" y="286" width="5" height="3" fill="#4A3F38"/><rect x="221" y="276" width="3" height="3" fill="#4A3F38"/><rect x="944" y="145" width="9" height="185" fill="#FBF8F1"/><rect x="944" y="316" width="4" height="3" fill="#4A3F38"/><rect x="944" y="305" width="6" height="3" fill="#4A3F38"/><rect x="944" y="250" width="6" height="3" fill="#4A3F38"/><rect x="944" y="202" width="7" height="3" fill="#4A3F38"/><rect x="1072" y="216" width="7" height="114" fill="#FBF8F1"/><rect x="1072" y="314" width="3" height="3" fill="#4A3F38"/><rect x="1072" y="292" width="4" height="3" fill="#4A3F38"/><rect x="1072" y="299" width="4" height="3" fill="#4A3F38"/><rect x="187" y="234" width="8" height="96" fill="#FBF8F1"/><rect x="187" y="251" width="4" height="3" fill="#4A3F38"/><rect x="187" y="319" width="7" height="3" fill="#4A3F38"/><rect x="187" y="296" width="5" height="3" fill="#4A3F38"/><rect x="187" y="297" width="6" height="3" fill="#4A3F38"/><rect x="418" y="234" width="8" height="96" fill="#FBF8F1"/><rect x="418" y="260" width="5" height="3" fill="#4A3F38"/><rect x="418" y="251" width="5" height="3" fill="#4A3F38"/><rect x="418" y="257" width="5" height="3" fill="#4A3F38"/><rect x="370" y="227" width="6" height="103" fill="#FBF8F1"/><rect x="370" y="246" width="5" height="3" fill="#4A3F38"/><rect x="370" y="298" width="5" height="3" fill="#4A3F38"/><rect x="370" y="273" width="4" height="3" fill="#4A3F38"/><rect x="370" y="250" width="3" height="3" fill="#4A3F38"/><rect x="969" y="229" width="7" height="101" fill="#FBF8F1"/><rect x="969" y="301" width="5" height="3" fill="#4A3F38"/><rect x="969" y="320" width="6" height="3" fill="#4A3F38"/><rect x="969" y="309" width="4" height="3" fill="#4A3F38"/><rect x="969" y="277" width="5" height="3" fill="#4A3F38"/><rect x="979" y="178" width="7" height="152" fill="#FBF8F1"/><rect x="979" y="247" width="3" height="3" fill="#4A3F38"/><rect x="979" y="308" width="4" height="3" fill="#4A3F38"/><rect x="979" y="271" width="4" height="3" fill="#4A3F38"/><rect x="979" y="241" width="4" height="3" fill="#4A3F38"/><rect x="855" y="225" width="9" height="105" fill="#FBF8F1"/><rect x="855" y="250" width="5" height="3" fill="#4A3F38"/><rect x="855" y="280" width="5" height="3" fill="#4A3F38"/><rect x="855" y="244" width="6" height="3" fill="#4A3F38"/><rect x="573" y="141" width="6" height="189" fill="#FBF8F1"/><rect x="573" y="310" width="5" height="3" fill="#4A3F38"/><rect x="573" y="320" width="5" height="3" fill="#4A3F38"/><rect x="573" y="299" width="4" height="3" fill="#4A3F38"/><rect x="573" y="246" width="4" height="3" fill="#4A3F38"/><rect x="186" y="235" width="7" height="95" fill="#FBF8F1"/><rect x="186" y="313" width="3" height="3" fill="#4A3F38"/><rect x="186" y="305" width="3" height="3" fill="#4A3F38"/><rect x="186" y="288" width="6" height="3" fill="#4A3F38"/><rect x="11" y="229" width="6" height="101" fill="#FBF8F1"/><rect x="11" y="257" width="4" height="3" fill="#4A3F38"/><rect x="11" y="278" width="4" height="3" fill="#4A3F38"/><rect x="11" y="254" width="5" height="3" fill="#4A3F38"/><rect x="11" y="261" width="3" height="3" fill="#4A3F38"/><rect x="497" y="151" width="6" height="179" fill="#FBF8F1"/><rect x="497" y="310" width="6" height="3" fill="#4A3F38"/><rect x="497" y="239" width="3" height="3" fill="#4A3F38"/><rect x="497" y="211" width="5" height="3" fill="#4A3F38"/><rect x="970" y="135" width="8" height="195" fill="#FBF8F1"/><rect x="970" y="303" width="3" height="3" fill="#4A3F38"/><rect x="970" y="258" width="6" height="3" fill="#4A3F38"/><rect x="970" y="245" width="6" height="3" fill="#4A3F38"/><rect x="970" y="190" width="7" height="3" fill="#4A3F38"/><ellipse class="lf" cx="1074" cy="177" rx="16" ry="24" fill="#B6D89C"/><ellipse class="lf" cx="955" cy="188" rx="14" ry="22" fill="#B6D89C"/><ellipse class="lf" cx="451" cy="219" rx="22" ry="15" fill="#C3E0A8"/><ellipse class="lf" cx="289" cy="233" rx="18" ry="18" fill="#B6D89C"/><ellipse class="lf" cx="403" cy="232" rx="23" ry="21" fill="#C3E0A8"/><ellipse class="lf" cx="1075" cy="221" rx="14" ry="17" fill="#C3E0A8"/><ellipse class="lf" cx="700" cy="76" rx="24" ry="19" fill="#C3E0A8"/><ellipse class="lf" cx="579" cy="68" rx="19" ry="17" fill="#B6D89C"/><ellipse class="lf" cx="460" cy="229" rx="14" ry="26" fill="#C3E0A8"/><ellipse class="lf" cx="263" cy="222" rx="19" ry="16" fill="#C3E0A8"/><ellipse class="lf" cx="1086" cy="66" rx="18" ry="23" fill="#B6D89C"/><ellipse class="lf" cx="-7" cy="237" rx="13" ry="15" fill="#B6D89C"/><ellipse class="lf" cx="346" cy="227" rx="12" ry="17" fill="#C3E0A8"/><ellipse class="lf" cx="649" cy="199" rx="13" ry="19" fill="#B6D89C"/><ellipse class="lf" cx="598" cy="106" rx="21" ry="23" fill="#B6D89C"/><ellipse class="lf" cx="533" cy="100" rx="19" ry="20" fill="#C3E0A8"/><ellipse class="lf" cx="215" cy="239" rx="13" ry="19" fill="#C3E0A8"/><ellipse class="lf" cx="351" cy="230" rx="19" ry="24" fill="#B6D89C"/><ellipse class="lf" cx="793" cy="214" rx="12" ry="15" fill="#C3E0A8"/><ellipse class="lf" cx="621" cy="158" rx="21" ry="17" fill="#C3E0A8"/><ellipse class="lf" cx="50" cy="226" rx="20" ry="24" fill="#B6D89C"/><ellipse class="lf" cx="839" cy="150" rx="20" ry="20" fill="#B6D89C"/><ellipse class="lf" cx="273" cy="219" rx="20" ry="24" fill="#B6D89C"/><ellipse class="lf" cx="58" cy="225" rx="16" ry="17" fill="#C3E0A8"/><ellipse class="lf" cx="133" cy="234" rx="19" ry="16" fill="#B6D89C"/><ellipse class="lf" cx="569" cy="237" rx="12" ry="19" fill="#C3E0A8"/><ellipse class="lf" cx="91" cy="229" rx="18" ry="25" fill="#C3E0A8"/><ellipse class="lf" cx="745" cy="189" rx="24" ry="21" fill="#B6D89C"/><ellipse class="lf" cx="271" cy="229" rx="15" ry="20" fill="#C3E0A8"/><ellipse class="lf" cx="394" cy="223" rx="24" ry="21" fill="#C3E0A8"/><ellipse class="lf" cx="168" cy="230" rx="24" ry="23" fill="#C3E0A8"/><ellipse class="lf" cx="503" cy="131" rx="22" ry="19" fill="#C3E0A8"/><ellipse class="lf" cx="229" cy="224" rx="14" ry="21" fill="#C3E0A8"/><ellipse class="lf" cx="523" cy="132" rx="19" ry="23" fill="#B6D89C"/><ellipse class="lf" cx="486" cy="239" rx="20" ry="24" fill="#C3E0A8"/><ellipse class="lf" cx="590" cy="135" rx="13" ry="17" fill="#B6D89C"/><ellipse class="lf" cx="679" cy="153" rx="21" ry="20" fill="#C3E0A8"/><ellipse class="lf" cx="288" cy="224" rx="14" ry="25" fill="#B6D89C"/><ellipse class="lf" cx="142" cy="221" rx="22" ry="15" fill="#B6D89C"/><ellipse class="lf" cx="921" cy="141" rx="22" ry="19" fill="#B6D89C"/><ellipse class="lf" cx="845" cy="153" rx="13" ry="19" fill="#C3E0A8"/><ellipse class="lf" cx="532" cy="94" rx="18" ry="16" fill="#C3E0A8"/><ellipse class="lf" cx="337" cy="226" rx="19" ry="16" fill="#B6D89C"/><ellipse class="lf" cx="338" cy="226" rx="17" ry="25" fill="#B6D89C"/><ellipse class="lf" cx="584" cy="141" rx="14" ry="20" fill="#B6D89C"/><ellipse class="lf" cx="241" cy="222" rx="16" ry="17" fill="#C3E0A8"/><ellipse class="lf" cx="932" cy="194" rx="18" ry="14" fill="#B6D89C"/><ellipse class="lf" cx="723" cy="72" rx="22" ry="21" fill="#B6D89C"/><ellipse class="lf" cx="730" cy="232" rx="22" ry="17" fill="#B6D89C"/><ellipse class="lf" cx="90" cy="226" rx="17" ry="15" fill="#B6D89C"/><ellipse class="lf" cx="1023" cy="111" rx="20" ry="17" fill="#B6D89C"/><ellipse class="lf" cx="214" cy="234" rx="16" ry="23" fill="#C3E0A8"/><ellipse class="lf" cx="814" cy="223" rx="22" ry="20" fill="#B6D89C"/><ellipse class="lf" cx="769" cy="160" rx="20" ry="14" fill="#B6D89C"/><ellipse class="lf" cx="124" cy="238" rx="23" ry="17" fill="#B6D89C"/><ellipse class="lf" cx="540" cy="165" rx="18" ry="18" fill="#B6D89C"/><ellipse class="lf" cx="70" cy="216" rx="16" ry="18" fill="#B6D89C"/><ellipse class="lf" cx="281" cy="232" rx="14" ry="20" fill="#B6D89C"/><ellipse class="lf" cx="1050" cy="125" rx="19" ry="25" fill="#C3E0A8"/><ellipse class="lf" cx="686" cy="172" rx="17" ry="19" fill="#B6D89C"/></g><path d="M1130 150 L1600 150 L1600 330 L1110 330 Z" fill="#F4F2EC"/><path d="M1130 150 L1110 330 L1150 330 L1168 160Z" fill="#E4E1DA"/><line x1="1150" x2="1600" y1="165" y2="165" stroke="#E2DED6" stroke-width="1.5"/><line x1="1150" x2="1600" y1="179" y2="179" stroke="#E2DED6" stroke-width="1.5"/><line x1="1150" x2="1600" y1="193" y2="193" stroke="#E2DED6" stroke-width="1.5"/><line x1="1150" x2="1600" y1="207" y2="207" stroke="#E2DED6" stroke-width="1.5"/><line x1="1150" x2="1600" y1="221" y2="221" stroke="#E2DED6" stroke-width="1.5"/><line x1="1150" x2="1600" y1="235" y2="235" stroke="#E2DED6" stroke-width="1.5"/><line x1="1150" x2="1600" y1="249" y2="249" stroke="#E2DED6" stroke-width="1.5"/><line x1="1150" x2="1600" y1="263" y2="263" stroke="#E2DED6" stroke-width="1.5"/><line x1="1150" x2="1600" y1="277" y2="277" stroke="#E2DED6" stroke-width="1.5"/><line x1="1150" x2="1600" y1="291" y2="291" stroke="#E2DED6" stroke-width="1.5"/><line x1="1150" x2="1600" y1="305" y2="305" stroke="#E2DED6" stroke-width="1.5"/><line x1="1150" x2="1600" y1="319" y2="319" stroke="#E2DED6" stroke-width="1.5"/><path d="M1060 30 Q1080 120 1150 200 L1175 210 Q1150 150 1160 110 L1600 110 L1600 45 Q1300 10 1060 30Z" fill="url(#roofU)"/><path d="M1060 30 Q1300 10 1600 45 L1600 58 Q1300 26 1068 44Z" fill="#E98A79"/><rect x="1158" y="150" width="9" height="40" fill="#2B2A33"/><rect x="0" y="318" width="1600" height="106" fill="url(#brk)"/><rect x="0" y="305" width="1600" height="14" fill="#F6F3ED"/><rect x="0" y="318" width="1600" height="3" fill="#D9D2C6"/><rect x="0" y="422" width="1600" height="8" fill="#EEE9E1"/><rect x="0" y="430" width="1600" height="40" fill="#E6DED0"/><image class="gw-logo" href="img/Group%201143.png" x="1010" y="340" width="440" height="50" preserveAspectRatio="xMidYMid meet" filter="url(#wht)"/><clipPath id="gclip"><rect x="560" y="300" width="300" height="124"/></clipPath><linearGradient id="gpark" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A9CF91"/><stop offset=".62" stop-color="#C9DFB5"/><stop offset=".63" stop-color="#E6DED0"/></linearGradient><a class="gw-gate" href="#full" aria-label="Иду в театр"><rect x="560" y="300" width="300" height="124" fill="url(#gpark)"/><rect x="578" y="300" width="5" height="77" fill="#FBF8F1" opacity=".8" clip-path="url(#gclip)"/><rect x="628" y="300" width="5" height="77" fill="#FBF8F1" opacity=".8" clip-path="url(#gclip)"/><rect x="678" y="300" width="5" height="77" fill="#FBF8F1" opacity=".8" clip-path="url(#gclip)"/><rect x="728" y="300" width="5" height="77" fill="#FBF8F1" opacity=".8" clip-path="url(#gclip)"/><rect x="778" y="300" width="5" height="77" fill="#FBF8F1" opacity=".8" clip-path="url(#gclip)"/><rect x="828" y="300" width="5" height="77" fill="#FBF8F1" opacity=".8" clip-path="url(#gclip)"/><circle class="gc" cx="597.5" cy="340.9" r="33.8" style="--d:0.00s"/><circle class="gc b" cx="597.5" cy="421.5" r="33.8" clip-path="url(#gclip)" style="--d:0.32s"/><circle class="gc" cx="672.5" cy="340.9" r="33.8" style="--d:0.08s"/><circle class="gc b" cx="672.5" cy="421.5" r="33.8" clip-path="url(#gclip)" style="--d:0.40s"/><circle class="gc" cx="747.5" cy="340.9" r="33.8" style="--d:0.16s"/><circle class="gc b" cx="747.5" cy="421.5" r="33.8" clip-path="url(#gclip)" style="--d:0.48s"/><circle class="gc" cx="822.5" cy="340.9" r="33.8" style="--d:0.24s"/><circle class="gc b" cx="822.5" cy="421.5" r="33.8" clip-path="url(#gclip)" style="--d:0.56s"/><g stroke="#FFFFFF" fill="none"><line x1="585.0" x2="585.0" y1="300" y2="424" stroke-width="2"/><line x1="610.0" x2="610.0" y1="300" y2="424" stroke-width="2"/><line x1="635.0" x2="635.0" y1="300" y2="424" stroke-width="2"/><line x1="660.0" x2="660.0" y1="300" y2="424" stroke-width="2"/><line x1="685.0" x2="685.0" y1="300" y2="424" stroke-width="2"/><line x1="710.0" x2="710.0" y1="300" y2="424" stroke-width="2"/><line x1="735.0" x2="735.0" y1="300" y2="424" stroke-width="2"/><line x1="760.0" x2="760.0" y1="300" y2="424" stroke-width="2"/><line x1="785.0" x2="785.0" y1="300" y2="424" stroke-width="2"/><line x1="810.0" x2="810.0" y1="300" y2="424" stroke-width="2"/><line x1="835.0" x2="835.0" y1="300" y2="424" stroke-width="2"/><line x1="560" x2="860" y1="302" y2="302" stroke-width="4"/><line x1="560" x2="860" y1="381.8" y2="381.8" stroke-width="3"/><line x1="560" x2="860" y1="422" y2="422" stroke-width="4"/><line x1="710.0" x2="710.0" y1="300" y2="424" stroke-width="6"/></g><rect x="551" y="296" width="12" height="130" fill="#F6F3ED"/><rect x="857" y="296" width="12" height="130" fill="#F6F3ED"/><g class="gw-sign"><rect x="618.0" y="234" width="184" height="44" rx="22" fill="#DA6150"/><path d="M702.0 277 L710.0 287 L718.0 277Z" fill="#DA6150"/><text x="710.0" y="263" text-anchor="middle" fill="#fff" font-family="Mayak,Oswald,Arial Narrow,sans-serif" font-weight="600" font-size="19" letter-spacing="1">ИДУ В ТЕАТР →</text></g></a></svg></section>
 <footer id="contacts">
-    <div class="ft-top">
+  <div class="ft-top">
     <div class="ft-brand">
       <img src="img/Group 1143.png" alt="Летний театр">
       <p>Летний театр в парке Маяковского — концерты и спектакли под открытым небом, с мая по сентябрь.</p>
-      <div class="soc"><a href="#" aria-label="ВКонтакте">ВК</a><a href="#" aria-label="Телеграм">ТГ</a><a href="#" aria-label="Одноклассники">ОК</a></div>
+      <div class="soc"><a href="https://vk.ru/letnyiteatr" target="_blank" rel="noopener" aria-label="ВКонтакте">ВК</a><a href="https://t.me/letnyiteatr" target="_blank" rel="noopener" aria-label="Телеграм">ТГ</a><a href="https://max.ru/id6662087597_gos" target="_blank" rel="noopener" aria-label="MAX">MAX</a><a href="#sub" aria-label="Подписаться на рассылку"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18v14H3zM3 6l9 7 9-7"/></svg></a></div>
+      <form class="ft-sub" id="sub" onsubmit="event.preventDefault();const i=this.querySelector('input');i.value='';i.placeholder='Спасибо! Ждите анонсов'"><label for="emFooter">Анонсы на почту</label><div><input id="emFooter" type="email" required placeholder="E-mail"><button class="pill btn-red" type="submit">Подписаться</button></div></form>
     </div>
-    <div><h4>Зрителям</h4><a href="#full">Афиша</a><a href="#">Как купить билет</a><a href="#">Возврат билетов</a><a href="#">Сертификаты</a><a href="#">Доступная среда</a><a href="#">Вопросы и ответы</a></div>
-    <div><h4>Театр</h4><a href="#about">О театре</a><a href="#">Архив событий</a><a href="#">Новости</a><a href="organizers.html">Организаторам</a><a href="#">Партнёры</a></div>
-    <div><h4>Контакты</h4><a href="#way">ул. Мичурина, 230</a><a href="tel:+7">+7 (343) ___-__-__</a><a href="#">info@___</a><a href="https://xn--e1agfrc5b.xn--p1ai" target="_blank" rel="noopener">ецпкио.рф</a></div>
+    <div><h4 id="visitors">Зрителям</h4><a href="#full">Афиша</a><a href="#about">О театре</a><a href="tickets.html" rel="noopener">Как купить билет</a><a href="certificates.html" rel="noopener">Сертификаты</a><a href="#fGenre" data-promo-link>Акции</a><a href="faq.html" rel="noopener">Вопросы и ответы</a><a href="rules.html" rel="noopener">Правила посещения</a><a href="accessibility.html">Доступная среда</a><a href="policy.html" rel="noopener">Политика конфиденциальности</a></div>
+    <div><h4>Театр</h4><a href="#about">О театре</a><a href="archive.html">Архив событий</a><a href="news.html" rel="noopener">Новости</a><a href="accreditation.html" rel="noopener">Аккредитация СМИ</a><a href="partners.html" rel="noopener">Партнёры</a></div>
+    <div><h4>Организаторам</h4><a href="organizers.html#org">Заявка на мероприятие</a><a href="organizers.html#org">О площадке</a><a href="equipment.html" rel="noopener">Перечень оборудования</a><a href="index.html#about">Схемы зала</a><a href="brand.html">Гайдбук и лого</a></div>
+    <div><h4>Контакты</h4><a href="#way">ул. Мичурина, 230, корп. 25</a><a href="tel:+79001985066">+7 (900) 198-50-66</a><a href="mailto:theater@park-cpkio.ru">theater@park-cpkio.ru</a></div>
   </div>
   <div class="ft-big">Летний театр</div>
-  <div class="ft-bot"><span>© 2026 МАУК ЕЦПКиО им. Маяковского</span><a href="#">Политика конфиденциальности</a></div>
+  <div class="ft-bot"><a href="https://xn--e1agfrc5b.xn--p1ai/" target="_blank" rel="noopener">© 2026 МАУК ЕЦПКиО им. Маяковского</a><span>Екатеринбург, парк Маяковского</span><span class="ft-inn">ИНН 6662087597</span></div>
 </footer>
 
 <script>
 /* ---- полная афиша с фильтрами ---- */
 (async()=>{
  const all=await (await fetch('events2026.json')).json();
- const G={orch:/оркестр|симфони/i,kids:/Сойер|Мультконцерт|волшебник|Алые паруса|ГИККОН/i,candle:/Lumisfera|свечах/i,red:/RED SUMMER/i,fest:/фестивал/i};
- const tagOf=t=>/Lumisfera|свечах/i.test(t)?'при свечах':/RED SUMMER/i.test(t)?'RED SUMMER':G.kids.test(t)?'6+ детям':G.orch.test(t)?'с оркестром':'';
+ const G={kids:/Сойер|Мультконцерт|волшебник|Алые паруса|ГИККОН/i,fest:/фестивал/i,theatre:/спектакл|мюзикл|театр|Провинциальные танцы|Сойера|Алые паруса/i,promo:/./};
+ const tagOf=t=>/Lumisfera|свечах/i.test(t)?'при свечах':/RED SUMMER/i.test(t)?'RED SUMMER':G.kids.test(t)?'детям':/оркестр|симфони/i.test(t)?'с оркестром':'';
+ const matchGenre=(e,g)=>!g||(g==='promo'?Array.isArray(e.badges)&&e.badges.length>0:g==='concert'?!G.fest.test(e.t)&&!G.theatre.test(e.t)&&!G.kids.test(e.t):G[g].test(e.t));
+ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  let m='',g='',lim=8;const grid=document.getElementById('grid'),more=document.getElementById('moreBtn');
  function render(){
-  const list=all.filter(e=>(!m||e.date.includes(m))&&(!g||G[g].test(e.t)));
-  grid.innerHTML=list.slice(0,lim).map(e=>{const[d,mo]=e.date.split(' ');const tg=tagOf(e.t);
-   return `<a class="tk" href="${e.url||'#'}" target="_blank" rel="noopener"><div class="ph">${e.img?`<img src="${e.img}" alt="" loading="lazy">`:''}<div class="dt"><b>${d}</b><small>${mo.slice(0,3)}</small></div>${tg?`<span class="tag">${tg}</span>`:''}</div>
-   <div class="bd"><b>${e.t}</b><span>${e.wd?e.wd+' · ':''}${e.time||'время уточняется'}</span></div><div class="cut"></div>
-   <div class="ft"><em>Летний театр</em><span class="pill btn-red">Купить</span></div></a>`}).join('')||'<div class="empty">В этом месяце таких событий нет — загляните в другой</div>';
+  const list=all.filter(e=>(!m||e.date.includes(m))&&matchGenre(e,g));
+  grid.innerHTML=list.slice(0,lim).map(e=>{const[d,mo]=e.date.split(' ');const tg=tagOf(e.t),idx=all.indexOf(e);
+   const badges=(e.badges||[]).map(b=>`<span class="badge ${esc(b.type||'fire')}">${b.type==='percent'?`<b>${esc(b.text)}</b>`:`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2c1 5-4 6-4 10 0 2 1 3 3 3 3 0 4-3 3-6 3 2 5 5 5 8a8 8 0 0 1-16 0c0-5 4-8 9-15z"/></svg>${esc(b.text)}`}</span>`).join('');
+   return `<article class="tk"><a class="tk-main" href="#full" data-event-details="${idx}" aria-label="Подробнее: ${esc(e.t)}"><div class="ph">${e.img?`<img src="${esc(e.img)}" alt="" loading="lazy">`:''}<div class="dt"><b>${d}</b><small>${esc(mo==='Августа'?'Авг':mo==='Сентября'?'Сент':mo)}</small></div>${tg?`<span class="tag">${tg}</span>`:''}${badges?`<div class="badges">${badges}</div>`:''}</div>
+   <div class="bd"><b>${esc(e.t)}</b><p class="desc">${esc(e.text)}</p><span class="time">${e.wd?esc(e.wd)+' · ':''}${esc(e.time||'время уточняется')}</span>${e.age?`<div class="age">${esc(e.age)}</div>`:''}</div><div class="cut"></div></a>
+   <div class="ft"><a class="details" href="#full" data-event-details="${idx}">Подробнее</a><button type="button" class="pill btn-red tk-buy" data-event="${idx}">${esc(e.cta||'Купить билет')}</button></div></article>`}).join('')||'<div class="empty">В этом месяце таких событий нет — загляните в другой</div>';
   more.style.display=list.length>lim?'':'none'}
  const bind=(id,set)=>document.getElementById(id).addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;
   b.parentNode.querySelectorAll('.chip').forEach(x=>x.classList.toggle('on',x===b));set(b);lim=8;render()});
@@ -1202,7 +1286,6 @@ const VIDEOS=[
    (function f(t){const k=Math.min((t-t0)/1400,1),v=Math.round(to*(1-Math.pow(1-k,3)));n.textContent=v.toLocaleString('ru-RU')+s;if(k<1)requestAnimationFrame(f)})(t0)})}),{threshold:0,rootMargin:'0px 0px -10% 0px'});
  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
  document.querySelectorAll('a[href="#"]').forEach(a=>{if(/Вся афиша|Смотреть афишу|Афиша/.test(a.textContent))a.href='#full'});
- document.querySelectorAll('nav a').forEach(a=>{const map={'Афиша':'#full','О театре':'#about','Организаторам':'#org','Контакты':'#way','Как купить':'#way'};if(map[a.textContent.trim()])a.href=map[a.textContent.trim()]});
 })();
 </script>
 
@@ -1226,11 +1309,11 @@ const RECS=[['00','Приключения Тома Сойера','7 июня','�
  ['17','Волынка: от этники до рока','28 июля','вт · 20:00'],['27','Фестиваль волшебников','16 августа','вс · 19:30'],
  ['29','Три дивы','21 августа','пт · 20:00'],['31','Мультконцерт с оркестром','23 августа','вс · 16:00']];
 const B=document.getElementById('banner');
-document.getElementById('dusk').insertAdjacentHTML('afterend',SLIDES.map(s=>`<article class="slide ev"><img class="ph" src="${s.img}" alt="" loading="lazy">
+document.getElementById('dusk').insertAdjacentHTML('afterend',SLIDES.map((s,i)=>{const idx=[15,2,4,11,35][i];return `<article class="slide ev"><img class="ph" src="${s.img}" alt="" loading="lazy">
  <div class="body"><div class="date"><b>${s.day}</b><span>${s.mon}<em>${s.wd} · ${s.time}</em></span></div>
  <div><span class="pill tag">${s.tag}</span></div><h2>${s.t}</h2><p>${s.p}</p>
- <div class="row" style="justify-content:flex-start"><a class="pill btn-red" href="#">Купить билет</a><a class="pill btn-glass" href="#">Подробнее</a></div></div></article>`).join(''));
-document.getElementById('recs').innerHTML=RECS.map(r=>`<a class="card" href="#"><div class="ph"><img src="img/ev/${r[0]}.jpg" alt="" loading="lazy"><span class="pill d">${r[2]}</span></div><b>${r[1]}</b><span>${r[3]}</span></a>`).join('');
+ <div class="row" style="justify-content:flex-start"><button type="button" class="pill btn-red tk-buy" data-event="${idx}">Купить билет</button><a class="pill btn-glass" href="#full" data-event-details="${idx}">Подробнее</a></div></div></article>`}).join(''));
+fetch('events2026.json').then(r=>r.json()).then(events=>{document.getElementById('recs').innerHTML=RECS.map(r=>`<a class="card" href="#full" data-event-details="${+r[0]}"><div class="ph"><img src="img/ev/${r[0]}.jpg" alt="" loading="lazy"><span class="pill d">${r[2]}</span></div><b>${r[1]}</b><span>${r[3]}</span></a>`).join('')});
 
 /* карусель */
 const sl=[...B.querySelectorAll('.slide')],D=document.getElementById('dots'),NX=document.getElementById('next'),P=document.getElementById('prog');
@@ -1362,7 +1445,7 @@ footer{margin-top:0;border-radius:0}
 @media (prefers-reduced-motion:reduce){#fluff{display:none}}
 </style>
 
-<canvas id="fluff" aria-hidden="true"></canvas>
+<!-- Летящие одуванчики убраны по замечанию заказчика. -->
 
 <script>
 /* декор: облака и солнце в «уже выступали», наклейки */
@@ -1371,28 +1454,13 @@ footer{margin-top:0;border-radius:0}
    '<svg class="st-cloud" style="top:12%;width:180px;animation-delay:-20s" viewBox="0 0 180 60"><ellipse cx="60" cy="40" rx="60" ry="20"/><ellipse cx="100" cy="28" rx="40" ry="26"/><ellipse cx="140" cy="42" rx="40" ry="16"/></svg>'+
    '<svg class="st-cloud" style="top:55%;width:120px;animation-duration:95s;animation-delay:-60s;opacity:.8" viewBox="0 0 180 60"><ellipse cx="60" cy="40" rx="60" ry="20"/><ellipse cx="100" cy="28" rx="40" ry="26"/></svg>')}
  const ab=document.getElementById('about');if(ab)ab.insertAdjacentHTML('beforeend','<svg class="stk sun spin" viewBox="0 0 100 100"><g fill="#F5C26B"><circle cx="50" cy="50" r="22"/>'+Array.from({length:12},(_,i)=>`<rect x="47" y="4" width="6" height="16" rx="3" transform="rotate(${i*30} 50 50)"/>`).join('')+'</g></svg>');
- const fu=document.getElementById('full');if(fu)fu.insertAdjacentHTML('beforeend','<svg class="stk arrow" viewBox="0 0 120 60"><path d="M6 40 C30 10 70 6 104 24" fill="none" stroke="#DA6150" stroke-width="3" stroke-linecap="round"/><path d="M92 12 L106 25 L88 32" fill="none" stroke="#DA6150" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><text x="0" y="58" font-family="Caveat" font-size="20" fill="#DA6150">выбирайте вечер</text></svg>');
+ /* Надпись «выбирайте вечер» убрана по замечанию заказчика. */
 })();
 
-/* семена одуванчика: медленно летят по ветру, немного, очень легко */
-(()=>{const c=document.getElementById('fluff'),x=c.getContext('2d');let W,H,P=[];
- function size(){const p=Math.min(devicePixelRatio,2);W=innerWidth;H=innerHeight;c.width=W*p;c.height=H*p;x.setTransform(p,0,0,p,0,0)}
- const N=innerWidth<700?6:12;
- function seed(init){return{x:init?Math.random()*W:-30,y:Math.random()*H*.9,s:.5+Math.random()*.7,v:.25+Math.random()*.45,p:Math.random()*6.3,r:Math.random()*6.3}}
- size();for(let i=0;i<N;i++)P.push(seed(1));
- function draw(t){const T=t/1000;x.clearRect(0,0,W,H);
-  for(const f of P){f.x+=f.v;f.y+=Math.sin(T*.8+f.p)*.35-.05;f.r+=.004;if(f.x>W+30||f.y<-30)Object.assign(f,seed(0));
-   x.save();x.translate(f.x,f.y);x.rotate(Math.sin(T+f.p)*.4);x.scale(f.s,f.s);x.globalAlpha=.75;x.strokeStyle='#fff';x.lineWidth=1;
-   x.beginPath();x.moveTo(0,0);x.lineTo(0,12);x.stroke();x.fillStyle='#c9b48a';x.beginPath();x.arc(0,12,1.6,0,6.283);x.fill();
-   for(let k=0;k<9;k++){const a=-Math.PI/2+(k-4)*.33;x.beginPath();x.moveTo(0,0);x.lineTo(Math.cos(a)*9,Math.sin(a)*9);x.stroke();
-    x.beginPath();x.arc(Math.cos(a)*9,Math.sin(a)*9,.9,0,6.283);x.fillStyle='rgba(255,255,255,.9)';x.fill()}
-   x.globalAlpha=.18;x.strokeStyle='#999';x.beginPath();x.moveTo(0,0);x.lineTo(0,12);x.stroke();x.restore()}
-  requestAnimationFrame(draw)}
- addEventListener('resize',size);requestAnimationFrame(draw);
-})();
 </script>
 
 
+<button type="button" class="map-fab" id="mapFab" aria-label="Открыть карту всего парка"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3V6zm6-3v15m6-12v15"/></svg><span>Карта парка</span></button>
 <div id="mapModal" role="dialog" aria-modal="true" aria-label="Карта парка Маяковского">
  <div class="box">
   <div class="bar">Карта парка <small>колёсико или два пальца — приблизить, тянуть — двигать</small></div>
@@ -1400,11 +1468,12 @@ footer{margin-top:0;border-radius:0}
   <div class="vp" id="mmVp"><div class="mz" id="mmZ">
    <svg viewBox="0 0 1176 1743" width="1176" height="1743">
     <image href="img/park_map_ours.svg" width="1176" height="1743"/>
-    <path d="M246 108 L246 397 A24 24 0 0 1 267 430 L318 470 L356 478 L370 512" fill="none" stroke="#fff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M246 108 L246 397 A24 24 0 0 1 267 430 L318 470 L356 478 L370 512" fill="none" stroke="#DA6150" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-    <rect x="356" y="500" width="30" height="26" rx="4" fill="#DA6150" opacity=".35"/>
-    <circle cx="370" cy="512" r="8" fill="#DA6150" stroke="#fff" stroke-width="3"/>
-    <circle cx="246" cy="108" r="7" fill="#fff" stroke="#DA6150" stroke-width="3"/>
+    <g id="mmRouteLines"></g>
+    <image href="img/park_map_labels.svg" width="1176" height="1743" pointer-events="none"/>
+    <g id="mmRouteStarts"></g>
+    <rect x="368" y="514" width="30" height="26" rx="4" fill="#DA6150" opacity=".35"/>
+    <circle cx="383" cy="527" r="8" fill="#DA6150" stroke="#fff" stroke-width="3"/>
+    <circle id="mmStart" cx="246" cy="108" r="7" fill="#fff" stroke="#DA6150" stroke-width="3"/>
     <g font-family="Mayak,Oswald,Arial Narrow,sans-serif" font-weight="600" font-size="15">
      <rect x="390" y="470" width="136" height="30" rx="10" fill="#DA6150"/><text x="458" y="490" fill="#fff" text-anchor="middle">ЛЕТНИЙ ТЕАТР</text>
     </g>
@@ -1413,10 +1482,10 @@ footer{margin-top:0;border-radius:0}
  </div>
 </div>
 <script>
-(()=>{/* вращение карты */
+(()=>{/* вращение карты и выбор маршрута кнопками слева */
  const W=document.getElementById('way'),st=W.querySelector('.stage'),pl=W.querySelector('.plane');let rx=50,rz=-16,d=null;
  const set=()=>{pl.style.setProperty('--rx',rx+'deg');pl.style.setProperty('--rz',rz+'deg')};
- st.addEventListener('pointerdown',e=>{if(!W.classList.contains('in'))return;d={x:e.clientX,y:e.clientY,rx,rz,id:e.pointerId};st.setPointerCapture(e.pointerId);pl.classList.add('drag');st.classList.add('grabbing','used')});
+ st.addEventListener('pointerdown',e=>{if(!W.classList.contains('in')||e.target.closest('[data-route-line]'))return;d={x:e.clientX,y:e.clientY,rx,rz,id:e.pointerId};st.setPointerCapture(e.pointerId);pl.classList.add('drag');st.classList.add('grabbing','used')});
  st.addEventListener('pointermove',e=>{if(!d||e.pointerId!==d.id)return;rz=d.rz+(e.clientX-d.x)*.35;rx=Math.min(78,Math.max(0,d.rx-(e.clientY-d.y)*.3));set()});
  const up=()=>{if(!d)return;d=null;pl.classList.remove('drag');st.classList.remove('grabbing')};
  st.addEventListener('pointerup',up);st.addEventListener('pointercancel',up);
@@ -1424,23 +1493,26 @@ footer{margin-top:0;border-radius:0}
 
  /* полноэкранная карта */
  const M=document.getElementById('mapModal');document.body.appendChild(M);const vp=document.getElementById('mmVp'),z=document.getElementById('mmZ');
+ window.initTheatreModalRoutes?.();
  let s=1,tx=0,ty=0,min=1;const P=new Map();let last=null;
  const apply=()=>{z.style.transform=`translate(${tx}px,${ty}px) scale(${s})`};
  const clamp=()=>{const w=vp.clientWidth,h=vp.clientHeight,cw=1176*s,ch=1743*s;
-  tx=cw<w?(w-cw)/2:Math.min(0,Math.max(w-cw,tx));ty=ch<h?(h-ch)/2:Math.min(0,Math.max(h-ch,ty))};
+  const free=(value,size,view)=>{if(size>=view)return Math.min(0,Math.max(view-size,value));const center=(view-size)/2;return Math.min(center+120,Math.max(center-120,value))};
+  tx=free(tx,cw,w);ty=free(ty,ch,h)};
  const zoomAt=(k,cx,cy)=>{const ns=Math.min(min*6,Math.max(min,s*k));tx=cx-(cx-tx)*ns/s;ty=cy-(cy-ty)*ns/s;s=ns;clamp();apply()};
  const open=()=>{M.classList.add('mm-open');document.body.style.overflow='hidden';
   const w=vp.clientWidth,h=vp.clientHeight;min=Math.min(w/1176,h/1743);
-  s=Math.max(min,Math.min(w/700,h/700));tx=w/2-310*s;ty=h/2-330*s;clamp();apply()};
+  s=min;tx=(w-1176*s)/2;ty=(h-1743*s)/2;clamp();apply()};
+ window.openTheatreMap=open;
  const close=()=>{M.classList.remove('mm-open');document.body.style.overflow=''};
- const mini=document.getElementById('miniMap');mini.addEventListener('click',open);
- mini.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open()}});
+ document.querySelectorAll('#parkMapOpen,#mapFab').forEach(mini=>{mini.addEventListener('click',open);mini.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open()}})});
  M.addEventListener('click',e=>{if(e.target===M)close()});
  addEventListener('keydown',e=>{if(e.key==='Escape'&&M.classList.contains('mm-open'))close()});
  M.querySelector('.ctl').addEventListener('click',e=>{const a=e.target.dataset.a;if(a==='x')close();
   else if(a){const r=vp.getBoundingClientRect();zoomAt(a==='+'?1.4:1/1.4,r.width/2,r.height/2)}});
  vp.addEventListener('wheel',e=>{e.preventDefault();const r=vp.getBoundingClientRect();zoomAt(e.deltaY<0?1.15:1/1.15,e.clientX-r.left,e.clientY-r.top)},{passive:false});
- vp.addEventListener('pointerdown',e=>{vp.setPointerCapture(e.pointerId);P.set(e.pointerId,{x:e.clientX,y:e.clientY});vp.classList.add('grabbing');last=null});
+ vp.addEventListener('selectstart',e=>e.preventDefault());vp.addEventListener('dragstart',e=>e.preventDefault());
+ vp.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse'&&e.button!==0)return;e.preventDefault();vp.setPointerCapture(e.pointerId);P.set(e.pointerId,{x:e.clientX,y:e.clientY});vp.classList.add('grabbing');last=null});
  vp.addEventListener('pointermove',e=>{if(!P.has(e.pointerId))return;const p=P.get(e.pointerId);
   if(P.size===1){tx+=e.clientX-p.x;ty+=e.clientY-p.y;clamp();apply()}
   else if(P.size===2){const [a,b]=[...P.values()];const o=a===p?b:a;const dist=Math.hypot(e.clientX-o.x,e.clientY-o.y);
@@ -1459,17 +1531,18 @@ footer{margin-top:0;border-radius:0}
 #sInfoPrice{white-space:nowrap}
 @media (max-width:1100px){
   #full .stk.arrow{display:none}
-  /* карта «Как добраться»: контейнер по высоте карты (400:520), иначе карта наезжает на карточки */
-  #way .stage{height:calc(min(100vw - 2 * var(--g), 560px) * 1.3 + 48px)}
+  /* Обрезанный кадр фотографии сохраняет пропорции и не наезжает на карточки. */
+  #way .plane{width:min(100%,560px)}
+  #way .stage{height:calc(min(100vw - 2 * var(--g), 560px) * 1.18 + 64px)}
 }
 @media (min-width:981px) and (max-width:1100px){ .nav-main{gap:22px} }
 @media (max-width:820px){
-  #way .plane{width:min(84%,520px)}
-  #way .stage{height:calc(min((100vw - 2 * var(--g)) * .84, 520px) * 1.3 + 56px)}
+  #way .plane{width:min(100%,560px)}
+  #way .stage{height:calc(min(100vw - 2 * var(--g), 560px) * 1.18 + 64px)}
 }
 @media (min-width:600px) and (max-width:820px){
-  #way .plane{width:min(74%,500px)}
-  #way .stage{height:calc(min((100vw - 2 * var(--g)) * .74, 500px) * 1.3 + 56px)}
+  #way .plane{width:min(92%,520px)}
+  #way .stage{height:calc(min((100vw - 2 * var(--g)) * .92, 520px) * 1.18 + 56px)}
 }
 @media (max-width:720px){
   /* фильтры афиши — в одну строку с прокруткой */
@@ -1615,6 +1688,140 @@ html[data-bg="weather"] .wx{display:flex}
   try{const u=new URL(location.href);k==='beige'?u.searchParams.delete('bg'):u.searchParams.set('bg',k);history.replaceState(null,'',u)}catch(e){}};
  p.addEventListener('click',e=>{const x=e.target.closest('button');if(x)style(x.dataset.bg,true)});
  style(H.dataset.bg||'beige',false);
+})();
+</script>
+
+
+<!-- ===== Правки заказчика: интерфейс, карточки, билеты и контакты ===== -->
+<style>
+.mnu-mobile{display:none}.mnu a[data-promo-link]{cursor:pointer}
+.theatre-intro{max-width:820px;padding:42px var(--g) 8px}.theatre-intro h2{font:600 clamp(30px,3.2vw,48px)/1 var(--cond);text-transform:uppercase;color:var(--coral)}.theatre-intro p{margin-top:14px;font-size:17px;line-height:1.65;color:#4A3A2E}
+.recs-shell{position:relative}.recs-arrow{display:none;position:absolute;z-index:4;top:calc(50% - 44px);width:48px;height:48px;border:0;border-radius:50%;background:var(--coral);color:#fff;font-size:22px;cursor:pointer;box-shadow:0 8px 24px rgba(43,32,25,.22)}.recs-arrow.prev{left:14px}.recs-arrow.next{right:14px}@media(min-width:901px){.recs-arrow{display:block}}
+.tk-main{display:block;flex:1}.tk .bd .desc{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;overflow:hidden;margin-top:10px;font-size:14px;line-height:1.45;color:#4A3A2E}.tk .bd .time{margin-top:10px}.tk .age{text-align:right;margin-top:10px;font:600 18px var(--cond);color:#2B2019}.tk .ft{gap:10px}.tk .details{font-size:13px;text-decoration:underline;text-underline-offset:3px}.tk .ft button{border:0}.tk .tag{color:#2B2019}.tk .badges{position:absolute;left:14px;bottom:14px;display:flex;gap:6px;flex-wrap:wrap}.tk .badge{display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border-radius:999px;background:var(--coral);color:#fff;font-size:12px;font-weight:700;line-height:1}.tk .badge.percent{background:#2B2019;color:#fff}.tk .badge svg{width:14px;height:14px;fill:currentColor}.chip.promo{display:inline-flex;align-items:center;gap:5px;color:#C84638;font-family:var(--hand);font-size:20px;font-weight:600}.chip.promo svg{width:18px;height:18px;fill:currentColor}.chip.promo.on{background:#F9D8D1;color:#A83226;border-color:#C84638}
+.route-picker{display:flex;flex-wrap:wrap;gap:7px;margin-top:20px;max-width:350px}.route-picker button{border:1px solid #CDBFA9;background:var(--white);color:#4A3A2E;border-radius:999px;padding:7px 10px;font-size:11px;cursor:pointer}.route-picker button.on{background:#2B2019;color:#fff;border-color:#2B2019}
+#way{grid-template-columns:minmax(230px,.7fr) minmax(420px,1.8fr) minmax(340px,380px)}
+#way .parking{min-height:620px;padding:36px 32px;display:flex;flex-direction:column}
+#way .parking .park-map-open{margin-top:auto}
+#mapModal .mm-route{fill:none;stroke:#E7A096;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;opacity:.85}#mapModal .mm-route-bg{fill:none;stroke:#fff;stroke-width:11;stroke-linecap:round;stroke-linejoin:round;opacity:.8}
+.parking h3{font:600 52px/1 var(--cond);text-transform:uppercase;color:var(--coral);margin:4px 0 20px}.parking-k{font:500 24px var(--hand);color:#6A5A4C}.parking h4{font:600 21px var(--cond);text-transform:uppercase;margin:24px 0 10px}.parking p{font-size:18px;line-height:1.55;margin-top:14px}.parking p b{font-size:18px}.parking p span{display:inline;color:#5A4636;font:inherit;font-weight:600;margin:0;white-space:normal}.parking .park-map-open{cursor:pointer;flex:0 0 auto}
+@media(max-width:1200px){#way{grid-template-columns:1fr}#way .parking{min-height:0}#way .parking .park-map-open{margin-top:26px}}
+@media(max-width:480px){#way .parking{padding:30px 24px}.parking p{font-size:17px}}
+.map-fab{display:none;position:fixed;right:16px;bottom:76px;z-index:65;align-items:center;gap:8px;border:0;border-radius:999px;background:var(--coral);color:#fff;padding:13px 17px;font:600 14px var(--cond);text-transform:uppercase;box-shadow:0 10px 30px rgba(43,32,25,.28);cursor:pointer}.map-fab svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8}
+footer .ft-top{grid-template-columns:1.25fr repeat(4,1fr);gap:26px}footer .ft-brand .soc a{background:var(--coral);border-color:var(--coral)!important;color:#fff;min-width:44px;width:44px;height:44px}footer .ft-brand .soc a:hover{background:#B8473A}footer .ft-brand .soc svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8}.ft-sub{margin-top:22px}.ft-sub label{display:block;font:600 15px var(--cond);text-transform:uppercase;margin-bottom:8px}.ft-sub>div{display:flex;gap:6px}.ft-sub input{min-width:0;width:100%;border:1px solid #CDBFA9;background:var(--white);border-radius:999px;padding:10px 12px;font-size:13px}.ft-sub .btn-red{padding:9px 12px;font-size:12px}.ft-inn{display:inline-block;margin:0;font:inherit;color:inherit}.ft-bot{align-items:center}
+.event-modal,.ticket-modal{position:fixed;inset:0;background:rgba(43,32,25,.68);backdrop-filter:blur(7px);padding:3vh 3vw;overflow:auto;overscroll-behavior:contain}
+.event-modal{z-index:170}.ticket-modal{z-index:180}.event-modal[hidden],.ticket-modal[hidden]{display:none}
+.event-box{position:relative;width:min(1160px,100%);max-height:94svh;margin:auto;background:var(--page);border-radius:24px;overflow:hidden;box-shadow:0 30px 90px rgba(0,0,0,.35)}
+.event-close,.ticket-close{flex:0 0 44px;width:44px;height:44px;border:0;border-radius:50%;background:var(--coral);color:#fff;font-size:25px;line-height:1;cursor:pointer;transition:background .2s,transform .2s}
+.event-close:hover,.ticket-close:hover{background:#B8473A;transform:rotate(4deg)}
+.event-close:focus-visible,.ticket-close:focus-visible,.event-buy:focus-visible,.ticket-fallback a:focus-visible{outline:3px solid #2B2019;outline-offset:3px}
+.event-close{position:absolute;z-index:2;right:18px;top:18px;box-shadow:0 6px 20px rgba(43,32,25,.24)}
+.event-layout{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);height:94svh;min-height:570px;max-height:850px}
+.event-photo{position:relative;min-height:0;height:100%;background:#E7DED0}.event-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.event-content{display:flex;flex-direction:column;align-items:flex-start;padding:48px 44px 36px;min-width:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#CDBFA9 transparent}
+.event-kicker,.ticket-kicker{font:600 14px var(--cond);letter-spacing:.12em;text-transform:uppercase;color:#6A5A4C}
+.event-date{margin-top:24px;font:600 22px var(--cond);text-transform:uppercase;color:var(--coral)}
+.event-content h2{margin-top:8px;font:600 clamp(32px,3.5vw,48px)/1.04 var(--cond);text-transform:uppercase;color:#2B2019}
+.event-facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}.event-fact{padding:9px 13px;border:1px solid #D8CBB9;border-radius:999px;font-size:14px;color:#2B2019;background:var(--white)}
+.event-lead{width:100%;margin:22px 0 0;font-size:17px;line-height:1.55;font-weight:600;color:#4A3A2E}
+.event-section-title{width:100%;margin-top:28px;padding-top:22px;border-top:1px solid #D8CBB9;font:600 20px var(--cond);letter-spacing:.05em;text-transform:uppercase;color:#2B2019}
+.event-description{width:100%;margin-top:14px;font-size:16px;line-height:1.65;color:#4A3A2E}.event-description p{margin:0 0 16px}.event-description p:last-child{margin-bottom:0}
+.event-venue{width:100%;margin-top:auto;padding-top:26px}.event-venue b{display:block;font:600 15px var(--cond);letter-spacing:.06em;text-transform:uppercase}.event-venue span{display:block;margin-top:6px;font-size:14px;line-height:1.5;color:#6A5A4C}
+.event-buy{flex:0 0 auto;margin-top:22px;min-height:50px;padding:0 28px;border:0;cursor:pointer;font-size:17px}
+.ticket-box{position:relative;width:min(1320px,100%);margin:auto;background:var(--page);border-radius:24px;padding:24px;box-shadow:0 30px 90px rgba(0,0,0,.35)}
+.ticket-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:20px}.ticket-heading{min-width:0}.ticket-head h2{margin-top:6px;font:600 clamp(28px,3vw,46px)/1.05 var(--cond);text-transform:uppercase;color:var(--coral)}
+.ticket-meta{margin-top:10px;font:500 17px var(--cond);text-transform:uppercase;color:#4A3A2E}
+.ticket-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(300px,.65fr);gap:20px}.ticket-grid>*{min-width:0}
+.ticket-widget{display:grid;min-height:520px;background:var(--white);border-radius:18px;padding:18px;overflow:auto}.ticket-widget>*{min-width:0}
+.ticket-aside{display:flex;flex-direction:column;gap:16px;min-width:0}.ticket-event,.ticket-seat{background:var(--white);border-radius:18px;padding:16px;min-width:0}
+.ticket-event-photo{position:relative;aspect-ratio:16/8;overflow:hidden;border-radius:12px;background:#E7DED0}.ticket-event-photo img{width:100%;height:100%;object-fit:cover}.ticket-event-photo[hidden]{display:none}
+.ticket-age{position:absolute;right:10px;bottom:10px;padding:6px 9px;border-radius:999px;background:var(--white);color:#2B2019;font:600 15px var(--cond)}
+.ticket-event-info{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:13px}.ticket-event-info b{font:600 20px var(--cond);text-transform:uppercase}.ticket-event-info span{font-size:14px;color:#6A5A4C;text-align:right}
+.ticket-seat h3{font:600 24px var(--cond);text-transform:uppercase}.ticket-seat svg{width:100%;height:auto;max-height:390px}.ticket-seat .pill{margin-top:10px}.ticket-note{font-size:12px;color:#6A5A4C;margin-top:10px;line-height:1.45}
+.ticket-loading,.ticket-fallback{align-self:stretch;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:480px;text-align:center;gap:16px;padding:36px}
+.ticket-loading svg{width:42px;height:42px;fill:none;stroke:var(--coral);stroke-width:3;stroke-linecap:round;animation:ticketSpin 1s linear infinite}.ticket-loading b,.ticket-fallback h3{font:600 28px var(--cond);text-transform:uppercase;color:#2B2019}.ticket-loading span{font-size:14px;color:#6A5A4C}
+.ticket-fallback>svg{width:64px;height:64px;fill:none;stroke:var(--coral);stroke-width:1.5}.ticket-fallback p{max-width:470px;margin:0;font-size:16px;line-height:1.6;color:#4A3A2E}.ticket-fallback a{min-height:52px;display:inline-flex;align-items:center;justify-content:center;margin-top:6px;padding:0 30px;font-size:17px}
+@keyframes ticketSpin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.event-close,.ticket-close{transition:none}.ticket-loading svg{animation:none}}
+@media(max-width:1200px){footer .ft-top{grid-template-columns:repeat(3,1fr)}.ticket-grid{grid-template-columns:1fr}.ticket-aside{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr)}.ticket-seat svg{max-height:360px}}
+@media(max-width:900px){.mnu-desktop{display:none}.mnu-mobile{display:flex}.map-fab{display:flex}#way .pin span{font-size:11px;padding:6px 9px}.route-picker{max-width:100%}}
+@media(max-width:720px){#full{padding-top:36px}.theatre-intro{padding-top:30px}.theatre-intro p{font-size:16px}.gl{height:100svh;min-height:600px;margin:0;border-radius:0}.gl-ph img{object-position:50% 50%;transform:scale(1.04)}.gl-in{padding-bottom:28px}.gl-t{font-size:clamp(38px,11vw,60px)}footer .ft-top{grid-template-columns:1fr 1fr}.ft-brand{grid-column:1/-1}.tk .bd .desc{-webkit-line-clamp:3;font-size:12px}.tk .ft{flex-direction:column;align-items:stretch}.tk .details{text-align:center;order:2}.tk .badges{left:8px;bottom:8px}.tk .badge{font-size:10px;padding:5px 7px}.route-picker button{font-size:12px;padding:9px 11px}
+.event-modal,.ticket-modal{padding:0}.event-box,.ticket-box{min-height:100svh;border-radius:0}.event-box{max-height:none}.event-layout{grid-template-columns:1fr;height:auto;min-height:100svh;max-height:none}.event-photo{min-height:250px;height:38svh;max-height:360px}.event-content{padding:28px 20px 32px;overflow:visible}.event-date{margin-top:18px}.event-content h2{font-size:clamp(30px,9vw,42px)}.event-lead{font-size:16px}.event-description{font-size:16px}.event-venue{margin-top:24px}.event-buy{width:100%}
+.ticket-box{padding:18px 16px 28px}.ticket-head{margin-bottom:18px}.ticket-head h2{font-size:clamp(27px,8vw,40px);padding-right:4px}.ticket-meta{font-size:15px;line-height:1.5}.ticket-widget{padding:10px;min-height:390px}.ticket-loading,.ticket-fallback{min-height:370px;padding:26px 18px}.ticket-aside{display:flex}.ticket-event-photo{aspect-ratio:16/9}.ticket-seat svg{max-height:440px}}
+@media(max-width:480px){footer .ft-top{grid-template-columns:1fr}.ft-brand{grid-column:auto}.map-fab span{display:none}.map-fab{padding:13px;border-radius:50%}}
+</style>
+<div class="event-modal" id="eventModal" role="dialog" aria-modal="true" aria-labelledby="eventTitle" hidden>
+ <div class="event-box">
+  <button type="button" class="event-close" id="eventClose" aria-label="Закрыть подробности события">×</button>
+  <div class="event-layout">
+   <div class="event-photo" id="eventPhoto"><img id="eventImage" src="" alt=""></div>
+   <div class="event-content">
+    <span class="event-kicker">Летний театр · афиша сезона</span>
+    <div class="event-date" id="eventDate"></div>
+    <h2 id="eventTitle"></h2>
+    <div class="event-facts"><span class="event-fact" id="eventTime"></span><span class="event-fact" id="eventAge"></span></div>
+    <p class="event-lead" id="eventLead"></p>
+    <div class="event-section-title">О событии</div>
+    <div class="event-description" id="eventDescription"></div>
+    <div class="event-venue"><b>Место проведения</b><span>Летний театр в парке Маяковского<br>ул. Мичурина, 230, корп. 25</span></div>
+    <button type="button" class="pill btn-red tk-buy event-buy" id="eventBuy">Купить билет</button>
+   </div>
+  </div>
+ </div>
+</div>
+<div class="ticket-modal" id="ticketModal" role="dialog" aria-modal="true" aria-labelledby="ticketTitle" hidden>
+ <div class="ticket-box">
+  <div class="ticket-head"><div class="ticket-heading"><span class="ticket-kicker">Летний театр · онлайн-билеты</span><h2 id="ticketTitle">Билеты</h2><div class="ticket-meta" id="ticketMeta"></div></div><button type="button" class="ticket-close" id="ticketClose" aria-label="Закрыть покупку билетов">×</button></div>
+  <div class="ticket-grid">
+   <div class="ticket-widget" id="ticketWidget"></div>
+   <div class="ticket-aside">
+    <div class="ticket-event"><div class="ticket-event-photo" id="ticketEventPhoto"><img id="ticketEventImage" src="" alt=""><span class="ticket-age" id="ticketAge"></span></div><div class="ticket-event-info"><b id="ticketEventDate"></b><span>В парке Маяковского</span></div></div>
+    <div class="ticket-seat"><h3>Схема зала</h3><div id="ticketSeatPlan"></div><a class="pill btn-red" id="ticketToSeats" href="#about">Выбрать места</a><p class="ticket-note">Схема демонстрационная. Актуальный выбор мест доступен при оформлении билета.</p></div>
+   </div>
+  </div>
+ </div>
+</div>
+<script>
+(()=>{
+ const modal=document.getElementById('ticketModal'),widgetBox=document.getElementById('ticketWidget'),title=document.getElementById('ticketTitle'),seatBox=document.getElementById('ticketSeatPlan');
+ const eventModal=document.getElementById('eventModal'),eventClose=document.getElementById('eventClose'),eventBuy=document.getElementById('eventBuy');
+ let activeWidget=null,token=0,lastFocus=null,lastDetailsFocus=null,eventsPromise=null;
+ const dealerName='YandexTicketsDealer',dealer=window[dealerName]=window[dealerName]||[];let dealerLoaded=false;
+ dealer.push(['setDefaultClientKey','886ffe1f-c649-4316-9089-1f8971c3bb7e']);dealer.push(['setDefaultRegionId',54]);
+ function getEvents(){if(!eventsPromise)eventsPromise=fetch('events2026.json').then(r=>r.json());return eventsPromise}
+ function syncBodyLock(){const locked=!modal.hidden||!eventModal.hidden;document.body.style.overflow=locked?'hidden':'';const notes=document.querySelector('review-notes-root');if(notes){if(locked)notes.style.setProperty('visibility','hidden','important');else notes.style.removeProperty('visibility')}}
+ function loadDealer(){if(dealerLoaded)return;dealerLoaded=true;const sc=document.createElement('script');sc.async=true;sc.src='https://widget.afisha.yandex.ru/dealer/dealer.js';document.head.appendChild(sc)}
+ function saleAvailable(id){return new Promise(resolve=>{const cb='__yandexSale'+Date.now()+Math.random().toString(36).slice(2),sc=document.createElement('script');let done=false;const finish=value=>{if(done)return;done=true;clearTimeout(timer);delete window[cb];sc.remove();resolve(value)};const timer=setTimeout(()=>finish(null),10000);window[cb]=data=>{const sessions=data&&data.result&&Array.isArray(data.result.sessions)?data.result.sessions:[];finish(sessions.some(s=>s.saleAvailable===true))};sc.onerror=()=>finish(null);sc.src='https://widget.afisha.yandex.ru/api/tickets/v1/sessions/sale-available?sessions_ids='+encodeURIComponent(id)+'&clientKey=886ffe1f-c649-4316-9089-1f8971c3bb7e&callback='+cb;document.head.appendChild(sc)})}
+ function destroyWidget(){if(activeWidget){try{activeWidget.unmount();activeWidget.destroy()}catch(_){}}activeWidget=null;widgetBox.textContent=''}
+ function close(){if(modal.hidden)return;token++;destroyWidget();modal.hidden=true;syncBodyLock();if(lastFocus)lastFocus.focus({preventScroll:true})}
+ function showLoading(){widgetBox.innerHTML='<div class="ticket-loading" role="status"><svg viewBox="0 0 44 44" aria-hidden="true"><path d="M22 4a18 18 0 1 1-12.7 5.3"/></svg><b>Готовим покупку</b><span>Загружаем актуальные места и способы оформления</span></div>'}
+ function open(event){if(!event)return;const my=++token;lastFocus=document.activeElement;destroyWidget();showLoading();title.textContent=event.t||'Билеты';
+  document.getElementById('ticketMeta').textContent=[event.date,event.wd,event.time].filter(Boolean).join(' · ');
+  const image=document.getElementById('ticketEventImage'),photo=document.getElementById('ticketEventPhoto');photo.hidden=!event.img;image.src=event.img||'';image.alt=event.t?`Афиша: ${event.t}`:'';
+  document.getElementById('ticketEventDate').textContent=event.date||'';const age=document.getElementById('ticketAge');age.textContent=event.age||'';age.hidden=!event.age;
+  modal.hidden=false;syncBodyLock();seatBox.textContent='';const plan=document.getElementById('seatPlan');if(plan&&plan.children.length){const clone=plan.cloneNode(true);clone.removeAttribute('id');clone.querySelectorAll('[id]').forEach(n=>n.removeAttribute('id'));seatBox.appendChild(clone)}
+  if(event.widget){loadDealer();dealer.push(['getDealer',async function(d){if(my!==token)return;let candidate=null;try{candidate=d.Widget(event.widget,'session',{target:widgetBox,onReadyToClose:close});const available=await saleAvailable(event.widget);if(my!==token){candidate.destroy();return}if(location.protocol!=='https:'||available!==true){const ticketUrl=candidate.url();candidate.destroy();fallback({...event,ticketUrl},location.protocol!=='https:'?'insecure':available===false?'unavailable':'unverified');return}activeWidget=candidate;activeWidget.mount({style:{height:'620px'}})}catch(_){if(candidate)try{candidate.destroy()}catch(__){}if(my===token)fallback(event)}}])}else fallback(event);
+  document.getElementById('ticketClose').focus({preventScroll:true});
+ }
+ function fallback(event,reason){widgetBox.innerHTML='';const wrap=document.createElement('div');wrap.className='ticket-fallback';wrap.innerHTML='<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M12 20h40v9a5 5 0 0 0 0 10v9H12v-9a5 5 0 0 0 0-10v-9Z"/><path d="M36 20v5m0 7v4m0 7v5"/></svg>';
+  const heading=document.createElement('h3');heading.textContent=reason==='unavailable'?'Продажа пока недоступна':reason==='unverified'?'Проверить покупку':reason==='insecure'?'Переход к покупке':'Перейти к билетам';
+  const p=document.createElement('p');p.textContent=reason==='insecure'?'Покупка откроется на защищённой странице Яндекс Афиши. На опубликованном сайте билетный сервис будет встроен в это окно.':reason==='unavailable'?'Онлайн-продажа этого события завершена или пока недоступна. Актуальные сведения — на странице события.':reason==='unverified'?'Не удалось проверить доступность онлайн-продажи. Актуальные сведения и вариант покупки — на странице события.':'Онлайн-покупка и актуальная информация доступны на официальной странице события.';
+  const a=document.createElement('a');a.className='pill btn-red';a.href=reason==='insecure'?event.ticketUrl:event.url;a.target='_blank';a.rel='noopener';a.textContent=event.cta||(reason==='insecure'?'Перейти к покупке':'Страница события');wrap.append(heading,p,a);widgetBox.appendChild(wrap)}
+ function closeDetails(){if(eventModal.hidden)return;eventModal.hidden=true;syncBodyLock();if(lastDetailsFocus)lastDetailsFocus.focus({preventScroll:true})}
+ async function openDetails(idx,trigger){const all=await getEvents(),event=all[idx];if(!event)return;lastDetailsFocus=trigger||document.activeElement;
+  document.getElementById('eventDate').textContent=event.date||'';document.getElementById('eventTitle').textContent=event.t||'Событие';
+  document.getElementById('eventTime').textContent=[event.wd,event.time].filter(Boolean).join(' · ')||'Время уточняется';
+  const age=document.getElementById('eventAge');age.textContent=event.age||'';age.hidden=!event.age;
+  const lead=document.getElementById('eventLead');lead.textContent=event.text||'';lead.hidden=!event.text;
+  const description=document.getElementById('eventDescription');description.textContent='';const paragraphs=Array.isArray(event.details)&&event.details.length?event.details:[event.text].filter(Boolean);paragraphs.forEach(text=>{const p=document.createElement('p');p.textContent=text;description.appendChild(p)});description.hidden=!paragraphs.length;
+  const photo=document.getElementById('eventPhoto'),image=document.getElementById('eventImage');photo.hidden=!event.img;image.src=event.img||'';image.alt=event.t?`Афиша: ${event.t}`:'';
+  eventBuy.dataset.event=String(idx);eventBuy.textContent=event.cta||'Купить билет';eventModal.hidden=false;eventModal.scrollTop=0;eventModal.querySelector('.event-content').scrollTop=0;syncBodyLock();eventClose.focus({preventScroll:true})}
+ function trapFocus(e,box){const items=[...box.querySelectorAll('a[href],button:not([disabled]),input,select,textarea,[tabindex]:not([tabindex="-1"])')].filter(n=>!n.hidden&&n.getClientRects().length);if(!items.length)return;const first=items[0],last=items[items.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}
+ document.addEventListener('click',e=>{const details=e.target.closest('[data-event-details]');if(details){e.preventDefault();openDetails(+details.dataset.eventDetails,details);return}const buy=e.target.closest('.tk-buy');if(buy){e.preventDefault();getEvents().then(all=>open(all[+buy.dataset.event]));return}const hero=e.target.closest('#glBuy');if(hero&&hero._event){e.preventDefault();open(hero._event)}});
+ eventClose.addEventListener('click',closeDetails);eventModal.addEventListener('click',e=>{if(e.target===eventModal)closeDetails()});
+ document.getElementById('ticketClose').addEventListener('click',close);modal.addEventListener('click',e=>{if(e.target===modal)close()});document.getElementById('ticketToSeats').addEventListener('click',()=>{close();closeDetails()});
+ addEventListener('keydown',e=>{if(e.key==='Escape'){if(!modal.hidden)close();else if(!eventModal.hidden)closeDetails()}else if(e.key==='Tab'){if(!modal.hidden)trapFocus(e,modal);else if(!eventModal.hidden)trapFocus(e,eventModal)}});
+ document.getElementById('recsPrev').onclick=()=>document.getElementById('recs').scrollBy({left:-innerWidth*.75,behavior:'smooth'});document.getElementById('recsNext').onclick=()=>document.getElementById('recs').scrollBy({left:innerWidth*.75,behavior:'smooth'});
+ document.querySelectorAll('[data-promo-link]').forEach(a=>a.addEventListener('click',()=>{const chip=document.querySelector('#fGenre [data-g="promo"]');if(chip)chip.click()}));
 })();
 </script>
 

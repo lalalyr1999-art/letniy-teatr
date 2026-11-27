@@ -212,20 +212,10 @@ for (let i = 0; i < NBT; i++) { let x, z; const side = rnd();
   for (let q = 0; q < 3; q++) { const sc = 0.6 + rnd() * 0.6; o.position.set(x + (rnd() - .5) * 2.4, 11 + q * 1.6 + rnd() * 2, z + (rnd() - .5) * 2.4); o.scale.set(sc, sc * 1.25, sc); o.updateMatrix(); bCr.setMatrixAt(i * 3 + q, o.matrix); bCr.setColorAt(i * 3 + q, crCol.set(crPal[(i + q) % 4])); } }
 o.scale.set(1, 1, 1); scene.add(bTr, bCr);
 
-/* ---------- камера: перелёт / путь от входа + осмотр ---------- */
+/* ---------- камера: перелёт к месту + осмотр ---------- */
 const camPos = new THREE.Vector3(), camTo = new THREE.Vector3(), lookTo = new THREE.Vector3(), lookCur = new THREE.Vector3(), from = new THREE.Vector3(), fromLook = new THREE.Vector3();
-let t0 = 0, yaw = 0, pitch = 0, flying = false, walk = null, curSeat = null;
+let t0 = 0, yaw = 0, pitch = 0, flying = false, curSeat = null;
 function aim(s) { camTo.set(s.x, 0.2 + s.y + 1.42, s.z + 0.08); lookTo.set(s.x * 0.15, 3.4, 1.5); }
-function startWalk(s) {   // ворота в задней стене -> центральный проход -> ряд -> скамейка
-  const eye = 1.65, top = 0.2 + TOP, rowFront = s.z - 0.55;
-  const pts = [new THREE.Vector3(-12, top + eye, HALL_END - 0.8), new THREE.Vector3(0, top + eye, HALL_END - 1.6),
-    new THREE.Vector3(0, 0.2 + s.y + eye, rowFront), new THREE.Vector3(s.x, 0.2 + s.y + eye, rowFront), new THREE.Vector3(s.x, 0.2 + s.y + 1.42, s.z + 0.08)];
-  const lens = [0]; for (let i = 1; i < pts.length; i++) lens.push(lens[i - 1] + pts[i].distanceTo(pts[i - 1]));
-  walk = { pts, lens, total: lens[lens.length - 1], t0: performance.now(), dur: Math.min(9000, 1200 + lens[lens.length - 1] / 2.6 * 1000) }; flying = false;
-}
-const tmpA = new THREE.Vector3(), tmpB = new THREE.Vector3();
-function walkPos(d, out) { const w = walk; let i = 1; while (i < w.lens.length - 1 && w.lens[i] < d) i++;
-  const seg = (d - w.lens[i - 1]) / Math.max(1e-6, w.lens[i] - w.lens[i - 1]); return out.lerpVectors(w.pts[i - 1], w.pts[i], Math.min(1, Math.max(0, seg))); }
 /* режим «днём / на закате» */
 let mode = 0, modeTo = 0;
 const C = (a) => new THREE.Color(a), lerpC = (a, b, k) => a.clone().lerp(b, k);
@@ -240,16 +230,11 @@ function render() {
   const now = performance.now();
   if (Math.abs(modeTo - mode) > 0.001) { mode += (modeTo - mode) * 0.05; applyMode(mode); }
   beams.forEach(b => { const t = now / 1000 + b.userData.ph; b.rotation.z = Math.sin(t * 0.7) * 0.32; b.rotation.x = -0.55 + Math.sin(t * 0.5) * 0.12; b.material.opacity = 0.05 + mode * 0.2 + Math.sin(t * 2) * 0.015; });
-  if (walk) { const k = Math.min(1, (now - walk.t0) / walk.dur), e = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2, d = e * walk.total;
-    walkPos(d, camPos); camPos.y += Math.sin(d * 3.6) * 0.035 * (1 - k);
-    walkPos(Math.min(walk.total, d + 2.5), tmpA); tmpA.y = camPos.y - 0.25;
-    const kl = Math.max(0, (k - 0.78) / 0.22); lookCur.lerpVectors(tmpA, lookTo, kl * kl);
-    if (k >= 1) { walk = null; camPos.copy(camTo); lookCur.copy(lookTo); } }
-  else if (flying) { const k = Math.min(1, (now - t0) / 1300), e = k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+  if (flying) { const k = Math.min(1, (now - t0) / 1300), e = k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
     camPos.lerpVectors(from, camTo, e); camPos.y += Math.sin(Math.PI * e) * 3; lookCur.lerpVectors(fromLook, lookTo, e); if (k >= 1) flying = false; }
   cam.position.copy(camPos);
   const dir = lookCur.clone().sub(camPos), yaw0 = Math.atan2(dir.x, dir.z), pitch0 = Math.atan2(dir.y, Math.hypot(dir.x, dir.z));
-  const Y = yaw0 + (walk ? 0 : yaw), Pt = pitch0 + (walk ? 0 : pitch);
+  const Y = yaw0 + yaw, Pt = pitch0 + pitch;
   cam.lookAt(camPos.x + Math.sin(Y) * Math.cos(Pt), camPos.y + Math.sin(Pt), camPos.z + Math.cos(Y) * Math.cos(Pt));
   renderer.render(scene, cam);
   drawCone();
@@ -258,7 +243,7 @@ function render() {
 function drawCone() {
   if (!curSeat) return;
   const hf = Math.atan(Math.tan(cam.fov * Math.PI / 360) * cam.aspect), L = Math.hypot(curSeat.x, curSeat.z) + 8;
-  const Y = Math.atan2(lookTo.x - camTo.x, lookTo.z - camTo.z) + (walk ? 0 : yaw);
+  const Y = Math.atan2(lookTo.x - camTo.x, lookTo.z - camTo.z) + yaw;
   const [sx, sy] = P(camTo.x, camTo.z), [ax, ay] = P(camTo.x + Math.sin(Y + hf) * L, camTo.z + Math.cos(Y + hf) * L), [bx, by] = P(camTo.x + Math.sin(Y - hf) * L, camTo.z + Math.cos(Y - hf) * L);
   cone.setAttribute('d', `M${sx.toFixed(1)} ${sy.toFixed(1)} L${ax.toFixed(1)} ${ay.toFixed(1)} A${(L * S).toFixed(0)} ${(L * S).toFixed(0)} 0 0 0 ${bx.toFixed(1)} ${by.toFixed(1)} Z`);
   const g = document.getElementById('coneG'); g.setAttribute('cx', sx); g.setAttribute('cy', sy); g.setAttribute('r', L * S);
@@ -280,13 +265,12 @@ function pick(i, how) {
   let s = seats[i], note = '';
   if (s.busy) { const j = nearestFree(s); note = `место ${s.num} в ${s.row} ряду занято — показываем ближайшее свободное · `; s = seats[j]; i = j; }
   curSeat = s; const [x, y] = P(s.x, s.z); marker.setAttribute('transform', `translate(${x} ${y})`);
-  if (how === 'instant') { aim(s); camPos.copy(camTo); lookCur.copy(lookTo); walk = null; }
-  else if (how === 'walk') { aim(s); startWalk(s); }
-  else { from.copy(camPos); fromLook.copy(lookCur); aim(s); t0 = performance.now(); flying = true; walk = null; }
+  if (how === 'instant') { aim(s); camPos.copy(camTo); lookCur.copy(lookTo); flying = false; }
+  else { from.copy(camPos); fromLook.copy(lookCur); aim(s); t0 = performance.now(); flying = true; }
   yaw = 0; pitch = 0; drawCone();
   const z = zoneOf(s);
   info.sec.textContent = s.sec === 'Л' ? 'ЛЕВАЯ' : 'ПРАВАЯ'; info.row.textContent = s.row; info.num.textContent = s.num; info.dist.textContent = '≈ ' + Math.round(Math.hypot(s.x, s.z - 2)) + ' М';
-  info.zone.textContent = z.n; info.price.textContent = z.p.toLocaleString('ru-RU') + ' ₽'; info.buy.textContent = 'Купить это место'; info.st.textContent = 'свободно';
+  info.zone.textContent = z.n; info.price.textContent = z.p.toLocaleString('ru-RU') + ' ₽'; info.buy.textContent = 'Выбрать событие'; info.st.textContent = 'свободно';
   const ang = Math.abs(Math.atan2(s.x, s.z - 2)) * 180 / Math.PI;
   info.view.textContent = note + (ang < 12 ? 'прямой вид на сцену' : ang < 30 ? 'вид немного сбоку' : 'вид сбоку, под углом') + (Math.abs(s.x) > HALL_W - 3.2 ? ' · у стены, рядом сосны' : '') + (s.row > 12 ? ' · сверху видно весь зал' : '');
   document.querySelectorAll('.seat-q button').forEach(b => b.classList.remove('on'));
@@ -294,9 +278,6 @@ function pick(i, how) {
 const find = (row, sec, pos) => { const list = seats.filter(q => q.row === row && q.sec === sec); const t = list[Math.floor((list.length - 1) * pos)]; return t.busy ? nearestFree(t) : seats.indexOf(t); };
 document.querySelectorAll('.seat-q button').forEach(b => b.addEventListener('click', () => {
   const q = b.dataset.q; const i = q === 'front' ? find(1, 'Л', 1) : q === 'center' ? find(11, 'П', 0) : q === 'back' ? find(ROWS, 'Л', 1) : find(8, 'П', 0.92); pick(i); b.classList.add('on'); }));
-// клики по плану: место / путь от входа
-plan.addEventListener('dblclick', e => { const m = toPlan(e), i = nearest(m.x, m.z); if (i >= 0) pick(i, 'walk'); });
-$('svWalk').addEventListener('click', () => { if (curSeat) pick(seats.indexOf(curSeat), 'walk'); });
 // режим дня
 document.querySelectorAll('.sv-mode button').forEach(b => b.addEventListener('click', () => { modeTo = b.dataset.m === 'eve' ? 1 : 0;
   document.querySelectorAll('.sv-mode button').forEach(x => x.classList.toggle('on', x === b)); }));
